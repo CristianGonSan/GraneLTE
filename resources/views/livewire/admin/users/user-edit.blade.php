@@ -1,0 +1,78 @@
+<div>
+    <h1 class="h4">{{ $user->email }}</h1>
+
+    <div class="row">
+        <div class="col-md-8">
+            <form wire:submit.prevent="save">
+                <div class="card">
+                    <div class="card-body">
+                        <x-adminlte-input name="name" label="Nombre *" placeholder="Nombre de usuario"
+                            autocomplete="username" type="text" maxlength="255" wire:model="name" required />
+
+                        <x-adminlte-input name="email" label="Correo electrónico *" placeholder="ejemplo@gmail.com"
+                            autocomplete="email" type="email" maxlength="191" wire:model="email" required />
+
+                        <x-form.select-wire-ignore name="roles" label="Roles" wire:loading.attr='disabled'
+                            wire:target='save' multiple>
+                            <x-adminlte-options :options="$roles" :selected="$selectedRoles" />
+                        </x-form.select-wire-ignore>
+                    </div>
+                </div>
+                <div class="mb-3">
+                    <x-livewire.loading-button type='submit' label="Guardar cambios" />
+
+                    <a href="{{ route('admin.users.index') }}" class="btn btn-outline-secondary ml-1">
+                        Cancelar
+                    </a>
+                </div>
+            </form>
+
+            <form wire:submit.prevent="changePassword">
+                <div class="card">
+                    <div class="card-header border-0">
+                        <p class="card-title">CAMBIAR CONTRASEÑA</p>
+                    </div>
+
+                    <div class="card-body pt-0">
+                        <x-adminlte-input name="password" label="Contraseña *" placeholder="Nueva Contraseña"
+                            autocomplete="new-password" type="password" maxlength="64" wire:model="password" required />
+
+                        <x-adminlte-input name="password_confirmation" label="Confirmar contraseña *"
+                            placeholder="Confirmar Nueva Contraseña" autocomplete="new-password" type="password"
+                            maxlength="64" wire:model="password_confirmation" required />
+                    </div>
+                </div>
+                <x-livewire.loading-button type='submit' label="Guardar contraseña" class="mb-3" />
+            </form>
+        </div>
+
+        <div class="col-md-4">
+            @include('partials.livewire.edit.model-status', [
+                'model' => $user,
+                'modelName' => 'Usuario',
+            ])
+        </div>
+    </div>
+</div>
+
+@push('js')
+    <script>
+        document.addEventListener("livewire:initialized", () => {
+            let $wire = Livewire.first();
+
+            roles = $('#roles').select2({
+                placeholder: 'Seleccione los roles...',
+                theme: 'bootstrap4',
+                allowClear: true,
+                language: 'es',
+                width: '100%',
+                width: 'resolve'
+            });
+
+            roles.on('change', function(e) {
+                const value = $(this).val();
+                $wire.set('selectedRoles', value, false);
+            });
+        });
+    </script>
+@endpush
