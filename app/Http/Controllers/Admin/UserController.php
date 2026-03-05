@@ -14,6 +14,15 @@ class UserController extends Controller
         return view('admin.users.index');
     }
 
+    public function show(int $id): View
+    {
+        abort_if(!User::where('id', $id)->exists(), 404);
+
+        return view('admin.users.show', [
+            'userId' => $id
+        ]);
+    }
+
     public function create(): View
     {
         return view('admin.users.create');

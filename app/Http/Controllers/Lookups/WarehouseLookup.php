@@ -11,36 +11,30 @@ class WarehouseLookup extends Controller
 {
     public function select2(Request $request): JsonResponse
     {
-        $query = Warehouse::active();
+        $query = Warehouse::query();
 
-        $term = $request->input('term');
+        if ($request->has('active')) {
+            $request->boolean('active') ? $query->active() : $query->inactive();
+        }
 
-        if ($term) {
-            $query->where(function ($q) use ($term) {
-                $q->where('name', 'like', "%$term%")
-                    ->orWhere('description', 'like', "%$term%");
-            });
+        if ($request->has('term')) {
+            $term = $request->string('term');
+            $query->whereAny(['name', 'description'], 'like', "%$term%");
         }
 
         $query->orderBy('name');
 
         $results = $query->paginate(16, ['id', 'name', 'description']);
 
-        $map = $results->map(
-            fn($item) => [
-                'id'            => $item->id,
-                'text'          => $item->name,
-                'description'   => $item->description
-            ]
-        );
+        $map = $results->map(fn(Warehouse $item) => [
+            'id'          => $item->id,
+            'text'        => $item->name,
+            'description' => $item->description,
+        ]);
 
-        $json = [
-            'results' => $map,
-            'pagination' => [
-                'more' => $results->hasMorePages(),
-            ],
-        ];
-
-        return response()->json($json);
+        return response()->json([
+            'results'    => $map,
+            'pagination' => ['more' => $results->hasMorePages()],
+        ]);
     }
 }

@@ -30,30 +30,24 @@ trait TruncateText
         return Str::limit((string) $value, $limit);
     }
 
-    public function default(string $attribute): string
-    {
-        $value = $this->getAttribute($attribute);
-        return blank($value) ? self::DEFAULT_TEXT : (string) $value;
-    }
-
     // Métodos de acceso rápido
-    public function tinyText(string $attribute): string
+    public function tinyText(string $attribute, string $default = self::DEFAULT_TEXT): string
     {
-        return $this->truncateText($attribute, 'tiny');
+        return $this->truncateText($attribute, 'tiny', $default);
     }
 
-    public function shortText(string $attribute): string
+    public function shortText(string $attribute, string $default = self::DEFAULT_TEXT): string
     {
         return $this->truncateText($attribute, 'short');
     }
 
-    public function mediumText(string $attribute): string
+    public function mediumText(string $attribute, string $default = self::DEFAULT_TEXT): string
     {
-        return $this->truncateText($attribute, 'medium');
+        return $this->truncateText($attribute, 'medium', $default);
     }
 
-    public function longText(string $attribute): string
+    public function longText(string $attribute, string $default = self::DEFAULT_TEXT): string
     {
-        return $this->truncateText($attribute, 'long');
+        return $this->truncateText($attribute, 'long', $default);
     }
 }

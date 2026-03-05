@@ -49,12 +49,7 @@ class ResponsibleEdit extends Component
     {
         $validated = $this->validate([
             'name'       => ['required', 'string', 'max:128'],
-            'identifier' => [
-                'nullable',
-                'string',
-                'max:128',
-                Rule::unique('responsibles')->ignore($this->responsibleId),
-            ],
+            'identifier' => ['nullable', 'string', 'max:128', Rule::unique('responsibles')->ignore($this->responsibleId),],
             'position'   => ['nullable', 'string', 'max:128'],
             'department' => ['nullable', 'string', 'max:128'],
             'phone'      => ['nullable', 'string', 'max:20'],
@@ -63,32 +58,7 @@ class ResponsibleEdit extends Component
 
         $this->responsible()->update($validated);
 
-        $this->toastSuccess('Responsable actualizado.');
-    }
-
-    public function toggleActive(): void
-    {
-        $this->toastSuccess(
-            $this->responsible()->toggleActive()
-                ? 'Responsable activado.'
-                : 'Responsable desactivado.'
-        );
-    }
-
-    public function delete(): void
-    {
-        $responsible = $this->responsible();
-
-        if ($responsible->isInUse()) {
-            $this->alertError(
-                'El responsable está en uso, se recomienda desactivarlo.',
-                'Responsable en uso'
-            );
-        } else {
-            $responsible->delete();
-            $this->flashToastSuccess('Responsable eliminado.');
-            redirect()->route('responsibles.index');
-        }
+        $this->toastSuccess('Responsable actualizado');
     }
 
     private ?Responsible $responsible = null;

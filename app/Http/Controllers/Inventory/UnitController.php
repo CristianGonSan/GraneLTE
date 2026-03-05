@@ -14,6 +14,15 @@ class UnitController extends Controller
         return view('inventory.units.index');
     }
 
+    public function show(int $id): View
+    {
+        abort_if(!Unit::where('id', $id)->exists(), 404);
+
+        return view('inventory.units.show', [
+            'unitId' => $id
+        ]);
+    }
+
     public function create(): View
     {
         return view('inventory.units.create');

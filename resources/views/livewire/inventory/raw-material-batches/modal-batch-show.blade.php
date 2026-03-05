@@ -3,80 +3,144 @@
         <div>
             <div class="modal-backdrop show"></div>
             <div class="modal show d-block" tabindex="-1">
-                <div class="modal-dialog modal-dialog-centered" x-on:click.outside="open = false">
+                <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable modal-lg"
+                    x-on:click.outside="open = false">
                     <div class="modal-content">
-
                         <div class="modal-header">
-                            <div class="modal-title">{{ $batch?->code() ?? 'Detalle de lote' }}</div>
+                            <h1 class="h4 modal-title">Detalles de lote</h1>
                             <button type="button" class="close" x-on:click="open = false">
                                 <span>&times;</span>
                             </button>
                         </div>
 
                         @if ($batch)
-                            <div class="modal-body bg-light border-bottom">
-                                <dt>Material</dt>
-                                <dd>
-                                    <a href="{{ route('raw-materials.edit', $batch->material_id) }}" target="_blank">
-                                        {{ $batch->material->name }}
-                                    </a>
-                                </dd>
-
-                                <dl class="row mb-0">
-                                    <div class="col-6">
-                                        <dt>Disponible</dt>
-                                        <dd class="mb-0">
-                                            {{ number_format($batch->current_quantity, 3) }}
-                                            {{ $batch->material->unit->symbol }}
-                                        </dd>
-                                    </div>
-                                    <div class="col-6">
-                                        <dt>Valor</dt>
-                                        <dd class="mb-0">{{ number_format($batch->currentCost(), 2) }} MXN</dd>
-                                    </div>
-                                </dl>
-                            </div>
-
+                            @php
+                                $supplier = $batch->supplier;
+                                $material = $batch->material;
+                            @endphp
                             <div class="modal-body">
-                                <dl class="row mb-0">
-                                    <div class="col-12 mb-2">
-                                        <dt>Proveedor</dt>
-                                        <dd class="mb-0">
-                                            <a href="{{ route('suppliers.edit', $batch->supplier_id) }}"
-                                                target="_blank">
-                                                {{ $batch->supplier->name }}
-                                            </a>
-                                        </dd>
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <div class="info-box">
+                                            <span class="info-box-icon bg-info">
+                                                <i class="fas fa-boxes"></i>
+                                            </span>
+                                            <div class="info-box-content">
+                                                <span class="info-box-text">En stock</span>
+                                                <span class="info-box-number">
+                                                    {{ number_format($batch->current_quantity, 3) }}
+                                                    {{ $material->unit->symbol }}
+                                                </span>
+                                            </div>
+                                        </div>
                                     </div>
-                                    <div class="col-6 mb-2">
-                                        <dt>Recepción</dt>
-                                        <dd class="mb-0">{{ $batch->received_at->format('d/m/Y') }}</dd>
+                                    <div class="col-md-6">
+                                        <div class="info-box">
+                                            <span class="info-box-icon bg-teal">
+                                                <i class="fas fa-dollar-sign"></i>
+                                            </span>
+                                            <div class="info-box-content">
+                                                <span class="info-box-text">Costo actual</span>
+                                                <span class="info-box-number">
+                                                    $ {{ number_format($batch->current_cost, 2) }}
+                                                    MXN
+                                                </span>
+                                            </div>
+                                        </div>
                                     </div>
-                                    <div class="col-6 mb-2">
-                                        <dt>Expiración</dt>
-                                        <dd class="mb-0">
-                                            {{ $batch->expiration_date?->format('d/m/Y') ?? '--/--/----' }}
-                                        </dd>
+                                </div>
+
+                                <h2 class="h5">
+                                    Lote
+                                    <a href="{{ route('raw-material-batches.show', $batch->id) }}" target="_blank">
+                                        <i class="fas fa-fw fa-arrow-up-right-from-square"></i>
+                                    </a>
+                                </h2>
+
+                                <div class="card mb-3">
+                                    <div class="card-body">
+                                        <dl class="row mb-0">
+                                            <dt class="col-sm-4 text-muted">Código</dt>
+                                            <dd class="col-sm-8 font-weight-bold">{{ $batch->code }}</dd>
+
+                                            <dt class="col-sm-4 text-muted">Recibido el</dt>
+                                            <dd class="col-sm-8">{{ $batch->received_at->format('d/m/Y') }}</dd>
+
+                                            <dt class="col-sm-4 text-muted">Cantidad recibida</dt>
+                                            <dd class="col-sm-8">
+                                                {{ number_format($batch->received_quantity, 3) }}
+                                                {{ $material->unit->symbol }}
+                                            </dd>
+
+                                            <dt class="col-sm-4 text-muted">Costo unitario</dt>
+                                            <dd class="col-sm-8">
+                                                $ {{ number_format($batch->received_unit_cost, 2) }} MXN /
+                                                {{ $material->unit->symbol }}
+                                            </dd>
+
+                                            <dt class="col-sm-4 text-muted">Costo total recibido</dt>
+                                            <dd class="col-sm-8">
+                                                $ {{ number_format($batch->received_total_cost, 2) }} MXN
+                                            </dd>
+
+                                            <dt class="col-sm-4 text-muted">
+                                                {{ $batch->isExpired() ? 'Vencido el' : 'Vence el' }}
+                                            </dt>
+                                            <dd
+                                                class="col-sm-8 {{ $batch->isExpired() ? 'text-danger font-weight-bold' : '' }} mb-0">
+                                                {{ $batch->expiration_date?->format('d/m/Y') ?? '--/--/----' }}
+                                            </dd>
+                                        </dl>
                                     </div>
-                                    <div class="col-6 mb-2">
-                                        <dt>Cantidad recibida</dt>
-                                        <dd class="mb-0">
-                                            {{ number_format($batch->received_quantity, 3) }}
-                                            {{ $batch->material->unit->symbol }}
-                                        </dd>
+                                </div>
+
+                                <h2 class="h5">
+                                    Material
+                                    <a href="{{ route('raw-materials.show', $material->id) }}" target="_blank">
+                                        <i class="fas fa-fw fa-arrow-up-right-from-square"></i>
+                                    </a>
+                                </h2>
+
+                                <div class="card mb-3">
+                                    <div class="card-body">
+                                        <dl class="row mb-0">
+                                            <dt class="col-sm-4 text-muted">Nombre</dt>
+                                            <dd class="col-sm-8">{{ $material->mediumText('name') }}</dd>
+
+                                            <dt class="col-sm-4 text-muted">Unidad</dt>
+                                            <dd class="col-sm-8">
+                                                {{ $material->unit->name }}
+                                                ({{ $material->unit->symbol }})
+                                            </dd>
+
+                                            <dt class="col-sm-4 text-muted">Categoría</dt>
+                                            <dd class="col-sm-8 mb-0">{{ $material->category->mediumText('name') }}
+                                            </dd>
+                                        </dl>
                                     </div>
-                                    <div class="col-6 mb-2">
-                                        <dt>Costo unitario</dt>
-                                        <dd class="mb-0">
-                                            {{ number_format($batch->received_unit_cost, 2) }} MXN /
-                                            {{ $batch->material->unit->symbol }}
-                                        </dd>
+                                </div>
+
+                                <h2 class="h5">
+                                    Proveedor
+                                    <a href="{{ route('suppliers.edit', $supplier->id) }}" target="_blank">
+                                        <i class="fas fa-fw fa-arrow-up-right-from-square"></i>
+                                    </a>
+                                </h2>
+
+                                <div class="card mb-0">
+                                    <div class="card-body">
+                                        <dl class="row mb-0">
+                                            <dt class="col-sm-4 text-muted">Nombre</dt>
+                                            <dd class="col-sm-8">
+                                                {{ $supplier->mediumText('name') }}
+                                            </dd>
+
+                                            <dt class="col-sm-4 text-muted">Descripción</dt>
+                                            <dd class="col-sm-8 text-muted mb-0">
+                                                {{ $supplier->longText('description', 'Sin descripción') }}</dd>
+                                        </dl>
                                     </div>
-                                    <div class="col-12">
-                                        <dt>Costo total</dt>
-                                        <dd class="mb-0">{{ number_format($batch->received_total_cost, 2) }} MXN</dd>
-                                    </div>
-                                </dl>
+                                </div>
                             </div>
                         @else
                             <div class="modal-body">
@@ -89,7 +153,6 @@
                                 Cerrar
                             </button>
                         </div>
-
                     </div>
                 </div>
             </div>

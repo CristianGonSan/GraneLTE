@@ -7,11 +7,12 @@
         <ol class="breadcrumb">
             <li class="breadcrumb-item"><a href="{{ route('dashboard') }}">Inicio</a></li>
             <li class="breadcrumb-item"><a href="{{ route('admin.roles.index') }}">Roles</a></li>
-            <li class="breadcrumb-item active">Crear</li>
+            <li class="breadcrumb-item active">Nuevo</li>
         </ol>
     </nav>
 @endsection
 
 @section('content')
+    <h1 class="h4">Nuevo rol</h1>
     <livewire:Admin.Roles.RoleCreate />
 @endsection

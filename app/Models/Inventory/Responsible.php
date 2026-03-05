@@ -19,9 +19,10 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
  * @property bool $is_active
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
- * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Inventory\RawMaterialDocument> $rawMaterialTransactions
- * @property-read int|null $raw_material_transactions_count
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Inventory\RawMaterialDocument> $rawMaterialDocuments
+ * @property-read int|null $raw_material_documents_count
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Responsible active()
+ * @method static \Database\Factories\Inventory\ResponsibleFactory factory($count = null, $state = [])
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Responsible inactive()
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Responsible newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Responsible newQuery()
@@ -36,9 +37,7 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Responsible wherePhone($value)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Responsible wherePosition($value)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Responsible whereUpdatedAt($value)
- * @method static \Database\Factories\Inventory\ResponsibleFactory factory($count = null, $state = [])
  * @mixin \Eloquent
- * @mixin IdeHelperResponsible
  */
 class Responsible extends Model
 {
@@ -62,10 +61,10 @@ class Responsible extends Model
 
     public function isInUse(): bool
     {
-        return $this->rawMaterialTransactions()->exists();
+        return $this->rawMaterialDocuments()->exists();
     }
 
-    public function rawMaterialTransactions(): HasMany
+    public function rawMaterialDocuments(): HasMany
     {
         return $this->hasMany(RawMaterialDocument::class);
     }

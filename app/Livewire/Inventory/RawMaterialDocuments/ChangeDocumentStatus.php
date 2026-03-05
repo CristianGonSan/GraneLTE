@@ -5,6 +5,7 @@ namespace App\Livewire\Inventory\RawMaterialDocuments;
 use App\Enums\Inventory\RawMaterialDocument\RawMaterialDocumentStatus;
 use App\Models\Inventory\RawMaterialDocument;
 use App\Traits\SweetAlert2\Livewire\WithSweetAlert;
+use App\Traits\SweetAlert2\WithSweetAlertFlash;
 use DomainException;
 use Illuminate\View\View;
 use Livewire\Component;
@@ -12,16 +13,13 @@ use Throwable;
 
 class ChangeDocumentStatus extends Component
 {
-    use WithSweetAlert;
+    use WithSweetAlert, WithSweetAlertFlash;
 
     public int $documentId;
 
-    private ?RawMaterialDocument $document = null;
-
-    public function mount(RawMaterialDocument $document): void
+    public function mount(int $documentId): void
     {
-        $this->documentId = $document->id;
-        $this->document   = $document;
+        $this->documentId = $documentId;
     }
 
     public function render(): View
@@ -63,12 +61,24 @@ class ChangeDocumentStatus extends Component
         }
     }
 
-    private function document(): RawMaterialDocument
+    public function delete(): void
     {
-        if ($this->document === null) {
-            $this->document = RawMaterialDocument::findOrFail($this->documentId);
+        $document = $this->document();
+
+        if (!$document->validateDelete(auth()->user())) {
+            $this->dispatchToast('error', 'Solo se puede eliminar si es un borrador y por el propietario');
+            return;
         }
 
-        return $this->document;
+        $document->hardDelete();
+        $this->flashToast('success', 'Documento eliminado.');
+        redirect()->route('raw-material-documents.index');
+    }
+
+    private ?RawMaterialDocument $document = null;
+
+    private function document(): RawMaterialDocument
+    {
+        return $this->document ??= RawMaterialDocument::findOrFail($this->documentId);
     }
 }

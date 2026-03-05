@@ -2,14 +2,13 @@
 
 namespace App\Models;
 
-// use Illuminate\Contracts\Auth\MustVerifyEmail;
-
+use App\Models\Inventory\RawMaterialDocument;
 use App\Traits\Models\HasActiveState;
 use App\Traits\Models\TruncateText;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Spatie\Permission\Traits\HasRoles;
-
 
 /**
  * @property int $id
@@ -21,10 +20,10 @@ use Spatie\Permission\Traits\HasRoles;
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
  * @property bool $is_active
- * @property-read \Illuminate\Notifications\DatabaseNotificationCollection<int, \Illuminate\Notifications\DatabaseNotification> $notifications
- * @property-read int|null $notifications_count
  * @property-read \Illuminate\Database\Eloquent\Collection<int, \Spatie\Permission\Models\Permission> $permissions
  * @property-read int|null $permissions_count
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, RawMaterialDocument> $rawMarterialDocument
+ * @property-read int|null $raw_marterial_document_count
  * @property-read \Illuminate\Database\Eloquent\Collection<int, \Spatie\Permission\Models\Role> $roles
  * @property-read int|null $roles_count
  * @method static \Illuminate\Database\Eloquent\Builder<static>|User active()
@@ -47,7 +46,6 @@ use Spatie\Permission\Traits\HasRoles;
  * @method static \Illuminate\Database\Eloquent\Builder<static>|User withoutPermission($permissions)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|User withoutRole($roles, $guard = null)
  * @mixin \Eloquent
- * @mixin IdeHelperUser
  */
 class User extends Authenticatable
 {
@@ -73,6 +71,11 @@ class User extends Authenticatable
 
     public function isInUse(): bool
     {
-        return true;
+        return $this->rawMarterialDocument()->exists();
+    }
+
+    public function rawMarterialDocument(): HasMany
+    {
+        return $this->hasMany(RawMaterialDocument::class, 'created_by');
     }
 }

@@ -2,7 +2,7 @@
 
 @section('plugins.Select2', true)
 
-@section('title', 'Detalles de Entrada')
+@section('title', 'Detalles de Salida')
 
 @section('content_header')
     <nav aria-label="breadcrumb">
@@ -18,81 +18,88 @@
 @endsection
 
 @section('content')
-    <div>
-        <h1 class="h4">Detalles de Salida de Materia Prima</h1>
+    <h1 class="h4">Detalles de Salida de Materia Prima</h1>
 
-        @include('partials.inventory.raw-material-documents.show.card-details')
+    @include('partials.inventory.raw-material-documents.show.card-details')
 
-        <x-card-table>
-            <thead class="text-nowrap">
-                <tr>
-                    <th>Materia Prima</th>
-                    <th>Almacén</th>
-                    <th>Código Lote</th>
-                    <th>Expiración</th>
-                    <th class="text-center">Cantidad</th>
-                    <th class="text-center">Costo Unit.</th>
-                    <th class="text-center">Total MXN</th>
-                </tr>
-            </thead>
+    <h2 class="h5">Lista de salidas</h2>
 
-            <tbody>
-                @forelse ($document->receiptLines as $line)
-                    <tr>
-                        <td class="align-middle" style="max-width: 130px;">
-                            {{ $line->material->name }}
-                        </td>
+    @forelse ($document->issueLines as $line)
+        @php
+            $stock = $line->stock;
+            $batch = $stock->batch;
+            $material = $batch->material;
+        @endphp
+        <div class="card">
+            <div class="card-body py-3">
+                <div>
+                    <strong class="mb-0 text-dark">{{ $material->name }}</strong>
+                    <div class="text-muted">{{ $batch->code }}</div>
+                </div>
 
-                        <td class="align-middle" style="max-width: 180px;">
-                            {{ $line->warehouse->name }}
-                        </td>
+                <hr class="my-2">
 
-                        <td class="align-middle">
-                            {{ $line->external_batch_code ?? 'S/N' }}
-                        </td>
+                <dl class="row mb-0">
+                    <div class="col-sm-4 col-md-4 col-6">
+                        <dt class="text-muted">Cantidad</dt>
+                        <dd>
+                            {{ number_format($line->quantity, 3) }}
+                            <span title="{{ $material->unit->name }}">
+                                {{ $material->unit->symbol }}
+                            </span>
+                            @if ($line->quantity > $stock->current_quantity)
+                                <br><small class="text-danger">Stock insuficiente</small>
+                            @endif
+                        </dd>
+                    </div>
 
-                        <td class="align-middle">
-                            {{ $line->expiration_date?->format('d/m/Y') ?? '--/--/----' }}
-                        </td>
+                    <div class="col-sm-4 col-md-4 col-6">
+                        <dt class="text-muted">Costo unitario</dt>
+                        <dd>$ {{ number_format($batch->received_unit_cost, 2) }}</dd>
+                    </div>
 
-                        <td class="align-middle text-center">
-                            {{ number_format($line->received_quantity, 3) }}
-                            {{ $line->material->unit->symbol }}
-                        </td>
+                    <div class="col-sm-4 col-md-4">
+                        <dt class="text-muted">Total MXN</dt>
+                        <dd>$ {{ number_format($line->totalCost(), 2) }}</dd>
+                    </div>
+                </dl>
 
-                        <td class="align-middle text-center">
-                            {{ number_format($line->received_unit_cost, 2) }}
-                        </td>
+                <hr class="my-2">
 
-                        <td class="align-middle text-center">
-                            {{ number_format($line->received_total_cost, 2) }}
-                        </td>
-                    </tr>
-                @empty
-                    <tr>
-                        <td colspan="7" class="text-center text-muted py-4">
-                            No hay lotes registrados
-                        </td>
-                    </tr>
-                @endforelse
-            </tbody>
+                <div class="text-muted">
+                    {{ $line->warehouse->name }}
+                </div>
+            </div>
+        </div>
+    @empty
+        <div class="card">
+            <div class="card-body">
+                <div class="text-center text-muted py-4">
+                    <i class="fas fa-box-open fa-2x mb-2 d-block"></i>
+                    No hay lotes registrados
+                </div>
+            </div>
+        </div>
+    @endforelse
 
-            <tfoot>
-                <tr>
-                    <th colspan="6"></th>
-                    <th class="text-center">
-                        {{ number_format($document->total_cost, 2) }}
-                    </th>
-                </tr>
-            </tfoot>
-        </x-card-table>
-
-        <livewire:Inventory.RawMaterialDocuments.ChangeDocumentStatus :document="$document" />
-
-        <div class="mt-3 mb-3">
-            <a href="{{ route('raw-material-documents.index') }}" class="btn btn-outline-secondary">
-                Volver
-            </a>
+    <div class="card">
+        <div class="card-body py-2">
+            <div class="d-flex justify-content-between align-items-center">
+                <strong class="text-muted">Total MXN</strong>
+                <strong>$ {{ number_format($document->total_cost, 2) }}</strong>
+            </div>
         </div>
     </div>
+
+    <h2 class="h5">Estatus</h2>
+
+    <livewire:Inventory.RawMaterialDocuments.ChangeDocumentStatus :documentId="$document->id" />
+
+    @if ($document->status === App\Enums\Inventory\RawMaterialDocument\RawMaterialDocumentStatus::ACCEPTED)
+        <hr>
+        <h2 class="h5">Movimientos generados por este documento</h2>
+        <livewire:Inventory.RawMaterialDocuments.MovementsTable :documentId="$document->id" />
+
+        <livewire:Inventory.RawMaterialMovements.ModalMovementShow />
+    @endif
 @endsection

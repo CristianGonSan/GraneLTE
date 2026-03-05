@@ -14,6 +14,15 @@ class CategoryController extends Controller
         return view('inventory.categories.index');
     }
 
+    public function show(int $id): View
+    {
+        abort_if(!Category::where('id', $id)->exists(), 404);
+
+        return view('inventory.categories.show', [
+            'categoryId' => $id
+        ]);
+    }
+
     public function create(): View
     {
         return view('inventory.categories.create');

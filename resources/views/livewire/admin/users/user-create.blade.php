@@ -1,6 +1,4 @@
 <div>
-    <h1 class="h4">Crear Usuario</h1>
-
     <form wire:submit.prevent="save">
         <div class="card">
             <div class="card-body form-row">
@@ -24,10 +22,7 @@
                     wire:model="password_confirmation" required />
 
                 <div class="col-12 mb-0">
-                    <div class="icheck-primary">
-                        <input type="checkbox" id="show_passwords" wire:model="showPasswords">
-                        <label for="show_passwords">Mostrar contraseñas</label>
-                    </div>
+                    <x-checkbox name="show_passwords" label="Mostrar contraseñas" />
                 </div>
 
                 <div class="col-12">
@@ -63,13 +58,12 @@
         document.addEventListener("livewire:initialized", () => {
             let $wire = Livewire.first();
 
-            roles = $('#roles').select2({
+            const roles = $('#roles').select2({
                 placeholder: 'Seleccione los roles...',
                 theme: 'bootstrap4',
                 width: '100%',
                 language: 'es',
                 dropdownAutoWidth: true,
-                width: 'resolve'
             });
 
             roles.on('change', function(e) {

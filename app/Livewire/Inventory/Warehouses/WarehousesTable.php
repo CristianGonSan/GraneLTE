@@ -2,53 +2,47 @@
 
 namespace App\Livewire\Inventory\Warehouses;
 
-use App\Models\Inventory\WareHouse;
-
-use App\Traits\Livewire\WithTableSorting;
-
+use App\Models\Inventory\Warehouse;
+use App\Traits\Livewire\Tables\HasLivewireTableBehavior;
+use Illuminate\Contracts\View\View;
 use Illuminate\Database\Eloquent\Builder;
-use Illuminate\View\View;
-use Livewire\Component;
-use Livewire\WithPagination;
 use Livewire\Attributes\Session;
+use Livewire\Component;
 
 class WarehousesTable extends Component
 {
-    use WithPagination, WithTableSorting;
+    use HasLivewireTableBehavior;
 
     #[Session]
     public string $searchTerm = '';
+
     #[Session]
     public int $perPage = 12;
+
     #[Session]
     public int $page = 1;
+
     #[Session]
     public string $sortColumn = 'id';
+
     #[Session]
     public string $sortDirection = 'desc';
 
-    protected array $theadConfig =
-    [
-        [
-            'column' => 'id',
-            'label' => 'id',
-            'align' => 'center',
-            'style' => 'width: 1%;',
-        ],
+    protected array $theadConfig = [
         [
             'column' => 'name',
-            'field' => 'name',
-            'label' => 'Nombre',
-            'style' => 'min-width: 200px;'
+            'label'  => 'Nombre',
+            'style'  => 'min-width: 200px;',
         ],
         [
             'label' => 'Descripción',
-            'style' => 'min-width: 300px;'
+            'style' => 'min-width: 300px;',
         ],
         [
-            'label' => 'Activo',
-            'align' => 'center',
-            'style' => 'width: 1%;',
+            'column' => 'is_active',
+            'label'  => 'Activo',
+            'align'  => 'center',
+            'style'  => 'width: 1%;',
         ],
         [
             'label' => 'Ver más',
@@ -56,29 +50,18 @@ class WarehousesTable extends Component
         ],
     ];
 
+    public function mount(): void
+    {
+        $this->setPage($this->page);
+    }
 
     public function render(): View
     {
         $warehouses = $this->getQuery()->paginate($this->perPage);
 
         return view('livewire.inventory.warehouses.warehouses-table', [
-            'warehouses' => $warehouses
+            'warehouses' => $warehouses,
         ]);
-    }
-
-    public function search(): void
-    {
-        $this->resetPage();
-    }
-
-    public function afterSortChanged(): void
-    {
-        $this->resetPage();
-    }
-
-    public function updatingPage($page): void
-    {
-        $this->page = $page;
     }
 
     private function getQuery(): Builder
@@ -86,10 +69,13 @@ class WarehousesTable extends Component
         $query = Warehouse::query();
 
         if ($term = $this->searchTerm) {
-            $query->whereAny([
-                'name',
-                'description'
-            ], 'like', "%$term%");
+            $query->where(function ($q) use ($term) {
+                $q->whereAny(
+                    ['name', 'description'],
+                    'like',
+                    "%$term%"
+                );
+            });
         }
 
         $query->orderBy($this->sortColumn, $this->sortDirection);

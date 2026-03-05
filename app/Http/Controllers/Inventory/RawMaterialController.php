@@ -13,6 +13,15 @@ class RawMaterialController extends Controller
         return view('inventory.raw-materials.index');
     }
 
+    public function show(int $id): View
+    {
+        abort_if(!RawMaterial::where('id', $id)->exists(), 404);
+
+        return view('inventory.raw-materials.show', [
+            'rawMaterialId' => $id
+        ]);
+    }
+
     public function create(): View
     {
         return view('inventory.raw-materials.create');

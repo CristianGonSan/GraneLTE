@@ -8,23 +8,18 @@
     <tbody>
         @forelse ($categories as $category)
             <tr wire:key="category-{{ $category->id }}">
-                <td class="text-center">{{ $category->id }}</td>
                 <td>{{ $category->shortText('name') }}</td>
-                <td>{{ $category->mediumText('description') }}</td>
-
+                <td>{{ $category->mediumText('description', 'Sin descripción') }}</td>
+                <td class="text-center"><i class="{{ $category->getActiveIconClass() }}"></i></td>
                 <td class="text-center">
-                    <i class="{{ $category->getActiveIconClass() }}"></i>
-                </td>
-
-                <td class="text-center cursor-pointer">
-                    <a href="{{ route('categories.edit', $category->id) }}" class="d-block text-reset">
-                        <i class="fa-solid fa-chevron-right"></i>
+                    <a href="{{ route('categories.show', $category->id) }}" class="d-block text-reset">
+                        <i class="fas fa-fw fa-chevron-right"></i>
                     </a>
                 </td>
             </tr>
         @empty
             <tr>
-                <td colspan="5" class="text-center text-muted">No se encontraron resultados.</td>
+                <td colspan="4" class="text-center text-muted">No se encontraron resultados.</td>
             </tr>
         @endforelse
     </tbody>

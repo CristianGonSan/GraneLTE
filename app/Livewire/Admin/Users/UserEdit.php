@@ -8,6 +8,7 @@ use App\Traits\SweetAlert2\Livewire\Toast;
 use Hash;
 use Illuminate\Validation\Rule;
 use Illuminate\View\View;
+use Livewire\Attributes\Locked;
 use Livewire\Component;
 use Spatie\Permission\Models\Role;
 
@@ -15,15 +16,15 @@ class UserEdit extends Component
 {
     use Toast, FlashToast;
 
+    #[Locked]
     public int $userId;
+
     public string $name;
     public string $email;
     public string $password;
     public string $password_confirmation;
     public array $roles = [];
     public array $selectedRoles = [];
-
-
 
     public function mount(int $userId): void
     {
@@ -44,9 +45,7 @@ class UserEdit extends Component
 
     public function render(): View
     {
-        return view('livewire.admin.users.user-edit', [
-            'user' => $this->user()
-        ]);
+        return view('livewire.admin.users.user-edit');
     }
 
     public function save(): void
@@ -62,27 +61,7 @@ class UserEdit extends Component
 
         $user->syncRoles($validated['selectedRoles'] ?? []);
 
-        $this->toastSuccess('Información actualizada.');
-    }
-
-    public function toggleActive(): void
-    {
-        $this->toastSuccess($this->user()->toggleActive() ?
-            'Usuario activado' :
-            'Usuario desactivado');
-    }
-
-    public function delete(): void
-    {
-        $user = $this->user();
-
-        if ($user->isInUse()) {
-            $this->toastError('El usuario esta en uso, sugerimos desactivarlo.', 'Usuario en Uso.');
-        } else {
-            $user->delete();
-            $this->flashToastSuccess('Usuario eliminado.');
-            redirect()->route('units.index');
-        }
+        $this->toastSuccess('Información actualizada');
     }
 
     public function changePassword(): void

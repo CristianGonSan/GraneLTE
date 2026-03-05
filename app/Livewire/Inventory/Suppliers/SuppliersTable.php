@@ -3,56 +3,52 @@
 namespace App\Livewire\Inventory\Suppliers;
 
 use App\Models\Inventory\Supplier;
-
-use App\Traits\Livewire\WithTableSorting;
-
+use App\Traits\Livewire\Tables\HasLivewireTableBehavior;
+use Illuminate\Contracts\View\View;
 use Illuminate\Database\Eloquent\Builder;
-use Illuminate\View\View;
-use Livewire\Component;
-use Livewire\WithPagination;
 use Livewire\Attributes\Session;
+use Livewire\Component;
 
 class SuppliersTable extends Component
 {
-    use WithPagination, WithTableSorting;
+    use HasLivewireTableBehavior;
 
     #[Session]
     public string $searchTerm = '';
+
     #[Session]
     public int $perPage = 12;
+
     #[Session]
     public int $page = 1;
+
     #[Session]
-    public string $sortColumn = 'id';
+    public string $sortColumn = 'name';
+
     #[Session]
     public string $sortDirection = 'desc';
 
-
-    protected array $theadConfig =
-    [
-        [
-            'column' => 'id',
-            'label' => 'id',
-            'align' => 'center',
-            'style'  => 'width: 1%;',
-        ],
+    protected array $theadConfig = [
         [
             'column' => 'name',
-            'field' => 'name',
-            'label' => 'Nombre',
-            'style' => 'min-width: 200px;'
+            'label'  => 'Nombre',
+            'style'  => 'min-width: 200px;',
         ],
         [
-            'column' => 'email',
+            'column' => 'contact_person',
+            'label'  => 'Persona de Contacto',
+        ],
+        [
             'label' => 'Email',
         ],
         [
             'label' => 'Teléfono',
         ],
         [
-            'label' => 'Activo',
-            'align' => 'center',
-            'style' => 'width: 1%;',
+            'column' => 'is_active',
+            'label'  => 'Activo',
+            'align'  => 'center',
+            'style'  => 'width: 1%;',
         ],
         [
             'label' => 'Ver más',
@@ -60,29 +56,18 @@ class SuppliersTable extends Component
         ],
     ];
 
+    public function mount(): void
+    {
+        $this->setPage($this->page);
+    }
 
     public function render(): View
     {
         $suppliers = $this->getQuery()->paginate($this->perPage);
 
         return view('livewire.inventory.suppliers.suppliers-table', [
-            'suppliers' => $suppliers
+            'suppliers' => $suppliers,
         ]);
-    }
-
-    public function search(): void
-    {
-        $this->resetPage();
-    }
-
-    public function afterSortChanged(): void
-    {
-        $this->resetPage();
-    }
-
-    public function updatingPage($page): void
-    {
-        $this->page = $page;
     }
 
     private function getQuery(): Builder
@@ -90,11 +75,20 @@ class SuppliersTable extends Component
         $query = Supplier::query();
 
         if ($term = $this->searchTerm) {
-            $query->whereAny([
-                'name',
-                'email',
-                'phone'
-            ], 'like', "%$term%");
+            $query->where(function ($q) use ($term) {
+                $q->whereAny(
+                    ['name', 'contact_person', 'email'],
+                    'like',
+                    "%$term%"
+                )->orWhere('phone', 'like', "$term%");
+            });
+        }
+
+        if ($this->sortColumn === 'contact_person') {
+            $query->orderByRaw("contact_person IS NULL")
+                ->orderBy('contact_person', $this->sortDirection);
+
+            return $query;
         }
 
         $query->orderBy($this->sortColumn, $this->sortDirection);

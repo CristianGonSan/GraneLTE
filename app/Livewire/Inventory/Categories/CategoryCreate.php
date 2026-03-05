@@ -16,9 +16,8 @@ class CategoryCreate extends Component
 
     public string $name;
     public ?string $description;
+
     public bool $createAnother = false;
-
-
 
     public function render(): View
     {
@@ -32,14 +31,17 @@ class CategoryCreate extends Component
             'description'   => ['nullable', 'string', 'max:255']
         ]);
 
-        Category::create($validated);
+        $category = Category::create($validated);
 
         if ($this->createAnother) {
-            $this->reset(['name', 'description']);
-            $this->toastSuccess('Categoria creada.');
+            $this->reset([
+                'name',
+                'description'
+            ]);
+            $this->toastSuccess('Categoría creada');
         } else {
-            $this->flashToastSuccess('Categoria creada.');
-            redirect()->route('categories.index');
+            $this->flashToastSuccess('Categoría creada');
+            redirect()->route('categories.show', $category->id);
         }
     }
 }

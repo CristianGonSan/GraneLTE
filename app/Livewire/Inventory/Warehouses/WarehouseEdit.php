@@ -22,13 +22,11 @@ class WarehouseEdit extends Component
     public ?string $location = null;
     public ?string $description = null;
 
-
-
     public function mount(int $warehouseId): void
     {
         $this->warehouseId = $warehouseId;
 
-        $warehouse = $this->warehouse();
+        $warehouse         = $this->warehouse();
 
         $this->name        = $warehouse->name;
         $this->location    = $warehouse->location;
@@ -52,32 +50,7 @@ class WarehouseEdit extends Component
 
         $this->warehouse()->update($validated);
 
-        $this->toastSuccess('Almacén actualizado.');
-    }
-
-    public function toggleActive(): void
-    {
-        $this->toastSuccess(
-            $this->warehouse()->toggleActive()
-                ? 'Almacén activado.'
-                : 'Almacén desactivado.'
-        );
-    }
-
-    public function delete(): void
-    {
-        $warehouse = $this->warehouse();
-
-        if ($warehouse->isInUse()) {
-            $this->alertError(
-                'El almacén está en uso, se recomienda desactivarlo.',
-                'Almacén en uso'
-            );
-        } else {
-            $warehouse->delete();
-            $this->flashToastSuccess('Almacén eliminado.');
-            redirect()->route('warehouses.index');
-        }
+        $this->toastSuccess('Almacén actualizado');
     }
 
     private ?Warehouse $warehouse = null;

@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Inventory;
 
 use App\Http\Controllers\Controller;
 use App\Models\Inventory\Category;
+use App\Models\Inventory\RawMaterialBatch;
 use Illuminate\Http\Request;
 use Illuminate\View\View;
 
@@ -14,17 +15,12 @@ class RawMaterialBatchController extends Controller
         return view('inventory.raw-material-batches.index');
     }
 
-    public function create(): View
+    public function show(int $id): View
     {
-        return view('inventory.categories.create');
-    }
+        abort_if(!RawMaterialBatch::where('id', $id)->exists(), 404);
 
-    public function edit(int $id): View
-    {
-        abort_if(!Category::where('id', $id)->exists(), 404);
-
-        return view('inventory.categories.edit', [
-            'categoryId' => $id
+        return view('inventory.raw-material-batches.show', [
+            'batchId' => $id
         ]);
     }
 }

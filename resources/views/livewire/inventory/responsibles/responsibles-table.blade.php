@@ -8,16 +8,14 @@
     <tbody>
         @forelse ($responsibles as $responsible)
             <tr wire:key="responsible-{{ $responsible->id }}">
-                <td class="text-center">{{ $responsible->id }}</td>
                 <td>{{ $responsible->shortText('name') }}</td>
-                <td>{{ $responsible->mediumText('email') }}</td>
-                <td>{{ $responsible->shortText('phone') }}</td>
+                <td>{{ $responsible->shortText('identifier') }}</td>
+                <td>{{ $responsible->shortText('department') }}</td>
+                <td>{{ $responsible->shortText('position') }}</td>
+                <td class="text-center"><i class="{{ $responsible->getActiveIconClass() }}"></i></td>
                 <td class="text-center">
-                    <i class="{{ $responsible->getActiveIconClass() }}"></i>
-                </td>
-                <td class="text-center">
-                    <a href="{{ route('responsibles.edit', $responsible->id) }}" class="d-block text-reset">
-                        <i class="fa-solid fa-chevron-right"></i>
+                    <a href="{{ route('responsibles.show', $responsible->id) }}" class="d-block text-reset">
+                        <i class="fas fa-fw fa-chevron-right"></i>
                     </a>
                 </td>
             </tr>

@@ -23,7 +23,6 @@ class SupplierCreate extends Component
 
     public bool $createAnother = false;
 
-
     public function render(): View
     {
         return view('livewire.inventory.suppliers.supplier-create');
@@ -43,11 +42,18 @@ class SupplierCreate extends Component
         $supplier = Supplier::create($validated);
 
         if ($this->createAnother) {
-            $this->reset(['name', 'contact_person', 'email', 'phone', 'address', 'description']);
-            $this->toastSuccess('Proveedor creado.');
+            $this->reset([
+                'name',
+                'contact_person',
+                'email',
+                'phone',
+                'address',
+                'description'
+            ]);
+            $this->toastSuccess('Proveedor creado');
         } else {
-            $this->flashToastSuccess('Proveedor creado.');
-            redirect()->route('suppliers.index');
+            $this->flashToastSuccess('Proveedor creado');
+            redirect()->route('suppliers.show', $supplier->id);
         }
     }
 }

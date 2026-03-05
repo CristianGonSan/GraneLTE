@@ -34,8 +34,7 @@ namespace App\Models\Inventory{
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Category whereUpdatedAt($value)
  * @mixin \Eloquent
  */
-	#[\AllowDynamicProperties]
-	class IdeHelperCategory {}
+	class Category extends \Eloquent {}
 }
 
 namespace App\Models\Inventory{
@@ -54,6 +53,9 @@ namespace App\Models\Inventory{
  * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Inventory\RawMaterialBatch> $batches
  * @property-read int|null $batches_count
  * @property-read \App\Models\Inventory\Category|null $category
+ * @property-read mixed $current_cost
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Inventory\RawMaterialReceiptLine> $receiptLines
+ * @property-read int|null $receipt_lines_count
  * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Inventory\RawMaterialStock> $stocks
  * @property-read int|null $stocks_count
  * @property-read \App\Models\Inventory\Unit $unit
@@ -76,8 +78,35 @@ namespace App\Models\Inventory{
  * @method static \Illuminate\Database\Eloquent\Builder<static>|RawMaterial whereUpdatedAt($value)
  * @mixin \Eloquent
  */
-	#[\AllowDynamicProperties]
-	class IdeHelperRawMaterial {}
+	class RawMaterial extends \Eloquent {}
+}
+
+namespace App\Models\Inventory{
+/**
+ * @property int $id
+ * @property numeric $theoretical_quantity
+ * @property numeric $counted_quantity
+ * @property numeric $difference_quantity
+ * @property int $stock_id
+ * @property int $document_id
+ * @property \Illuminate\Support\Carbon|null $created_at
+ * @property \Illuminate\Support\Carbon|null $updated_at
+ * @property-read \App\Models\Inventory\RawMaterialDocument $document
+ * @property-read \App\Models\Inventory\RawMaterialStock $stock
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|RawMaterialAdjustmentLine newModelQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|RawMaterialAdjustmentLine newQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|RawMaterialAdjustmentLine query()
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|RawMaterialAdjustmentLine whereCountedQuantity($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|RawMaterialAdjustmentLine whereCreatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|RawMaterialAdjustmentLine whereDifferenceQuantity($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|RawMaterialAdjustmentLine whereDocumentId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|RawMaterialAdjustmentLine whereId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|RawMaterialAdjustmentLine whereStockId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|RawMaterialAdjustmentLine whereTheoreticalQuantity($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|RawMaterialAdjustmentLine whereUpdatedAt($value)
+ * @mixin \Eloquent
+ */
+	class RawMaterialAdjustmentLine extends \Eloquent {}
 }
 
 namespace App\Models\Inventory{
@@ -95,44 +124,45 @@ namespace App\Models\Inventory{
  * @property int $supplier_id
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
+ * @property-read mixed $code
+ * @property-read mixed $current_cost
  * @property-read \App\Models\Inventory\RawMaterial $material
  * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Inventory\RawMaterialMovement> $movements
  * @property-read int|null $movements_count
  * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Inventory\RawMaterialStock> $stocks
  * @property-read int|null $stocks_count
  * @property-read \App\Models\Inventory\Supplier $supplier
- * @method static \Illuminate\Database\Eloquent\Builder<static>|RawMaterialBatch active()
- * @method static \Illuminate\Database\Eloquent\Builder<static>|RawMaterialBatch fEFO()
- * @method static \Illuminate\Database\Eloquent\Builder<static>|RawMaterialBatch fIFO()
- * @method static \Illuminate\Database\Eloquent\Builder<static>|RawMaterialBatch inactive()
- * @method static \Illuminate\Database\Eloquent\Builder<static>|RawMaterialBatch lIFO()
- * @method static \Illuminate\Database\Eloquent\Builder<static>|RawMaterialBatch newModelQuery()
- * @method static \Illuminate\Database\Eloquent\Builder<static>|RawMaterialBatch newQuery()
- * @method static \Illuminate\Database\Eloquent\Builder<static>|RawMaterialBatch query()
- * @method static \Illuminate\Database\Eloquent\Builder<static>|RawMaterialBatch whereBatchCode($value)
- * @method static \Illuminate\Database\Eloquent\Builder<static>|RawMaterialBatch whereCreatedAt($value)
- * @method static \Illuminate\Database\Eloquent\Builder<static>|RawMaterialBatch whereCurrentQuantity($value)
- * @method static \Illuminate\Database\Eloquent\Builder<static>|RawMaterialBatch whereExpirationDate($value)
- * @method static \Illuminate\Database\Eloquent\Builder<static>|RawMaterialBatch whereExternalBatchCode($value)
- * @method static \Illuminate\Database\Eloquent\Builder<static>|RawMaterialBatch whereId($value)
- * @method static \Illuminate\Database\Eloquent\Builder<static>|RawMaterialBatch whereMaterialId($value)
- * @method static \Illuminate\Database\Eloquent\Builder<static>|RawMaterialBatch whereReceivedAt($value)
- * @method static \Illuminate\Database\Eloquent\Builder<static>|RawMaterialBatch whereReceivedQuantity($value)
- * @method static \Illuminate\Database\Eloquent\Builder<static>|RawMaterialBatch whereReceivedTotalCost($value)
- * @method static \Illuminate\Database\Eloquent\Builder<static>|RawMaterialBatch whereReceivedUnitCost($value)
- * @method static \Illuminate\Database\Eloquent\Builder<static>|RawMaterialBatch whereSupplierId($value)
- * @method static \Illuminate\Database\Eloquent\Builder<static>|RawMaterialBatch whereUpdatedAt($value)
+ * @method static Builder<static>|RawMaterialBatch active()
+ * @method static Builder<static>|RawMaterialBatch fEFO()
+ * @method static Builder<static>|RawMaterialBatch fIFO()
+ * @method static Builder<static>|RawMaterialBatch inactive()
+ * @method static Builder<static>|RawMaterialBatch lIFO()
+ * @method static Builder<static>|RawMaterialBatch newModelQuery()
+ * @method static Builder<static>|RawMaterialBatch newQuery()
+ * @method static Builder<static>|RawMaterialBatch query()
+ * @method static Builder<static>|RawMaterialBatch whereBatchCode($value)
+ * @method static Builder<static>|RawMaterialBatch whereCreatedAt($value)
+ * @method static Builder<static>|RawMaterialBatch whereCurrentQuantity($value)
+ * @method static Builder<static>|RawMaterialBatch whereExpirationDate($value)
+ * @method static Builder<static>|RawMaterialBatch whereExternalBatchCode($value)
+ * @method static Builder<static>|RawMaterialBatch whereId($value)
+ * @method static Builder<static>|RawMaterialBatch whereMaterialId($value)
+ * @method static Builder<static>|RawMaterialBatch whereReceivedAt($value)
+ * @method static Builder<static>|RawMaterialBatch whereReceivedQuantity($value)
+ * @method static Builder<static>|RawMaterialBatch whereReceivedTotalCost($value)
+ * @method static Builder<static>|RawMaterialBatch whereReceivedUnitCost($value)
+ * @method static Builder<static>|RawMaterialBatch whereSupplierId($value)
+ * @method static Builder<static>|RawMaterialBatch whereUpdatedAt($value)
  * @mixin \Eloquent
  */
-	#[\AllowDynamicProperties]
-	class IdeHelperRawMaterialBatch {}
+	class RawMaterialBatch extends \Eloquent {}
 }
 
 namespace App\Models\Inventory{
 /**
  * @property int $id
- * @property \App\Enums\Inventory\RawMaterialDocument\RawMaterialDocumentType $type
- * @property \App\Enums\Inventory\RawMaterialDocument\RawMaterialDocumentStatus $status
+ * @property RawMaterialDocumentType $type
+ * @property RawMaterialDocumentStatus $status
  * @property \Illuminate\Support\Carbon $effective_at
  * @property string|null $description
  * @property string|null $reference_type
@@ -144,14 +174,21 @@ namespace App\Models\Inventory{
  * @property \Illuminate\Support\Carbon|null $validated_at
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
- * @property-read \App\Models\User $creator
- * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Inventory\RawMaterialReceiptLine> $issueLines
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Inventory\RawMaterialAdjustmentLine> $adjustmentLines
+ * @property-read int|null $adjustment_lines_count
+ * @property-read User $creator
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Inventory\RawMaterialIssueLine> $issueLines
  * @property-read int|null $issue_lines_count
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Inventory\RawMaterialMovement> $movements
+ * @property-read int|null $movements_count
  * @property-read \App\Models\Inventory\RawMaterialReceipt|null $receipt
  * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Inventory\RawMaterialReceiptLine> $receiptLines
  * @property-read int|null $receipt_lines_count
  * @property-read \App\Models\Inventory\Responsible|null $responsible
- * @property-read \App\Models\User|null $validator
+ * @property-read \App\Models\Inventory\RawMaterialTransferLine|null $transferLine
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Inventory\RawMaterialTransferLine> $transferLines
+ * @property-read int|null $transfer_lines_count
+ * @property-read User|null $validator
  * @method static \Illuminate\Database\Eloquent\Builder<static>|RawMaterialDocument newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder<static>|RawMaterialDocument newQuery()
  * @method static \Illuminate\Database\Eloquent\Builder<static>|RawMaterialDocument query()
@@ -171,14 +208,39 @@ namespace App\Models\Inventory{
  * @method static \Illuminate\Database\Eloquent\Builder<static>|RawMaterialDocument whereValidatedBy($value)
  * @mixin \Eloquent
  */
-	#[\AllowDynamicProperties]
-	class IdeHelperRawMaterialDocument {}
+	class RawMaterialDocument extends \Eloquent {}
 }
 
 namespace App\Models\Inventory{
 /**
  * @property int $id
- * @property \App\Enums\Inventory\RawMaterialMovement\MovementType $type
+ * @property numeric $quantity
+ * @property int $stock_id
+ * @property int $document_id
+ * @property \Illuminate\Support\Carbon|null $created_at
+ * @property \Illuminate\Support\Carbon|null $updated_at
+ * @property-read \App\Models\Inventory\RawMaterialBatch|null $batch
+ * @property-read \App\Models\Inventory\RawMaterialDocument $document
+ * @property-read \App\Models\Inventory\RawMaterialStock $stock
+ * @property-read \App\Models\Inventory\Warehouse|null $warehouse
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|RawMaterialIssueLine newModelQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|RawMaterialIssueLine newQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|RawMaterialIssueLine query()
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|RawMaterialIssueLine whereCreatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|RawMaterialIssueLine whereDocumentId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|RawMaterialIssueLine whereId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|RawMaterialIssueLine whereQuantity($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|RawMaterialIssueLine whereStockId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|RawMaterialIssueLine whereUpdatedAt($value)
+ * @mixin \Eloquent
+ */
+	class RawMaterialIssueLine extends \Eloquent {}
+}
+
+namespace App\Models\Inventory{
+/**
+ * @property int $id
+ * @property RawMaterialMovementType $type
  * @property numeric $quantity
  * @property \Illuminate\Support\Carbon $effective_at
  * @property int $batch_id
@@ -204,8 +266,7 @@ namespace App\Models\Inventory{
  * @method static \Illuminate\Database\Eloquent\Builder<static>|RawMaterialMovement whereWarehouseId($value)
  * @mixin \Eloquent
  */
-	#[\AllowDynamicProperties]
-	class IdeHelperRawMaterialMovement {}
+	class RawMaterialMovement extends \Eloquent {}
 }
 
 namespace App\Models\Inventory{
@@ -216,7 +277,7 @@ namespace App\Models\Inventory{
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
  * @property-read \App\Models\Inventory\RawMaterialDocument $document
- * @property-read \App\Models\Inventory\Supplier $supplier
+ * @property-read Supplier $supplier
  * @method static \Illuminate\Database\Eloquent\Builder<static>|RawMaterialReceipt newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder<static>|RawMaterialReceipt newQuery()
  * @method static \Illuminate\Database\Eloquent\Builder<static>|RawMaterialReceipt query()
@@ -227,8 +288,7 @@ namespace App\Models\Inventory{
  * @method static \Illuminate\Database\Eloquent\Builder<static>|RawMaterialReceipt whereUpdatedAt($value)
  * @mixin \Eloquent
  */
-	#[\AllowDynamicProperties]
-	class IdeHelperRawMaterialReceipt {}
+	class RawMaterialReceipt extends \Eloquent {}
 }
 
 namespace App\Models\Inventory{
@@ -245,8 +305,8 @@ namespace App\Models\Inventory{
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
  * @property-read \App\Models\Inventory\RawMaterialDocument $document
- * @property-read \App\Models\Inventory\RawMaterial $material
- * @property-read \App\Models\Inventory\Warehouse $warehouse
+ * @property-read RawMaterial $material
+ * @property-read Warehouse $warehouse
  * @method static \Illuminate\Database\Eloquent\Builder<static>|RawMaterialReceiptLine newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder<static>|RawMaterialReceiptLine newQuery()
  * @method static \Illuminate\Database\Eloquent\Builder<static>|RawMaterialReceiptLine query()
@@ -263,8 +323,7 @@ namespace App\Models\Inventory{
  * @method static \Illuminate\Database\Eloquent\Builder<static>|RawMaterialReceiptLine whereWarehouseId($value)
  * @mixin \Eloquent
  */
-	#[\AllowDynamicProperties]
-	class IdeHelperRawMaterialReceiptLine {}
+	class RawMaterialReceiptLine extends \Eloquent {}
 }
 
 namespace App\Models\Inventory{
@@ -276,20 +335,48 @@ namespace App\Models\Inventory{
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
  * @property-read \App\Models\Inventory\RawMaterialBatch $batch
+ * @property-read mixed $current_cost
  * @property-read \App\Models\Inventory\Warehouse $warehouse
- * @method static \Illuminate\Database\Eloquent\Builder<static>|RawMaterialStock newModelQuery()
- * @method static \Illuminate\Database\Eloquent\Builder<static>|RawMaterialStock newQuery()
- * @method static \Illuminate\Database\Eloquent\Builder<static>|RawMaterialStock query()
- * @method static \Illuminate\Database\Eloquent\Builder<static>|RawMaterialStock whereBatchId($value)
- * @method static \Illuminate\Database\Eloquent\Builder<static>|RawMaterialStock whereCreatedAt($value)
- * @method static \Illuminate\Database\Eloquent\Builder<static>|RawMaterialStock whereCurrentQuantity($value)
- * @method static \Illuminate\Database\Eloquent\Builder<static>|RawMaterialStock whereId($value)
- * @method static \Illuminate\Database\Eloquent\Builder<static>|RawMaterialStock whereUpdatedAt($value)
- * @method static \Illuminate\Database\Eloquent\Builder<static>|RawMaterialStock whereWarehouseId($value)
+ * @method static Builder<static>|RawMaterialStock available()
+ * @method static Builder<static>|RawMaterialStock newModelQuery()
+ * @method static Builder<static>|RawMaterialStock newQuery()
+ * @method static Builder<static>|RawMaterialStock query()
+ * @method static Builder<static>|RawMaterialStock whereBatchId($value)
+ * @method static Builder<static>|RawMaterialStock whereCreatedAt($value)
+ * @method static Builder<static>|RawMaterialStock whereCurrentQuantity($value)
+ * @method static Builder<static>|RawMaterialStock whereId($value)
+ * @method static Builder<static>|RawMaterialStock whereUpdatedAt($value)
+ * @method static Builder<static>|RawMaterialStock whereWarehouseId($value)
  * @mixin \Eloquent
  */
-	#[\AllowDynamicProperties]
-	class IdeHelperRawMaterialStock {}
+	class RawMaterialStock extends \Eloquent {}
+}
+
+namespace App\Models\Inventory{
+/**
+ * @property int $id
+ * @property numeric $quantity
+ * @property int $stock_origin_id
+ * @property int $warehouse_dest_id
+ * @property int $document_id
+ * @property \Illuminate\Support\Carbon|null $created_at
+ * @property \Illuminate\Support\Carbon|null $updated_at
+ * @property-read \App\Models\Inventory\RawMaterialDocument $document
+ * @property-read \App\Models\Inventory\RawMaterialStock $originStock
+ * @property-read \App\Models\Inventory\Warehouse $warehouseDest
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|RawMaterialTransferLine newModelQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|RawMaterialTransferLine newQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|RawMaterialTransferLine query()
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|RawMaterialTransferLine whereCreatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|RawMaterialTransferLine whereDocumentId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|RawMaterialTransferLine whereId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|RawMaterialTransferLine whereQuantity($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|RawMaterialTransferLine whereStockOriginId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|RawMaterialTransferLine whereUpdatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|RawMaterialTransferLine whereWarehouseDestId($value)
+ * @mixin \Eloquent
+ */
+	class RawMaterialTransferLine extends \Eloquent {}
 }
 
 namespace App\Models\Inventory{
@@ -304,8 +391,8 @@ namespace App\Models\Inventory{
  * @property bool $is_active
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
- * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Inventory\RawMaterialDocument> $rawMaterialTransactions
- * @property-read int|null $raw_material_transactions_count
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Inventory\RawMaterialDocument> $rawMaterialDocuments
+ * @property-read int|null $raw_material_documents_count
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Responsible active()
  * @method static \Database\Factories\Inventory\ResponsibleFactory factory($count = null, $state = [])
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Responsible inactive()
@@ -324,8 +411,7 @@ namespace App\Models\Inventory{
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Responsible whereUpdatedAt($value)
  * @mixin \Eloquent
  */
-	#[\AllowDynamicProperties]
-	class IdeHelperResponsible {}
+	class Responsible extends \Eloquent {}
 }
 
 namespace App\Models\Inventory{
@@ -359,9 +445,10 @@ namespace App\Models\Inventory{
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Supplier wherePhone($value)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Supplier whereUpdatedAt($value)
  * @mixin \Eloquent
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Inventory\RawMaterialDocument> $rawMaterialDocuments
+ * @property-read int|null $raw_material_documents_count
  */
-	#[\AllowDynamicProperties]
-	class IdeHelperSupplier {}
+	class Supplier extends \Eloquent {}
 }
 
 namespace App\Models\Inventory{
@@ -387,8 +474,7 @@ namespace App\Models\Inventory{
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Unit whereUpdatedAt($value)
  * @mixin \Eloquent
  */
-	#[\AllowDynamicProperties]
-	class IdeHelperUnit {}
+	class Unit extends \Eloquent {}
 }
 
 namespace App\Models\Inventory{
@@ -400,6 +486,7 @@ namespace App\Models\Inventory{
  * @property bool $is_active
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
+ * @property-read mixed $current_cost
  * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Inventory\RawMaterialBatch> $rawMaterialBatches
  * @property-read int|null $raw_material_batches_count
  * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Inventory\RawMaterialStock> $rawMaterialStocks
@@ -419,8 +506,7 @@ namespace App\Models\Inventory{
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Warehouse whereUpdatedAt($value)
  * @mixin \Eloquent
  */
-	#[\AllowDynamicProperties]
-	class IdeHelperWarehouse {}
+	class Warehouse extends \Eloquent {}
 }
 
 namespace App\Models{
@@ -459,7 +545,6 @@ namespace App\Models{
  * @method static \Illuminate\Database\Eloquent\Builder<static>|User withoutRole($roles, $guard = null)
  * @mixin \Eloquent
  */
-	#[\AllowDynamicProperties]
-	class IdeHelperUser {}
+	class User extends \Eloquent {}
 }
 

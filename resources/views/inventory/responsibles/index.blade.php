@@ -1,20 +1,22 @@
 @extends('adminlte::page')
 
-@section('content_header')
-    <nav aria-label="breadcrumb">
-        <ol class="breadcrumb">
-            <li class="breadcrumb-item"><a href="{{ route('dashboard') }}">Inicio</a></li>
-            <li class="breadcrumb-item active">Responsables</li>
-        </ol>
-    </nav>
-@endsection
+@section('title', 'Responsables')
 
-@section('content')
-    <div class="mb-3">
+@section('content_header')
+    <div class="d-flex justify-content-between align-items-center">
+        <nav aria-label="breadcrumb">
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item"><a href="{{ route('dashboard') }}">Inicio</a></li>
+                <li class="breadcrumb-item active">Responsables</li>
+            </ol>
+        </nav>
+
         <a href="{{ route('responsibles.create') }}" class="btn btn-outline-primary">
             <i class="fas fa-fw fa-plus mr-1"></i>Crear responsable
         </a>
     </div>
+@endsection
 
+@section('content')
     <livewire:Inventory.Responsibles.ResponsiblesTable />
 @endsection

@@ -14,6 +14,15 @@ class ResponsibleController extends Controller
         return view('inventory.responsibles.index');
     }
 
+    public function show(int $id): View
+    {
+        abort_if(!Responsible::where('id', $id)->exists(), 404);
+
+        return view('inventory.responsibles.show', [
+            'responsibleId' => $id
+        ]);
+    }
+
     public function create(): View
     {
         return view('inventory.responsibles.create');

@@ -22,58 +22,31 @@ class CategoryEdit extends Component
     public string $name;
     public ?string $description;
 
-
     public function mount(int $categoryId): void
     {
         $this->categoryId   = $categoryId;
 
-        $category = $this->category();
+        $category           = $this->category();
 
         $this->name         = $category->name;
         $this->description  = $category->description;
     }
 
-
     public function render(): View
     {
-        return view('livewire.inventory.categories.category-edit', [
-            'category' => $this->category()
-        ]);
+        return view('livewire.inventory.categories.category-edit');
     }
-
 
     public function save(): void
     {
-        $categoryId = $this->categoryId;
-
         $validated = $this->validate([
-            'name'          => ['required', 'string', 'max:64', Rule::unique('categories')->ignore($categoryId)],
+            'name'          => ['required', 'string', 'max:64', Rule::unique('categories')->ignore($this->categoryId)],
             'description'   => ['nullable', 'string', 'max:255']
         ]);
 
         $this->category()->update($validated);
 
-        $this->toastSuccess('Categoria actualizada.');
-    }
-
-    public function toggleActive(): void
-    {
-        $this->toastSuccess($this->category()->toggleActive() ?
-            'Categoria activada' :
-            'Categoria desactivada');
-    }
-
-    public function delete(): void
-    {
-        $category = $this->category();
-
-        if ($category->isInUse()) {
-            $this->alertError('La Categoria esta en uso, sugerimos desactivarla.', 'Categoria en Uso.');
-        } else {
-            $category->delete();
-            $this->flashToastSuccess('Categoria eliminada.');
-            redirect()->route('categories.index');
-        }
+        $this->toastSuccess('Categoria actualizada');
     }
 
     private ?Category $category = null;

@@ -1,6 +1,4 @@
 <div>
-    <h1 class="h4">Crear materia prima</h1>
-
     <form wire:submit.prevent="save">
         <div class="card">
             <div class="card-body form-row">
@@ -19,8 +17,8 @@
                     wire:loading.attr='readonly' wire:target='save' required>
                 </x-form.select-wire-ignore>
 
-                <x-form.select-wire-ignore fgroup-class="col-md-6" name="category_id"
-                    label="Categoría *" wire:loading.attr='readonly' wire:target='save' required>
+                <x-form.select-wire-ignore fgroup-class="col-md-6" name="category_id" label="Categoría *"
+                    wire:loading.attr='readonly' wire:target='save' required>
                 </x-form.select-wire-ignore>
 
                 <x-adminlte-textarea fgroup-class="col-md-12" name="description" label="Descripción"
@@ -61,7 +59,13 @@
                         url: "{{ route('lookups.units.select2') }}",
                         dataType: 'json',
                         delay: 250,
-                        cache: true
+                        cache: true,
+                        data: function(params) {
+                            return {
+                                term: params.term,
+                                active: true,
+                            };
+                        },
                     },
                     templateResult: data => {
                         if (data.loading) return data.text;
@@ -81,7 +85,13 @@
                         url: "{{ route('lookups.categories.select2') }}",
                         dataType: 'json',
                         delay: 250,
-                        cache: true
+                        cache: true,
+                        data: function(params) {
+                            return {
+                                term: params.term,
+                                active: true,
+                            };
+                        },
                     },
                     templateResult: data => {
                         if (data.loading) return data.text;

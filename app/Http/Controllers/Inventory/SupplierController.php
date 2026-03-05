@@ -14,6 +14,15 @@ class SupplierController extends Controller
         return view('inventory.suppliers.index');
     }
 
+    public function show(int $id): View
+    {
+        abort_if(!Supplier::where('id', $id)->exists(), 404);
+
+        return view('inventory.suppliers.show', [
+            'supplierId' => $id
+        ]);
+    }
+
     public function create(): View
     {
         return view('inventory.suppliers.create');

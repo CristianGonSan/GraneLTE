@@ -6,6 +6,8 @@ use App\Traits\Models\HasActiveState;
 use App\Traits\Models\TruncateText;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Casts\Attribute;
+use Illuminate\Support\Facades\DB;
 
 /**
  * @property int $id
@@ -14,6 +16,7 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
  * @property bool $is_active
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
+ * @property-read mixed $current_cost
  * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Inventory\RawMaterial> $rawMaterials
  * @property-read int|null $raw_materials_count
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Category active()
@@ -28,7 +31,6 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Category whereName($value)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Category whereUpdatedAt($value)
  * @mixin \Eloquent
- * @mixin IdeHelperCategory
  */
 class Category extends Model
 {
@@ -46,9 +48,22 @@ class Category extends Model
         'is_active' => 'bool',
     ];
 
+    protected $appends = [
+        'current_cost'
+    ];
+
     public function isInUse(): bool
     {
         return $this->rawMaterials()->exists();
+    }
+
+    public function currentCost(): Attribute
+    {
+        return Attribute::make(
+            fn() => $this->rawMaterials()
+                ->join('raw_material_batches as batches', 'batches.material_id', '=', 'raw_materials.id')
+                ->sum(DB::raw('batches.current_quantity * batches.received_unit_cost'))
+        );
     }
 
     public function rawMaterials(): HasMany

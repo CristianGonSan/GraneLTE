@@ -22,7 +22,7 @@
                     </div>
                     <hr>
                     @if ($user->roles->isNotEmpty())
-                        @foreach ($user->roles as $role)
+                        @foreach ($user->roles()->orderBy('name')->get() as $role)
                             <span class="badge badge-info">
                                 {{ $role->name }}
                             </span>

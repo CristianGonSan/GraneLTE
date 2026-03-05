@@ -3,7 +3,7 @@
 namespace App\Models\Inventory;
 
 use App\Actions\Inventory\ExecuteRawMaterialMovement;
-use App\Enums\Inventory\RawMaterialMovement\MovementType;
+use App\Enums\Inventory\RawMaterialMovement\RawMaterialMovementType;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -11,7 +11,7 @@ use Illuminate\Database\Eloquent\Relations\HasOne;
 
 /**
  * @property int $id
- * @property MovementType $type
+ * @property RawMaterialMovementType $type
  * @property numeric $quantity
  * @property \Illuminate\Support\Carbon $effective_at
  * @property int $batch_id
@@ -21,6 +21,7 @@ use Illuminate\Database\Eloquent\Relations\HasOne;
  * @property \Illuminate\Support\Carbon|null $updated_at
  * @property-read \App\Models\Inventory\RawMaterialBatch $batch
  * @property-read \App\Models\Inventory\RawMaterialDocument $document
+ * @property-read \App\Models\Inventory\RawMaterialStock|null $stock
  * @property-read \App\Models\Inventory\Warehouse $warehouse
  * @method static \Illuminate\Database\Eloquent\Builder<static>|RawMaterialMovement newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder<static>|RawMaterialMovement newQuery()
@@ -35,7 +36,6 @@ use Illuminate\Database\Eloquent\Relations\HasOne;
  * @method static \Illuminate\Database\Eloquent\Builder<static>|RawMaterialMovement whereUpdatedAt($value)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|RawMaterialMovement whereWarehouseId($value)
  * @mixin \Eloquent
- * @mixin IdeHelperRawMaterialMovement
  */
 class RawMaterialMovement extends Model
 {
@@ -53,7 +53,7 @@ class RawMaterialMovement extends Model
     ];
 
     protected $casts = [
-        'type'         => MovementType::class,
+        'type'         => RawMaterialMovementType::class,
         'quantity'     => 'decimal:3',
         'effective_at' => 'datetime',
     ];

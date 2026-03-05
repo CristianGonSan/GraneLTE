@@ -8,6 +8,7 @@ class LivewireSelect2Builder {
             placeholder: 'Seleccionar...',
             minimumInputLength: 1,
             allowClear: false,
+            dropdownAutoWidth: true,
         };
 
         this.internal = {

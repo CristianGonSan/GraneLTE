@@ -10,7 +10,7 @@ trait WithSweetAlertFlash
         ?string $title = null,
         array $options = []
     ): void {
-        $default = $this->getTheme($theme);
+        $default = $this->getThemeF($theme);
 
         $config = [
             'title' => $title ?? $default['title'],
@@ -48,7 +48,7 @@ trait WithSweetAlertFlash
     /**
      * @return array{icon: string, title: string}
      */
-    private function getTheme(string $theme): array
+    private function getThemeF(string $theme): array
     {
         return match ($theme) {
             'success' => [

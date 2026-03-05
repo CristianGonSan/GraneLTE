@@ -6,6 +6,7 @@ use App\Traits\SweetAlert2\FlashToast;
 use App\Traits\SweetAlert2\Livewire\Toast;
 use Illuminate\Validation\Rule;
 use Illuminate\View\View;
+use Livewire\Attributes\Locked;
 use Livewire\Component;
 use Livewire\WithPagination;
 use Spatie\Permission\Models\Permission;
@@ -13,25 +14,21 @@ use Spatie\Permission\Models\Role;
 
 class RoleEdit extends Component
 {
-    use WithPagination;
-    use Toast, FlashToast;
+    use WithPagination, Toast, FlashToast;
 
+    #[Locked]
     public int $roleId;
-    public string $name;
 
-    public array $permissions = [];
+    public string $name;
     public array $selectedPermissions = [];
+
 
     public function mount(int $roleId): void
     {
         $this->roleId   = $roleId;
-        $role           = $this->getRole();
+        $role           = $this->role();
 
         $this->name     = $role->name;
-
-        foreach (Permission::orderBy('name')->get() as $permission) {
-            $this->permissions[$permission->name] = $permission->name;
-        }
 
         foreach ($role->permissions as $permission) {
             $this->selectedPermissions[] = $permission->name;
@@ -40,10 +37,9 @@ class RoleEdit extends Component
 
     public function render(): View
     {
-        $role = $this->getRole();
-
         return view('livewire.admin.roles.role-edit', [
-            'role'  => $role
+            'role'        => $this->role(),
+            'permissions' => $this->getTranslatedPermissions()
         ]);
     }
 
@@ -54,7 +50,7 @@ class RoleEdit extends Component
             'selectedPermissions'   => ['nullable', 'array']
         ]);
 
-        $role = $this->getRole();
+        $role = $this->role();
         $role->update($validated);
 
         $role->syncPermissions($validated['selectedPermissions'] ?? []);
@@ -62,16 +58,19 @@ class RoleEdit extends Component
         $this->toastSuccess('Información actualizada');
     }
 
-    public function delete(): void
+    private function getTranslatedPermissions(): array
     {
-        $this->getRole()->delete();
-        $this->flashToastSuccess('Rol eliminado.');
-        redirect()->route('admin.roles.index');
+        $permissions = [];
+        foreach (Permission::orderBy('id')->get() as $p) {
+            $langKey = "permissions.{$p->name}";
+            $permissions[$p->name] = __($langKey);
+        }
+        return $permissions;
     }
 
     private ?Role $role = null;
 
-    private function getRole(): Role
+    private function role(): Role
     {
         return $this->role ??= Role::findOrFail($this->roleId);
     }

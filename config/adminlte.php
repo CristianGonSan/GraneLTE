@@ -14,7 +14,7 @@ return [
     |
     */
 
-    'title'         => 'InventoryLTE',
+    'title'         => 'GraneLTE',
     'title_prefix'  => '',
     'title_postfix' => '',
 
@@ -30,7 +30,7 @@ return [
     |
     */
 
-    'use_ico_only'      => false,
+    'use_ico_only'      => true,
     'use_full_favicon'  => false,
 
     /*
@@ -63,12 +63,12 @@ return [
     |
     */
 
-    'logo'              => '<b>Inventory</b>LTE',
-    'logo_img'          => '/img/logos/logo.png',
+    'logo'              => '<b>Grane</b>LTE',
+    'logo_img'          => '/img/logos/logo3.png',
     'logo_img_class'    => 'brand-image img-circle elevation-3',
     'logo_img_xl'       => null,
     'logo_img_xl_class' => 'brand-image-xs',
-    'logo_img_alt'      => 'InventaryLTE Logo',
+    'logo_img_alt'      => 'GraneLTE Logo',
 
     /*
     |--------------------------------------------------------------------------
@@ -86,7 +86,7 @@ return [
     'auth_logo' => [
         'enabled' => false,
         'img' => [
-            'path'      => '/img/logos/logo.png',
+            'path'      => '/img/logos/logo3.png',
             'alt'       => 'Auth Logo',
             'class'     => '',
             'width'     => 50,
@@ -113,8 +113,8 @@ return [
         'enabled' => true,
         'mode' => 'fullscreen',
         'img' => [
-            'path'      => '/img/logos/logo.png',
-            'alt'       => 'Inventory Preloader Image',
+            'path'      => '/img/logos/logo3.png',
+            'alt'       => 'GraneLTE Preloader Image',
             'effect'    => 'animation__shake',
             'width'     => 60,
             'height'    => 60,
@@ -305,6 +305,11 @@ return [
             'topnav_right' => true,
         ],
 
+        [
+            'type' => 'darkmode-widget',
+            'topnav_right' => true,     // Or "topnav => true" to place on the left.
+        ],
+
         // Sidebar items:
         [
             'type' => 'sidebar-menu-search',
@@ -314,6 +319,16 @@ return [
             'text' => 'dashboard',
             'route' => 'dashboard',
             'icon' => 'fas fa-fw fa-chart-line',
+        ],
+        [
+            'text' => 'export',
+            'route' => 'exports.index',
+            'icon' => 'fas fa-fw fa-file-excel',
+        ],
+        [
+            'text' => 'info',
+            'route' => 'info',
+            'icon' => 'fas fa-fw fa-circle-info',
         ],
         ['header' => 'INVENTORY'],
 
@@ -395,11 +410,6 @@ return [
             'text' => 'roles',
             'route' => 'admin.roles.index',
             'icon' => 'fas fa-fw fa-lock',
-        ],
-        [
-            'text' => 'info',
-            'route' => 'info',
-            'icon' => 'fas fa-fw fa-circle-info',
         ],
     ],
 

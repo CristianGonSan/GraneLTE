@@ -2,9 +2,7 @@
 
 namespace App\Livewire\Inventory\RawMaterials;
 
-use App\Models\Inventory\Category;
 use App\Models\Inventory\RawMaterial;
-use App\Models\Inventory\Unit;
 use App\Traits\SweetAlert2\FlashToast;
 use App\Traits\SweetAlert2\Livewire\Toast;
 
@@ -39,17 +37,11 @@ class RawMaterialCreate extends Component
             'abbreviation'   => ['required', 'string', 'max:8', Rule::unique('raw_materials')],
             'description'    => ['nullable', 'string', 'max:255'],
             'minimum_stock'  => ['nullable', 'numeric', 'min:0'],
-            'unit_id'        => [
-                'required',
-                Rule::exists('units', 'id')->where('is_active', true)
-            ],
-            'category_id'    => [
-                'required',
-                Rule::exists('categories', 'id')->where('is_active', true)
-            ]
+            'unit_id'        => ['required', Rule::exists('units', 'id')->where('is_active', true)],
+            'category_id'    => ['required', Rule::exists('categories', 'id')->where('is_active', true)]
         ]);
 
-        RawMaterial::create($validated);
+        $material = RawMaterial::create($validated);
 
         if ($this->createAnother) {
             $this->reset([
@@ -64,8 +56,8 @@ class RawMaterialCreate extends Component
             $this->dispatch('reset');
             $this->toastSuccess('Materia prima creada.');
         } else {
-            $this->flashToastSuccess('Materia prima creada.');
-            redirect()->route('raw-materials.index');
+            $this->flashToastSuccess('Materia prima creada');
+            redirect()->route('raw-materials.show', $material->id);
         }
     }
 }

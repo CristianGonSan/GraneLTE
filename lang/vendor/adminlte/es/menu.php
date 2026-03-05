@@ -52,4 +52,6 @@ return [
     'responsibles' => 'Responsables',
 
     'configuration' => 'Configuración',
+
+    'export' => 'Exportar'
 ];

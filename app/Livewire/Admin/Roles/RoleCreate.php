@@ -16,21 +16,15 @@ class RoleCreate extends Component
 
     public string $name;
 
-    public array $permissions = [];
     public array $selectedPermissions = [];
 
     public bool $createAnother = false;
 
-
-    public function mount(): void
-    {
-        $this->permissions = Permission::orderBy('name', 'desc')
-            ->pluck('name', 'name')->toArray();
-    }
-
     public function render(): View
     {
-        return view('livewire.admin.roles.role-create');
+        return view('livewire.admin.roles.role-create', [
+            'permissions' => $this->getTranslatedPermissions()
+        ]);
     }
 
     public function save(): void
@@ -51,7 +45,17 @@ class RoleCreate extends Component
             $this->toastSuccess('Rol creado.');
         } else {
             $this->flashToastSuccess('Rol creado.');
-            redirect()->route('admin.roles.index');
+            redirect()->route('admin.roles.show', $role->id);
         }
+    }
+
+    private function getTranslatedPermissions(): array
+    {
+        $permissions = [];
+        foreach (Permission::orderBy('id')->get() as $p) {
+            $langKey = "permissions.{$p->name}";
+            $permissions[$p->name] = __($langKey);
+        }
+        return $permissions;
     }
 }

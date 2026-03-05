@@ -32,3 +32,13 @@
 .text-uppercase {
     text-transform: uppercase;
 }
+
+body.dark-mode .form-control:-webkit-autofill,
+body.dark-mode .form-control:-webkit-autofill:hover,
+body.dark-mode .form-control:-webkit-autofill:focus,
+body.dark-mode .form-control:-webkit-autofill:active {
+    -webkit-text-fill-color: #fff;
+    -webkit-box-shadow: 0 0 0 1000px #3e444a inset;
+
+    transition: background-color 5000s ease-in-out 0s;
+}

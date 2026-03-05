@@ -12,7 +12,7 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasOne;
-
+use Illuminate\Support\Facades\DB;
 
 /**
  * @property int $id
@@ -29,13 +29,20 @@ use Illuminate\Database\Eloquent\Relations\HasOne;
  * @property \Illuminate\Support\Carbon|null $validated_at
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Inventory\RawMaterialAdjustmentLine> $adjustmentLines
+ * @property-read int|null $adjustment_lines_count
  * @property-read User $creator
- * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Inventory\RawMaterialReceiptLine> $issueLines
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Inventory\RawMaterialIssueLine> $issueLines
  * @property-read int|null $issue_lines_count
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Inventory\RawMaterialMovement> $movements
+ * @property-read int|null $movements_count
  * @property-read \App\Models\Inventory\RawMaterialReceipt|null $receipt
  * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Inventory\RawMaterialReceiptLine> $receiptLines
  * @property-read int|null $receipt_lines_count
  * @property-read \App\Models\Inventory\Responsible|null $responsible
+ * @property-read \App\Models\Inventory\RawMaterialTransferLine|null $transferLine
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Inventory\RawMaterialTransferLine> $transferLines
+ * @property-read int|null $transfer_lines_count
  * @property-read User|null $validator
  * @method static \Illuminate\Database\Eloquent\Builder<static>|RawMaterialDocument newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder<static>|RawMaterialDocument newQuery()
@@ -55,7 +62,6 @@ use Illuminate\Database\Eloquent\Relations\HasOne;
  * @method static \Illuminate\Database\Eloquent\Builder<static>|RawMaterialDocument whereValidatedAt($value)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|RawMaterialDocument whereValidatedBy($value)
  * @mixin \Eloquent
- * @mixin IdeHelperRawMaterialDocument
  */
 class RawMaterialDocument extends Model
 {
@@ -102,6 +108,11 @@ class RawMaterialDocument extends Model
         return true;
     }
 
+    public function validateDelete(User $user): bool
+    {
+        return $this->created_by == $user->id && $this->status == RawMaterialDocumentStatus::DRAFT;
+    }
+
     public function execute(): void
     {
         ExecuteRawMaterialDocument::execute($this);
@@ -117,19 +128,27 @@ class RawMaterialDocument extends Model
 
     public function receiptLines(): HasMany
     {
-        return $this->hasMany(
-            RawMaterialReceiptLine::class,
-            'document_id'
-        );
+        return $this->hasMany(RawMaterialReceiptLine::class, 'document_id');
     }
 
-    //Por implementar
     public function issueLines(): HasMany
     {
-        return $this->hasMany(
-            RawMaterialReceiptLine::class,
-            'document_id'
-        );
+        return $this->hasMany(RawMaterialIssueLine::class, 'document_id');
+    }
+
+    public function transferLines(): HasMany
+    {
+        return $this->hasMany(RawMaterialTransferLine::class, 'document_id');
+    }
+
+    public function transferLine(): HasOne
+    {
+        return $this->hasOne(RawMaterialTransferLine::class, 'document_id');
+    }
+
+    public function adjustmentLines(): HasMany
+    {
+        return $this->hasMany(RawMaterialAdjustmentLine::class, 'document_id');
     }
 
     public function responsible(): BelongsTo
@@ -147,6 +166,11 @@ class RawMaterialDocument extends Model
         return $this->belongsTo(User::class, 'validated_by');
     }
 
+    public function movements(): HasMany
+    {
+        return $this->hasMany(RawMaterialMovement::class, 'document_id');
+    }
+
     public function getRoute(string $action = 'show'): string
     {
         $prefixName = 'raw-material-documents';
@@ -161,17 +185,18 @@ class RawMaterialDocument extends Model
         return route($routeName, ['document' => $this->id]);
     }
 
-    public function getUrl(string $action = 'show'): string
+    public function hardDelete(): void
     {
-        $prefixName = 'raw-material-documents';
+        DB::transaction(function (): void {
+            $this->movements()->delete();
 
-        $routeName = match ($this->type) {
-            RawMaterialDocumentType::RECEIPT    => "$prefixName.receipts.$action",
-            RawMaterialDocumentType::ISSUE      => "$prefixName.issues.$action",
-            RawMaterialDocumentType::TRANSFER   => "$prefixName.transfers.$action",
-            RawMaterialDocumentType::ADJUSTMENT => "$prefixName.adjustments.$action",
-        };
+            $this->receipt()->delete();
+            $this->receiptLines()->delete();
+            $this->issueLines()->delete();
+            $this->transferLines()->delete();
+            $this->adjustmentLines()->delete();
 
-        return route($routeName, ['document' => $this->id]);
+            $this->delete();
+        });
     }
 }

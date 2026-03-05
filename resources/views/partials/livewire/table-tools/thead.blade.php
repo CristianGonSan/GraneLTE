@@ -17,9 +17,9 @@
                     <i
                         class="{{ $this->checkColumnSort(
                             $column,
-                            'fas fa-sort ml-1 text-muted',
-                            'fas fa-sort-up ml-1',
-                            'fas fa-sort-down ml-1',
+                            'fas fa-fw fa-sort ml-1 text-muted',
+                            'fas fa-fw fa-sort-up ml-1',
+                            'fas fa-fw fa-sort-down ml-1',
                         ) }}">
                     </i>
                 @endif

@@ -8,14 +8,20 @@
     <tbody>
         @forelse($users as $user)
             <tr wire:key="user-{{ $user->id }}">
-                <td class="text-center">{{ $user->id }}</td>
                 <td>{{ $user->name }}</td>
                 <td>{{ $user->email }}</td>
+                <td>
+                    @forelse ($user->roles()->orderBy('name')->get() as $role)
+                        <span class="badge badge-info">{{ $role->name }}</span>
+                    @empty
+                        Sin roles
+                    @endforelse
+                </td>
                 <td class="text-center">
                     <i class="{{ $user->getActiveIconClass() }}"></i>
                 </td>
                 <td class="text-center">
-                    <a href="{{ route('admin.users.edit', $user->id) }}" class="d-block text-reset">
+                    <a href="{{ route('admin.users.show', $user->id) }}" class="d-block text-reset">
                         <i class="fa-solid fa-chevron-right"></i>
                     </a>
                 </td>

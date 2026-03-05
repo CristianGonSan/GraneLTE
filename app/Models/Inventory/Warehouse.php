@@ -8,6 +8,8 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasManyThrough;
+use Illuminate\Database\Eloquent\Casts\Attribute;
+use Illuminate\Support\Facades\DB;
 
 /**
  * @property int $id
@@ -17,6 +19,7 @@ use Illuminate\Database\Eloquent\Relations\HasManyThrough;
  * @property bool $is_active
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
+ * @property-read mixed $current_cost
  * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Inventory\RawMaterialBatch> $rawMaterialBatches
  * @property-read int|null $raw_material_batches_count
  * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Inventory\RawMaterialStock> $rawMaterialStocks
@@ -35,7 +38,6 @@ use Illuminate\Database\Eloquent\Relations\HasManyThrough;
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Warehouse whereName($value)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Warehouse whereUpdatedAt($value)
  * @mixin \Eloquent
- * @mixin IdeHelperWarehouse
  */
 class Warehouse extends Model
 {
@@ -54,21 +56,38 @@ class Warehouse extends Model
         'is_active' => 'bool',
     ];
 
+    protected $appends = [
+        'current_cost'
+    ];
+
     public function isInUse(): bool
     {
         return $this->rawMaterialStocks()->exists();
     }
 
+    public function currentCost(): Attribute
+    {
+        return Attribute::make(
+            fn() => $this->rawMaterialStocks()
+                ->join('raw_material_batches as batches', 'batches.id', '=', 'raw_material_stocks.batch_id')
+                ->sum(DB::raw('batches.current_quantity * batches.received_unit_cost'))
+        );
+    }
+
     public function rawMaterialStocks(): HasMany
     {
-        return $this->hasMany(RawMaterialStock::class);
+        return $this->hasMany(RawMaterialStock::class, 'warehouse_id');
     }
 
     public function rawMaterialBatches(): HasManyThrough
     {
         return $this->hasManyThrough(
-            RawMaterialBatch::class,
-            RawMaterialStock::class
+            RawMaterialBatch::class,   // Modelo final
+            RawMaterialStock::class,   // Modelo intermedio
+            'warehouse_id',           // FK en raw_material_stocks hacia warehouses
+            'id',                    // PK en raw_material_batches
+            'id',                     // PK en warehouses
+            'batch_id'          // FK en raw_material_stocks hacia batches
         );
     }
 }

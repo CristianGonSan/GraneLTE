@@ -11,18 +11,18 @@ use App\Traits\SweetAlert2\Livewire\Toast;
 
 use Illuminate\Validation\Rule;
 use Illuminate\View\View;
+use Livewire\Attributes\Locked;
 use Livewire\Component;
 
 class UnitEdit extends Component
 {
     use Toast, FlashToast, Alert, FlashAlert;
 
+    #[Locked]
     public int $unitId;
 
     public string $name;
     public string $symbol;
-
-
 
     public function mount(int $unitId): void
     {
@@ -36,9 +36,7 @@ class UnitEdit extends Component
 
     public function render(): View
     {
-        return view('livewire.inventory.units.unit-edit', [
-            'unit' => $this->unit()
-        ]);
+        return view('livewire.inventory.units.unit-edit');
     }
 
     public function save(): void
@@ -51,29 +49,8 @@ class UnitEdit extends Component
 
         $this->unit()->update($validated);
 
-        $this->toastSuccess('Unidad actualizada.');
+        $this->toastSuccess('Unidad actualizada');
     }
-
-    public function toggleActive(): void
-    {
-        $this->toastSuccess($this->unit()->toggleActive() ?
-            'Unidad activada' :
-            'Unidad desactivada');
-    }
-
-    public function delete(): void
-    {
-        $unit = $this->unit();
-
-        if ($unit->isInUse()) {
-            $this->alertError('La unidad esta en uso, sugerimos desactivarla.', 'Unidad en Uso.');
-        } else {
-            $unit->delete();
-            $this->flashToastSuccess('Unidad eliminada.');
-            redirect()->route('units.index');
-        }
-    }
-
 
     private ?Unit $unit = null;
 

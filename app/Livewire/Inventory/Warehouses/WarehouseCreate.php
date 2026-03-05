@@ -20,8 +20,6 @@ class WarehouseCreate extends Component
 
     public bool $createAnother = false;
 
-    
-
     public function render(): View
     {
         return view('livewire.inventory.warehouses.warehouse-create');
@@ -35,14 +33,18 @@ class WarehouseCreate extends Component
             'description' => ['nullable', 'string', 'max:512']
         ]);
 
-        Warehouse::create($validated);
+        $warehouse = Warehouse::create($validated);
 
         if ($this->createAnother) {
-            $this->reset(['name', 'location', 'description']);
-            $this->toastSuccess('Almacén creado.');
+            $this->reset([
+                'name',
+                'location',
+                'description'
+            ]);
+            $this->toastSuccess('Almacén creado');
         } else {
-            $this->flashToastSuccess('Almacén creado.');
-            redirect()->route('warehouses.index');
+            $this->flashToastSuccess('Almacén creado');
+            redirect()->route('warehouses.show', $warehouse->id);
         }
     }
 }

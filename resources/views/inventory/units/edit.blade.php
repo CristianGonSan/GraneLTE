@@ -6,11 +6,12 @@
             <li class="breadcrumb-item"><a href="{{ route('dashboard') }}">Inicio</a></li>
             <li class="breadcrumb-item"><a href="{{ route('units.index') }}">Unidades</a></li>
             <li class="breadcrumb-item active">{{ $unitId }}</li>
-            <li class="breadcrumb-item active">Editar</li>
+            <li class="breadcrumb-item active">Edición</li>
         </ol>
     </nav>
 @endsection
 
 @section('content')
+    <h1 class="h4">Edición de unidad de medida</h1>
     <livewire:Inventory.Units.UnitEdit :unitId="$unitId" />
 @endsection

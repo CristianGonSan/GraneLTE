@@ -10,13 +10,17 @@ use App\Traits\SweetAlert2\Livewire\Toast;
 
 use Illuminate\Validation\Rule;
 use Illuminate\View\View;
+use Livewire\Attributes\Locked;
 use Livewire\Component;
 
 class RawMaterialEdit extends Component
 {
     use Toast, FlashToast, Alert, FlashAlert;
 
+    #[Locked]
     public int $rawMaterialId;
+
+    #[Locked]
     public bool $hasBatches = false;
 
     public string $name;
@@ -30,9 +34,9 @@ class RawMaterialEdit extends Component
 
     public function mount(int $rawMaterialId): void
     {
-        $this->rawMaterialId = $rawMaterialId;
+        $this->rawMaterialId  = $rawMaterialId;
 
-        $rawMaterial = $this->rawMaterial();
+        $rawMaterial          = $this->rawMaterial();
 
         $this->name           = $rawMaterial->name;
         $this->abbreviation   = $rawMaterial->abbreviation;
@@ -52,9 +56,7 @@ class RawMaterialEdit extends Component
 
     public function render(): View
     {
-        return view('livewire.inventory.raw-materials.raw-material-edit', [
-            'rawMaterial'   => $this->rawMaterial()
-        ]);
+        return view('livewire.inventory.raw-materials.raw-material-edit');
     }
 
     public function save(): void
@@ -90,32 +92,7 @@ class RawMaterialEdit extends Component
 
         $rawMaterial->update($validated);
 
-        $this->toastSuccess('Materia prima actualizada.');
-    }
-
-    public function toggleActive(): void
-    {
-        $this->toastSuccess(
-            $this->rawMaterial()->toggleActive()
-                ? 'Materia prima activada'
-                : 'Materia prima desactivada'
-        );
-    }
-
-    public function delete(): void
-    {
-        $rawMaterial = $this->rawMaterial();
-
-        if ($rawMaterial->isInUse()) {
-            $this->alertError(
-                'La materia prima está en uso, se recomienda desactivarla.',
-                'Materia prima en uso'
-            );
-        } else {
-            $rawMaterial->delete();
-            $this->flashToastSuccess('Materia prima eliminada.');
-            redirect()->route('raw-materials.index');
-        }
+        $this->toastSuccess('Materia prima actualizada');
     }
 
     private ?RawMaterial $rawMaterial = null;

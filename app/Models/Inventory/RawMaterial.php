@@ -9,6 +9,8 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasManyThrough;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Database\Eloquent\Casts\Attribute;
 use Str;
 
 /**
@@ -17,14 +19,18 @@ use Str;
  * @property string $abbreviation
  * @property string|null $description
  * @property numeric|null $minimum_stock
+ * @property numeric $current_quantity
  * @property int $unit_id
- * @property int|null $category_id
+ * @property int $category_id
  * @property bool $is_active
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
  * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Inventory\RawMaterialBatch> $batches
  * @property-read int|null $batches_count
- * @property-read \App\Models\Inventory\Category|null $category
+ * @property-read \App\Models\Inventory\Category $category
+ * @property-read mixed $current_cost
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Inventory\RawMaterialReceiptLine> $receiptLines
+ * @property-read int|null $receipt_lines_count
  * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Inventory\RawMaterialStock> $stocks
  * @property-read int|null $stocks_count
  * @property-read \App\Models\Inventory\Unit $unit
@@ -37,6 +43,7 @@ use Str;
  * @method static \Illuminate\Database\Eloquent\Builder<static>|RawMaterial whereAbbreviation($value)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|RawMaterial whereCategoryId($value)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|RawMaterial whereCreatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|RawMaterial whereCurrentQuantity($value)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|RawMaterial whereDescription($value)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|RawMaterial whereId($value)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|RawMaterial whereIsActive($value)
@@ -45,7 +52,6 @@ use Str;
  * @method static \Illuminate\Database\Eloquent\Builder<static>|RawMaterial whereUnitId($value)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|RawMaterial whereUpdatedAt($value)
  * @mixin \Eloquent
- * @mixin IdeHelperRawMaterial
  */
 class RawMaterial extends Model
 {
@@ -68,6 +74,10 @@ class RawMaterial extends Model
         'minimum_stock'     => 'decimal:3',
         'current_quantity'  => 'decimal:3',
         'is_active'         => 'boolean',
+    ];
+
+    protected $appends = [
+        'current_cost'
     ];
 
     public function generateBatchCode(): string
@@ -100,7 +110,26 @@ class RawMaterial extends Model
 
     public function isInUse(): bool
     {
+        return $this->batches()->exists() || $this->receiptLines()->exists();
+    }
+
+    public function hasBatches(): bool
+    {
         return $this->batches()->exists();
+    }
+
+    public function currentCost(): Attribute
+    {
+        return Attribute::make(
+            fn() => $this->batches()
+                ->sum(DB::raw('current_quantity * received_unit_cost'))
+        );
+    }
+
+    public static function totalCost(): float
+    {
+        return (float) self::join("raw_material_batches as batches", "batches.material_id", "raw_materials.id")
+            ->sum(DB::raw("batches.current_quantity * batches.received_unit_cost"));
     }
 
     public function unit(): BelongsTo
@@ -124,5 +153,10 @@ class RawMaterial extends Model
             RawMaterialStock::class,
             RawMaterialBatch::class
         );
+    }
+
+    public function receiptLines(): HasMany
+    {
+        return $this->hasMany(RawMaterialReceiptLine::class, 'material_id');
     }
 }

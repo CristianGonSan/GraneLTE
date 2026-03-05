@@ -12,5 +12,6 @@
 @endsection
 
 @section('content')
+    <h1 class="h4">Edición de categoría</h1>
     <livewire:Inventory.Categories.CategoryEdit :categoryId="$categoryId" />
 @endsection

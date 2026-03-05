@@ -8,7 +8,6 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
-
 /**
  * @property int $id
  * @property string|null $external_batch_code
@@ -39,7 +38,6 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
  * @method static \Illuminate\Database\Eloquent\Builder<static>|RawMaterialReceiptLine whereUpdatedAt($value)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|RawMaterialReceiptLine whereWarehouseId($value)
  * @mixin \Eloquent
- * @mixin IdeHelperRawMaterialReceiptLine
  */
 class RawMaterialReceiptLine extends Model
 {

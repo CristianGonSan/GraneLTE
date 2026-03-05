@@ -14,6 +14,15 @@ class RoleController extends Controller
         return view('admin.roles.index');
     }
 
+    public function show(int $id): View
+    {
+        abort_if(!Role::where('id', $id)->exists(), 404);
+
+        return view('admin.roles.show', [
+            'roleId' => $id
+        ]);
+    }
+
     public function create(): View
     {
         return view('admin.roles.create');

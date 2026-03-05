@@ -25,8 +25,6 @@ class UserCreate extends Component
 
     public bool $createAnother = false;
 
-
-
     public function mount(): void
     {
         $this->roles = Role::orderBy('name', 'desc')
@@ -65,10 +63,10 @@ class UserCreate extends Component
             ]);
 
             $this->dispatch('reset');
-            $this->toastSuccess('Usuario creado.');
+            $this->toastSuccess('Usuario creado');
         } else {
-            $this->flashToastSuccess('Usuario creado.');
-            redirect()->route('admin.users.index');
+            $this->flashToastSuccess('Usuario creado');
+            redirect()->route('admin.users.show', $user->id);
         }
     }
 }

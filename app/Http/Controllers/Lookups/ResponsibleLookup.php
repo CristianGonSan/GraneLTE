@@ -11,36 +11,34 @@ class ResponsibleLookup extends Controller
 {
     public function select2(Request $request): JsonResponse
     {
-        $query = Responsible::active();
+        $query = Responsible::query();
 
-        $term = $request->input('term');
+        if ($request->has('active')) {
+            $request->boolean('active') ? $query->active() : $query->inactive();
+        }
 
-        if ($term) {
-            $query->where(function ($q) use ($term) {
-                $q->where('name', 'like', "%$term%")
-                    ->orWhere('identifier', 'like', "%$term%");
-            });
+        if ($request->has('term')) {
+            $term = $request->string('term');
+            $query->where(
+                fn($q) => $q
+                    ->where('name', 'like', "%$term%")
+                    ->orWhere('identifier', 'like', "$term%")
+            );
         }
 
         $query->orderBy('name');
 
         $results = $query->paginate(16, ['id', 'name', 'identifier']);
 
-        $map = $results->map(
-            fn($item) => [
-                'id'            => $item->id,
-                'text'          => $item->name,
-                'description'   => $item->identifier
-            ]
-        );
+        $map = $results->map(fn(Responsible $item) => [
+            'id'          => $item->id,
+            'text'        => $item->name,
+            'description' => $item->identifier,
+        ]);
 
-        $json = [
-            'results' => $map,
-            'pagination' => [
-                'more' => $results->hasMorePages(),
-            ],
-        ];
-
-        return response()->json($json);
+        return response()->json([
+            'results'    => $map,
+            'pagination' => ['more' => $results->hasMorePages()],
+        ]);
     }
 }

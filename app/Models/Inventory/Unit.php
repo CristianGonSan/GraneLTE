@@ -28,7 +28,6 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Unit whereSymbol($value)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Unit whereUpdatedAt($value)
  * @mixin \Eloquent
- * @mixin IdeHelperUnit
  */
 class Unit extends Model
 {

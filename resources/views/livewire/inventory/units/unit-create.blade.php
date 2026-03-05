@@ -1,6 +1,4 @@
 <div>
-    <h1 class="h4">Crear Unidad</h1>
-
     <form wire:submit.prevent='save'>
         <div class="card">
             <div class="card-body form-row">

@@ -1,6 +1,6 @@
 @extends('adminlte::page')
 
-@section('title', 'Lotes MP')
+@section('title', 'Lotes de materia prima')
 
 @section('content_header')
     <nav aria-label="breadcrumb">
@@ -13,6 +13,4 @@
 
 @section('content')
     <livewire:Inventory.RawMaterialBatches.BatchesTable />
-
-    <livewire:Inventory.RawMaterialBatches.ModalBatchShow />
 @endsection

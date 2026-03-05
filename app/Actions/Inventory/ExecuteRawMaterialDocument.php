@@ -4,10 +4,9 @@ namespace App\Actions\Inventory;
 
 use App\Models\Inventory\RawMaterialBatch;
 use App\Models\Inventory\RawMaterialDocument;
-use App\Enums\Inventory\RawMaterialDocument\RawMaterialDocumentStatus;
-use App\Enums\Inventory\RawMaterialDocument\RawMaterialDocumentType;
-use App\Enums\Inventory\RawMaterialMovement\MovementType;
-use App\Models\Inventory\RawMaterialMovement;
+use App\Enums\Inventory\RawMaterialDocument\RawMaterialDocumentType as DocumentType;
+use App\Enums\Inventory\RawMaterialMovement\RawMaterialMovementType as MovementType;
+use DomainException;
 use Illuminate\Support\Facades\DB;
 
 class ExecuteRawMaterialDocument
@@ -15,10 +14,10 @@ class ExecuteRawMaterialDocument
     public static function execute(RawMaterialDocument $document): void
     {
         match ($document->type) {
-            RawMaterialDocumentType::RECEIPT    => self::receipt($document),
-            RawMaterialDocumentType::ISSUE      => self::issue($document),
-            RawMaterialDocumentType::TRANSFER   => self::transfer($document),
-            RawMaterialDocumentType::ADJUSTMENT => self::adjustment($document)
+            DocumentType::RECEIPT    => self::receipt($document),
+            DocumentType::ISSUE      => self::issue($document),
+            DocumentType::TRANSFER   => self::transfer($document),
+            DocumentType::ADJUSTMENT => self::adjustment($document)
         };
     }
 
@@ -42,13 +41,12 @@ class ExecuteRawMaterialDocument
                     'supplier_id'           => $receipt->supplier_id,
                 ]);
 
-                $movement = RawMaterialMovement::create([
+                $movement = $document->movements()->create([
                     'type'          => MovementType::RECEIPT,
                     'quantity'      => $line->received_quantity,
                     'effective_at'  => $document->effective_at,
                     'batch_id'      => $batch->id,
-                    'warehouse_id'  => $line->warehouse_id,
-                    'document_id'   => $document->id,
+                    'warehouse_id'  => $line->warehouse_id
                 ]);
 
                 $movement->execute();
@@ -56,9 +54,105 @@ class ExecuteRawMaterialDocument
         });
     }
 
-    private static function issue(RawMaterialDocument $document): void {}
+    private static function issue(RawMaterialDocument $document): void
+    {
+        DB::transaction(function () use ($document) {
+            $lines = $document->issueLines;
 
-    private static function transfer(RawMaterialDocument $document): void {}
+            foreach ($lines as $line) {
+                $stock = $line->stock;
 
-    private static function adjustment(RawMaterialDocument $document): void {}
+                if ($line->quantity > $stock->current_quantity) {
+                    throw new DomainException('Stock insuficiente');
+                }
+
+                $movement = $document->movements()->create([
+                    'type'          => MovementType::ISSUE,
+                    'quantity'      => $line->quantity,
+                    'effective_at'  => $document->effective_at,
+                    'batch_id'      => $stock->batch_id,
+                    'warehouse_id'  => $stock->warehouse_id
+                ]);
+
+                $movement->execute();
+            }
+        });
+    }
+
+    private static function transfer(RawMaterialDocument $document): void
+    {
+        DB::transaction(function () use ($document) {
+            $lines = $document->transferLines;
+
+            foreach ($lines as $line) {
+                $stock = $line->originStock;
+
+                if ($line->quantity > $stock->current_quantity) {
+                    throw new DomainException('Stock insuficiente');
+                }
+
+                //Sale material del alamcen de origen
+                $movementOut = $document->movements()->create([
+                    'type'          => MovementType::TRANSFER_OUT,
+                    'quantity'      => $line->quantity,
+                    'effective_at'  => $document->effective_at,
+                    'batch_id'      => $stock->batch_id,
+                    'warehouse_id'  => $stock->warehouse_id
+                ]);
+
+                //Entra material en el almacen de destino
+                $movementIn = $document->movements()->create([
+                    'type'          => MovementType::TRANSFER_IN,
+                    'quantity'      => $line->quantity,
+                    'effective_at'  => $document->effective_at,
+                    'batch_id'      => $stock->batch_id,
+                    'warehouse_id'  => $line->warehouse_dest_id
+                ]);
+
+                $movementOut->execute();
+                $movementIn->execute();
+            }
+        });
+    }
+
+    private static function adjustment(RawMaterialDocument $document): void
+    {
+        DB::transaction(function () use ($document) {
+            $lines = $document->adjustmentLines;
+
+            foreach ($lines as $line) {
+                $stock = $line->stock;
+
+                $difference     = $line->difference_quantity;
+                $absDifference  = self::bcabs($difference, 3);
+
+                if (bccomp($difference, '0', 3) < 0) {
+                    $type = MovementType::ADJUSTMENT_OUT;
+                    $result = bcsub($stock->current_quantity, $absDifference, 3);
+                    if (bccomp($result, '0', 3) < 0) {
+                        throw new DomainException('El Stock resultante es negativo');
+                    }
+                } else {
+                    $type = MovementType::ADJUSTMENT_IN;
+                }
+
+                $movement = $document->movements()->create([
+                    'type'         => $type,
+                    'quantity'     => $absDifference,
+                    'effective_at' => $document->effective_at,
+                    'batch_id'     => $stock->batch_id,
+                    'warehouse_id' => $stock->warehouse_id
+                ]);
+
+                $movement->execute();
+            }
+        });
+    }
+
+    private static function bcabs(string $number, int $scale = 3): string
+    {
+        return bccomp($number, '0', $scale) < 0
+            ? ltrim($number, '-')
+            : $number;
+    }
 }

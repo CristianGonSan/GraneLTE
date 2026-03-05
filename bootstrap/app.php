@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Middleware\CheckDocumentType;
+use App\Http\Middleware\CheckEditableDocument;
 use App\Http\Middleware\RedirectIfNotActive;
 use Illuminate\Foundation\Application;
 use Illuminate\Foundation\Configuration\Exceptions;
@@ -18,8 +19,9 @@ return Application::configure(basePath: dirname(__DIR__))
         $middleware->alias([
             'role'              => RoleMiddleware::class,
             'permission'        => PermissionMiddleware::class,
-            'active'            => RedirectIfNotActive::class,
-            'check.document'    => CheckDocumentType::class
+            'check.user.active'       => RedirectIfNotActive::class,
+            'check.document.type'     => CheckDocumentType::class,
+            'check.document.editable' => CheckEditableDocument::class
         ]);
     })
     ->withExceptions(function (Exceptions $exceptions) {

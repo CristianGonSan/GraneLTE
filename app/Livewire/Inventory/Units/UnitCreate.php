@@ -19,8 +19,6 @@ class UnitCreate extends Component
 
     public bool $createAnother = false;
 
-
-
     public function render(): View
     {
         return view('livewire.inventory.units.unit-create');
@@ -33,14 +31,17 @@ class UnitCreate extends Component
             'symbol'    => ['required', 'string', 'max:8', Rule::unique('units')],
         ]);
 
-        Unit::create($validated);
+        $unit = Unit::create($validated);
 
         if ($this->createAnother) {
-            $this->reset(['name', 'symbol']);
-            $this->toastSuccess('Unidad creada.');
+            $this->reset([
+                'name',
+                'symbol'
+            ]);
+            $this->toastSuccess('Unidad creada');
         } else {
-            $this->flashToastSuccess('Unidad creada.');
-            redirect()->route('units.index');
+            $this->flashToastSuccess('Unidad creada');
+            redirect()->route('units.show', $unit->id);
         }
     }
 }

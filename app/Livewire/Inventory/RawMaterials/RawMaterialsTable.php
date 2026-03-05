@@ -3,59 +3,60 @@
 namespace App\Livewire\Inventory\RawMaterials;
 
 use App\Models\Inventory\RawMaterial;
-
-use App\Traits\Livewire\WithTableSorting;
+use App\Traits\Livewire\Tables\HasLivewireTableBehavior;
 use Illuminate\Contracts\View\View;
 use Illuminate\Database\Eloquent\Builder;
-use Livewire\Component;
-use Livewire\WithPagination;
 use Livewire\Attributes\Session;
+use Livewire\Component;
 
 class RawMaterialsTable extends Component
 {
-    use WithPagination, WithTableSorting;
+    use HasLivewireTableBehavior;
 
     #[Session]
     public string $searchTerm = '';
+
     #[Session]
     public int $perPage = 12;
+
     #[Session]
     public int $page = 1;
+
     #[Session]
-    public string $sortColumn = 'id';
+    public string $sortColumn = 'name';
+
     #[Session]
     public string $sortDirection = 'desc';
 
-    protected array $theadConfig =
-    [
-        [
-            'column' => 'id',
-            'label' => 'id',
-            'align' => 'center',
-            'style' => 'width: 1%;',
-        ],
+    #[Session]
+    public array $filters = [
+        'quantityMin'  => null,
+        'quantityMax'  => null,
+        'lowStockFilter' => 'all',
+    ];
+
+    protected array $theadConfig = [
         [
             'column' => 'name',
-            'field' => 'name',
-            'label' => 'Nombre',
+            'label'  => 'Nombre',
         ],
         [
             'column' => 'abbreviation',
-            'label' => 'Abreviatura',
-            'align' => 'center',
+            'label'  => 'Abreviatura',
+        ],
+        [
+            'column' => 'category',
+            'label'  => 'Categoría',
         ],
         [
             'column' => 'current_quantity',
-            'label' => 'Disponible',
-            'align' => 'center',
+            'label'  => 'En stock',
         ],
         [
-            'label' => 'Categoría',
-        ],
-        [
-            'label' => 'Activo',
-            'align' => 'center',
-            'style' => 'width: 1%;',
+            'column' => 'is_active',
+            'label'  => 'Activo',
+            'align'  => 'center',
+            'style'  => 'width: 1%;',
         ],
         [
             'label' => 'Ver más',
@@ -63,43 +64,77 @@ class RawMaterialsTable extends Component
         ],
     ];
 
+    public function mount(): void
+    {
+        $this->setPage($this->page);
+    }
+
     public function render(): View
     {
-        $rawMaterials = $this->getQuery()->paginate($this->perPage);
+        $materials = $this->getQuery()->paginate($this->perPage);
 
         return view('livewire.inventory.raw-materials.raw-materials-table', [
-            'rawMaterials' => $rawMaterials,
+            'materials' => $materials,
         ]);
     }
 
-    public function search(): void
+    public function updatedFilters(mixed $value, string $key): void
     {
-        $this->resetPage();
-    }
+        if ($value === '') {
+            $this->filters[$key] = null;
+        }
 
-    public function afterSortChanged(): void
-    {
         $this->resetPage();
-    }
-
-    public function updatingPage($page): void
-    {
-        $this->page = $page;
     }
 
     private function getQuery(): Builder
     {
         $query = RawMaterial::query()
-            ->with(['unit:id,symbol', 'category:id,name']);
+            ->leftJoin('categories', 'raw_materials.category_id', '=', 'categories.id')
+            ->with([
+                'unit:id,symbol',
+                'category:id,name',
+            ])
+            ->select('raw_materials.*');
 
-        if ($term = $this->searchTerm) {
-            $query->whereAny([
-                'name',
-                'abbreviation'
-            ], 'like', "%$term%");
+        if ($this->filters['quantityMin'] !== null) {
+            $query->where('raw_materials.current_quantity', '>=', $this->filters['quantityMin']);
         }
 
-        $query->orderBy($this->sortColumn, $this->sortDirection);
+        if ($this->filters['quantityMax'] !== null) {
+            $query->where('raw_materials.current_quantity', '<=', $this->filters['quantityMax']);
+        }
+
+        match ($this->filters['lowStockFilter']) {
+            'low_stock' => $query
+                ->whereColumn('raw_materials.current_quantity', '<', 'raw_materials.minimum_stock')
+                ->where('raw_materials.minimum_stock', '>', 0),
+            'ok' => $query->where(function (Builder $q): void {
+                $q->whereColumn('raw_materials.current_quantity', '>=', 'raw_materials.minimum_stock')
+                    ->orWhere('raw_materials.minimum_stock', '<=', 0);
+            }),
+            default => null,
+        };
+
+        if ($term = $this->searchTerm) {
+            $query->where(function (Builder $q) use ($term): void {
+                $q->where('raw_materials.name', 'like', "%$term%")
+                    ->orWhere('raw_materials.abbreviation', 'like', "$term%")
+                    ->orWhere('categories.name', 'like', "%$term%");
+            });
+        }
+
+        $sortable = [
+            'name'             => 'raw_materials.name',
+            'abbreviation'     => 'raw_materials.abbreviation',
+            'current_quantity' => 'raw_materials.current_quantity',
+            'is_active'        => 'raw_materials.is_active',
+            'category'         => 'categories.name',
+        ];
+
+        $column = $sortable[$this->sortColumn] ?? 'raw_materials.name';
+
+        $query->orderBy($column, $this->sortDirection);
 
         return $query;
     }

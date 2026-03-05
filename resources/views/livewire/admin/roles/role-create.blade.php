@@ -1,6 +1,4 @@
 <div>
-    <h1 class="h4">Crear Rol</h1>
-
     <form wire:submit.prevent="save">
         <div class="card">
             <div class="card-body form-row">
@@ -37,7 +35,7 @@
         document.addEventListener("livewire:initialized", () => {
             let $wire = Livewire.first();
 
-            permisions = $('#permissions').select2({
+            const permisions = $('#permissions').select2({
                 placeholder: 'Seleccione los permisos...',
                 theme: 'bootstrap4',
                 allowClear: true,

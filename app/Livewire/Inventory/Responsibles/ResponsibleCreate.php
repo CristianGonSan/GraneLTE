@@ -32,19 +32,14 @@ class ResponsibleCreate extends Component
     {
         $validated = $this->validate([
             'name'       => ['required', 'string', 'max:128'],
-            'identifier' => [
-                'nullable',
-                'string',
-                'max:128',
-                Rule::unique('responsibles')
-            ],
+            'identifier' => ['nullable', 'string',  'max:128', Rule::unique('responsibles')],
             'position'   => ['nullable', 'string', 'max:128'],
             'department' => ['nullable', 'string', 'max:128'],
             'phone'      => ['nullable', 'string', 'max:20'],
             'email'      => ['nullable', 'email', 'max:191'],
         ]);
 
-        Responsible::create($validated);
+        $Responsible = Responsible::create($validated);
 
         if ($this->createAnother) {
             $this->reset([
@@ -56,10 +51,10 @@ class ResponsibleCreate extends Component
                 'email'
             ]);
 
-            $this->toastSuccess('Responsable creado.');
+            $this->toastSuccess('Responsable creado');
         } else {
-            $this->flashToastSuccess('Responsable creado.');
-            redirect()->route('responsibles.index');
+            $this->flashToastSuccess('Responsable creado');
+            redirect()->route('responsibles.show', $Responsible->id);
         }
     }
 }

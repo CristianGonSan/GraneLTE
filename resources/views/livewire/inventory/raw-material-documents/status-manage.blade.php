@@ -20,7 +20,7 @@
                     <a href="{{ route('admin.users.edit', $val->id) }}" target="_blank">
                         {{ $val->name }}
                     </a> el
-                    {{ $document->validated_at->format('d/m/Y h:i - a') }}
+                    {{ $document->validated_at->format('d/m/Y - h:i a') }}
                 </div>
             @endif
         </div>
@@ -29,11 +29,14 @@
     <div class="mb-3">
         @switch($document->status)
             @case(Status::DRAFT)
-                <a href="{{ route('raw-material-documents.receipts.edit', $document->id) }}" class="btn btn-outline-warning mr-1">
-                    <i class="fas fa-fw fa-edit"></i> Editar
-                </a>
-
                 @if ($document->created_by === auth()->id())
+                    <a href="{{ $document->getRoute('edit') }}" class="btn btn-outline-warning mr-1">
+                        <i class="fas fa-fw fa-edit"></i> Editar
+                    </a>
+
+                    <x-livewire.loading-button label="Eliminar" icon="trash-alt" theme="outline-danger" class="mr-1"
+                        wire:click='delete' wire:swal-confirm="¿Eliminar este borrador?" swal-icon="warning" />
+
                     <x-livewire.loading-button label="Pasar a pendiente" theme="outline-primary" icon="clock"
                         wire:click="changeStatus('{{ Status::PENDING }}')"
                         wire:swal-confirm="¿Seguro que deseas pasar el documento a Pendiente?" />
@@ -47,19 +50,23 @@
                 @endcan
 
                 @can('raw-material-documents.reject')
-                    <x-livewire.loading-button label="Rechazar" theme="outline-danger" icon="circle-xmark"
+                    <x-livewire.loading-button label="Rechazar" theme="outline-danger" class="mr-1" icon="circle-xmark"
                         wire:click="changeStatus('{{ Status::REJECTED }}')" wire:swal-confirm="¿Rechazar este documento?" />
                 @endcan
             @break
 
             @case(Status::ACCEPTED)
                 @can('raw-material-documents.cancel')
-                    <x-livewire.loading-button label="Cancelar" theme="outline-danger" icon="ban"
+                    <x-livewire.loading-button label="Cancelar" theme="outline-danger" class="mr-1" icon="ban"
                         wire:click="changeStatus('{{ Status::CANCELED }}')" wire:swal-confirm="¿Cancelar el documento aceptado?" />
                 @endcan
             @break
 
         @endswitch
+
+        <a href="{{ route('raw-material-documents.index') }}" class="btn btn-outline-secondary mr-1">
+            <i class="fas fa-fw fa-chevron-left mr-1"></i> Volver
+        </a>
     </div>
 
 </div>

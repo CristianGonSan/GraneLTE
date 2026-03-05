@@ -10,6 +10,7 @@ use App\Models\Inventory\Warehouse;
 use App\Traits\SweetAlert2\FlashToast;
 use App\Traits\SweetAlert2\Livewire\Toast;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Validation\Rule;
 use Illuminate\View\View;
 use Livewire\Component;
@@ -27,7 +28,7 @@ class ReceiptCreate extends Component
     public ?int $responsible_id = null;
     public ?string $description = null;
 
-    public bool $isDraft = false;
+    public bool $isDraft = true;
 
 
     //Dominio
@@ -54,21 +55,23 @@ class ReceiptCreate extends Component
             return;
         }
 
-        $validated = $this->validate();
+        DB::transaction(function () {
+            $validated = $this->validate();
 
-        $validated['type']       = RawMaterialDocumentType::RECEIPT;
-        $validated['status']     = $this->isDraft ? RawMaterialDocumentStatus::DRAFT : RawMaterialDocumentStatus::PENDING;
-        $validated['created_by'] = Auth::id();
+            $validated['type']       = RawMaterialDocumentType::RECEIPT;
+            $validated['status']     = $this->isDraft ? RawMaterialDocumentStatus::DRAFT : RawMaterialDocumentStatus::PENDING;
+            $validated['created_by'] = Auth::id();
 
-        $document = RawMaterialDocument::create($validated);
-        $document->receipt()->create($validated);
+            $document = RawMaterialDocument::create($validated);
+            $document->receipt()->create($validated);
 
-        foreach ($validated['lines'] as $line) {
-            $document->receiptLines()->create($line);
-        }
+            foreach ($validated['lines'] as $line) {
+                $document->receiptLines()->create($line);
+            }
 
-        $this->flashToastSuccess('Documento creado.');
-        redirect()->route('raw-material-documents.index');
+            $this->flashToastSuccess('Documento creado.');
+            redirect()->route('raw-material-documents.receipts.show', $document->id);
+        });
     }
 
     public function addLine(): void
@@ -101,9 +104,9 @@ class ReceiptCreate extends Component
             'warehouse_id'          => $warehouse->id,
             'warehouse_name'        => $warehouse->name,
             'external_batch_code'   => null,
-            'received_quantity'     => 1,
-            'received_unit_cost'    => 1,
-            'received_total_cost'   => 1,
+            'received_quantity'     => null,
+            'received_unit_cost'    => null,
+            'received_total_cost'   => null,
             'expiration_date'       => null,
         ];
 
@@ -127,6 +130,11 @@ class ReceiptCreate extends Component
         }
 
         $this->total_cost = $totalCost;
+    }
+
+    public function updatedLines(): void
+    {
+        $this->recalculateTotals();
     }
 
     protected function rules(): array

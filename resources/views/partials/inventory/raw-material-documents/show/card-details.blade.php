@@ -1,39 +1,35 @@
 <div class="card mb-3">
     <div class="card-body">
-        <div>
-            {{ $document->effective_at->format('d/m/Y - h:i a') }}
-        </div>
-
-        <hr>
-
-        <div class="row">
+        <dl class="row">
             <div class="col-md-3">
-                <strong>{{ $document->reference_type ?? 'Referencia' }}</strong>
-                <div>
-                    {{ $document->reference_number ?? 'S/N' }}
-                </div>
+                <dt>Fecha efectiva</dt>
+                <dd>{{ $document->effective_at->format('d/m/Y - h:i a') }}</dd>
+            </div>
+            <div class="col-md-3">
+                <dt>{{ $document->reference_type ?? 'Referencia' }}</dt>
+                <dd>{{ $document->reference_number ?? 'S/N' }}</dd>
             </div>
 
             <div class="col-md-3">
-                <strong>Responsable</strong>
-                <div>{{ $document->responsible?->name ?? 'S/N' }}</div>
+                <dt>Responsable</dt>
+                <dd>{{ $document->responsible?->name ?? 'S/N' }}</dd>
             </div>
 
             @if ($receipt = $document->receipt)
                 <div class="col-md-3">
-                    <strong>Proveedor</strong>
-                    <div>{{ $receipt->supplier->name }}</div>
+                    <dt>Proveedor</dt>
+                    <dd>{{ $receipt->supplier->name }}</dd>
                 </div>
             @endif
-        </div>
+        </dl>
 
         <hr>
 
         @if ($document->description)
-            <div>
-                <strong>Descripción</strong>
-                <div>{{ $document->description }}</div>
-            </div>
+            <dl class="mb-0">
+                <dt>Descripción</dt>
+                <dd>{{ $document->description }}</dd>
+            </dl>
             <hr>
         @endif
 

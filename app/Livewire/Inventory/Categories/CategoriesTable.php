@@ -3,18 +3,15 @@
 namespace App\Livewire\Inventory\Categories;
 
 use App\Models\Inventory\Category;
-
-use App\Traits\Livewire\WithTableSorting;
-
+use App\Traits\Livewire\Tables\HasLivewireTableBehavior;
+use Illuminate\Contracts\View\View;
 use Illuminate\Database\Eloquent\Builder;
-use Illuminate\View\View;
-use Livewire\Component;
-use Livewire\WithPagination;
 use Livewire\Attributes\Session;
+use Livewire\Component;
 
 class CategoriesTable extends Component
 {
-    use WithPagination, WithTableSorting;
+    use HasLivewireTableBehavior;
 
     #[Session]
     public string $searchTerm = '';
@@ -31,32 +28,31 @@ class CategoriesTable extends Component
     #[Session]
     public string $sortDirection = 'desc';
 
-    protected array $theadConfig =
-    [
-        [
-            'column' => 'id',
-            'label'  => 'id',
-            'align'  => 'center',
-            'style'  => 'width: 1%;',
-        ],
+    protected array $theadConfig = [
         [
             'column' => 'name',
             'label'  => 'Nombre',
         ],
         [
-            'label'  => 'Descripción',
-            'style'  => 'min-width: 300px;'
+            'label' => 'Descripción',
+            'style' => 'min-width: 300px;',
         ],
         [
-            'label' => 'Activo',
-            'align' => 'center',
-            'style' => 'width: 1%;',
+            'column' => 'is_active',
+            'label'  => 'Activo',
+            'align'  => 'center',
+            'style'  => 'width: 1%;',
         ],
         [
             'label' => 'Ver más',
             'align' => 'center',
         ],
     ];
+
+    public function mount(): void
+    {
+        $this->setPage($this->page);
+    }
 
     public function render(): View
     {
@@ -67,30 +63,18 @@ class CategoriesTable extends Component
         ]);
     }
 
-    public function search(): void
-    {
-        $this->resetPage();
-    }
-
-    public function afterSortChanged(): void
-    {
-        $this->resetPage();
-    }
-
-    public function updatingPage($page): void
-    {
-        $this->page = $page;
-    }
-
     private function getQuery(): Builder
     {
         $query = Category::query();
 
         if ($term = $this->searchTerm) {
-            $query->whereAny([
-                'name',
-                'description'
-            ], 'like', "%$term%");
+            $query->where(function ($q) use ($term) {
+                $q->whereAny(
+                    ['name', 'description'],
+                    'like',
+                    "%$term%"
+                );
+            });
         }
 
         $query->orderBy($this->sortColumn, $this->sortDirection);

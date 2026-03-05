@@ -26,7 +26,8 @@ class DatabaseSeeder extends Seeder
             //CategorySeeder::class,
             //SupplierSeeder::class,
             //WarehouseSeeder::class,
-            ResponsibleSeeder::class
+            //ResponsibleSeeder::class
+            RolesAndPermissionsSeeder::class
         ]);
     }
 }

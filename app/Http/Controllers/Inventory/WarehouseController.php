@@ -14,6 +14,15 @@ class WarehouseController extends Controller
         return view('inventory.warehouses.index');
     }
 
+    public function show(int $id): View
+    {
+        abort_if(!Warehouse::where('id', $id)->exists(), 404);
+
+        return view('inventory.warehouses.show', [
+            'warehouseId' => $id
+        ]);
+    }
+
     public function create(): View
     {
         return view('inventory.warehouses.create');

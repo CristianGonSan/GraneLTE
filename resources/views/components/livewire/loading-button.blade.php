@@ -2,7 +2,7 @@
     'type' => 'button',
     'label' => null,
     'icon' => 'save',
-    'loadingIcon' => 'spinner',
+    'loadingIcon' => 'circle-notch',
     'theme' => 'outline-primary',
 ])
 

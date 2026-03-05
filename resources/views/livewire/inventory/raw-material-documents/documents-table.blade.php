@@ -1,6 +1,21 @@
 <x-card-table :pagination="$documents">
     <x-slot:header>
-        <x-livewire.table.search-pane />
+        <x-livewire.table.search-pane>
+            <div class="row mt-1 mb-1">
+                <x-adminlte-select fgroup-class="col-md-4 mb-0" class="custom-select" name="types"
+                    label="Filtrar por tipo" wire:model.live="filters.type" label-class="text-muted mb-0">
+                    <option value="all">Todos</option>
+                    <x-adminlte-options :options="$typeOptions" />
+                </x-adminlte-select>
+
+                <x-adminlte-select fgroup-class="col-md-4 mb-0" class="custom-select" name="status"
+                    label="Filtrar por estado" wire:model.live="filters.status" label-class="text-muted mb-0">
+                    <option value="all">Todos</option>
+                    <x-adminlte-options :options="$statusOptions" />
+                </x-adminlte-select>
+            </div>
+            <hr class="mb-0">
+        </x-livewire.table.search-pane>
     </x-slot:header>
 
     {{ $this->thead() }}
@@ -8,24 +23,24 @@
     <tbody>
         @forelse ($documents as $document)
             <tr wire:key="raw-material-document-{{ $document->id }}">
-                <td class="text-center">{{ $document->id }}</td>
-                <td class="text-center">{{ $document->type->label() ?? $document->type->value }}</td>
-                <td class="text-center">{{ $document->status->label() }}</td>
-                <td>{{ $document->effective_at->format('d/m/Y') }}</td>
+                <td class="text-center">{{ number_format($document->id) }}</td>
                 <td>{{ $document->shortText('reference_number') }}</td>
-                <td class="text-center">{{ number_format($document->total_cost, 2) }}</td>
+                <td>{{ $document->type->label() }}</td>
+                <td>{{ $document->status->label() }}</td>
                 <td>{{ $document->responsible?->shortText('name') ?? 'S/N' }}</td>
                 <td>{{ $document->creator->shortText('name') }}</td>
+                <td>{{ number_format($document->total_cost, 2) }}</td>
+                <td>{{ $document->effective_at->format('d/m/Y') }}</td>
                 <td>{{ $document->created_at->format('d/m/Y') }}</td>
                 <td class="text-center">
                     <a href="{{ $document->getRoute('show') }}" class="d-block text-reset">
-                        <i class="fa-solid fa-chevron-right"></i>
+                        <i class="fas fa-fw fa-chevron-right"></i>
                     </a>
                 </td>
             </tr>
         @empty
             <tr>
-                <td colspan="8" class="text-center text-muted">
+                <td colspan="9" class="text-center text-muted">
                     No se encontraron resultados.
                 </td>
             </tr>

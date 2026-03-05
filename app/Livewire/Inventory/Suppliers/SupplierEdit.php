@@ -26,13 +26,11 @@ class SupplierEdit extends Component
     public ?string $address;
     public ?string $description;
 
-
-
     public function mount(int $supplierId): void
     {
-        $this->supplierId   = $supplierId;
+        $this->supplierId       = $supplierId;
 
-        $supplier = $this->supplier();
+        $supplier               = $this->supplier();
 
         $this->name             = $supplier->name;
         $this->contact_person   = $supplier->contact_person;
@@ -62,27 +60,7 @@ class SupplierEdit extends Component
 
         $this->supplier()->update($validated);
 
-        $this->toastSuccess('Proveedor actualizado.');
-    }
-
-    public function toggleActive(): void
-    {
-        $this->toastSuccess($this->supplier()->toggleActive()
-            ? 'Proveedor activado'
-            : 'Proveedor desactivado');
-    }
-
-    public function delete(): void
-    {
-        $supplier = $this->supplier();
-
-        if ($supplier->isInUse()) {
-            $this->alertError('El proveedor esta en uso, sugerimos desactivarlo.', 'Proveedor en Uso.');
-        } else {
-            $supplier->delete();
-            $this->flashToastSuccess('Proveedor eliminado.');
-            redirect()->route('suppliers.index');
-        }
+        $this->toastSuccess('Proveedor actualizado');
     }
 
     private ?Supplier $supplier = null;
