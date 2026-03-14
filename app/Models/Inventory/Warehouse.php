@@ -84,10 +84,10 @@ class Warehouse extends Model
         return $this->hasManyThrough(
             RawMaterialBatch::class,   // Modelo final
             RawMaterialStock::class,   // Modelo intermedio
-            'warehouse_id',           // FK en raw_material_stocks hacia warehouses
-            'id',                    // PK en raw_material_batches
-            'id',                     // PK en warehouses
-            'batch_id'          // FK en raw_material_stocks hacia batches
+            'warehouse_id',            // FK en raw_material_stocks hacia warehouses
+            'id',                      // PK en raw_material_batches
+            'id',                      // PK en warehouses
+            'batch_id'                 // FK en raw_material_stocks hacia batches
         );
     }
 }

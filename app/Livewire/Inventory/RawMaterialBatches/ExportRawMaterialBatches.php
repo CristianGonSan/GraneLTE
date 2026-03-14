@@ -22,13 +22,23 @@ class ExportRawMaterialBatches extends Component
     public ?float $quantityMax = null;
 
     // — Filtros de fechas —
-    public ?string $receivedFrom     = null;
-    public ?string $receivedTo       = null;
-    public string  $expirationFilter = ''; // '' | expired | expiring | no_expiration
+    public ?string $receivedFrom = null;
+    public ?string $receivedTo   = null;
+
+    // — Filtro de caducidad —
+    public string $expirationFilter = '';
+    public int    $expirationDays   = 30;
 
     // — Ordenamiento —
     public string $orderBy        = 'material';
     public string $orderDirection = 'asc';
+
+    public function updatedExpirationDays(int $value): void
+    {
+        if ($value < 1) {
+            $this->expirationDays = 1;
+        }
+    }
 
     public function render(): View
     {
@@ -54,12 +64,17 @@ class ExportRawMaterialBatches extends Component
             ->when($this->receivedTo,   fn(Builder $q) => $q->where('batches.received_at', '<=', $this->receivedTo))
             ->when($this->expirationFilter !== '', function (Builder $q): void {
                 match ($this->expirationFilter) {
-                    'expired'       => $q->whereNotNull('batches.expiration_date')
+                    'not_expired'    => $q->where(fn(Builder $inner) => $inner
+                        ->whereNull('batches.expiration_date')
+                        ->orWhere('batches.expiration_date', '>', now())),
+                    'expiring'       => $q->whereNotNull('batches.expiration_date')
+                        ->where('batches.expiration_date', '>', now())
+                        ->where('batches.expiration_date', '<=', now()->addDays($this->expirationDays))
+                        ->orderBy('batches.expiration_date', 'asc'),
+                    'expired'        => $q->whereNotNull('batches.expiration_date')
                         ->where('batches.expiration_date', '<=', now()),
-                    'expiring'      => $q->whereNotNull('batches.expiration_date')
-                        ->whereBetween('batches.expiration_date', [now(), now()->addDays(30)]),
-                    'no_expiration' => $q->whereNull('batches.expiration_date'),
-                    default         => null,
+                    'non_perishable' => $q->whereNull('batches.expiration_date'),
+                    default          => null,
                 };
             });
 

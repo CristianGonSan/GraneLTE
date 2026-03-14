@@ -48,7 +48,6 @@ class RawMaterialStock extends Model
 
     protected $appends = [
         'current_cost',
-        'code',
     ];
 
     protected function currentCost(): Attribute

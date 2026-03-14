@@ -28,9 +28,10 @@ class DocumentsTable extends Component
 
     public string $sortDirection = 'desc';
 
-    public string $type = 'all';
-
-    public string $status = 'all';
+    public array $filters = [
+        'type'   => 'all',
+        'status' => 'all',
+    ];
 
     protected array $theadConfig = [
         [
@@ -90,6 +91,15 @@ class DocumentsTable extends Component
         ]);
     }
 
+    public function updatedFilters(mixed $value, string $key): void
+    {
+        if ($value === '') {
+            $this->filters[$key] = null;
+        }
+
+        $this->resetPage();
+    }
+
     private function getQuery(): Builder
     {
         $query = RawMaterialDocument::query()
@@ -102,12 +112,12 @@ class DocumentsTable extends Component
 
         $query->whereCreatedBy($this->userId);
 
-        if ($this->type !== 'all') {
-            $query->whereType($this->type);
+        if ($this->filters['type'] !== 'all') {
+            $query->whereType($this->filters['type']);
         }
 
-        if ($this->status !== 'all') {
-            $query->whereStatus($this->status);
+        if ($this->filters['status'] !== 'all') {
+            $query->whereStatus($this->filters['status']);
         }
 
         if ($term = $this->searchTerm) {

@@ -20,6 +20,11 @@
 
     <hr>
 
+    <h2 class="h5">Generar reporte general</h2>
+    <livewire:Inventory.Reports.ExportInventoryReport />
+
+    <hr>
+
     <h2 class="h5">Exportar stock</h2>
 
     <div class="d-block mb-3">

@@ -150,8 +150,12 @@ class RawMaterial extends Model
     public function stocks(): HasManyThrough
     {
         return $this->hasManyThrough(
-            RawMaterialStock::class,
-            RawMaterialBatch::class
+            RawMaterialStock::class, // Modelo final
+            RawMaterialBatch::class, // Modelo intermedio
+            'material_id',           // FK en raw_material_batches → raw_materials
+            'batch_id',              // FK en raw_material_stocks → raw_material_batches
+            'id',                    // PK en raw_materials
+            'id'                     // PK en raw_material_batches
         );
     }
 

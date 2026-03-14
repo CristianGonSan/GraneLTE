@@ -81,8 +81,8 @@ class BatchesTable extends Component
             $this->filters[$key] = null;
         }
 
-        if ($key === 'expirationDays' && $this->filters['expirationDays'] < 1) {
-            $this->filters['expirationDays'] = 1;
+        if ($key === 'expirationDays') {
+            $this->filters['expirationDays'] = max(1, (int) $this->filters['expirationDays']);
         }
 
         $this->resetPage();

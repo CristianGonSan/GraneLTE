@@ -3,13 +3,13 @@
         <x-livewire.table.search-pane :autofocus="false">
             <div class="row mt-1 mb-1">
                 <x-adminlte-select fgroup-class="col-md-4 mb-0" class="custom-select" name="types"
-                    label="Filtrar por tipo" wire:model='type' wire:change='search' label-class="text-muted mb-0">
+                    label="Filtrar por tipo" wire:model.live="filters.type" label-class="text-muted mb-0">
                     <option value="all">Todos</option>
                     <x-adminlte-options :options="$typeOptions" />
                 </x-adminlte-select>
 
                 <x-adminlte-select fgroup-class="col-md-4 mb-0" class="custom-select" name="status"
-                    label="Filtrar por estado" wire:model='status' wire:change='search' label-class="text-muted mb-0">
+                    label="Filtrar por estado" wire:model.live="filters.status" label-class="text-muted mb-0">
                     <option value="all">Todos</option>
                     <x-adminlte-options :options="$statusOptions" />
                 </x-adminlte-select>
@@ -22,7 +22,7 @@
 
     <tbody>
         @forelse ($documents as $document)
-            <tr wire:key="raw-material-document-{{ $document->id }}">
+<tr wire:key="raw-material-document-{{ $document->id }}">
                 <td class="text-center">{{ number_format($document->id) }}</td>
                 <td>{{ $document->shortText('reference_number') }}</td>
                 <td>{{ $document->type->label() }}</td>
@@ -37,12 +37,12 @@
                     </a>
                 </td>
             </tr>
-        @empty
+    @empty
             <tr>
                 <td colspan="9" class="text-center text-muted">
                     No se encontraron resultados.
                 </td>
             </tr>
-        @endforelse
+@endforelse
     </tbody>
 </x-card-table>

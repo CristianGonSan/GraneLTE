@@ -70,7 +70,7 @@ class TransferEdit extends Component
             $this->unit_name         = $material->unit->name;
             $this->unit_symbol       = $material->unit->symbol;
             $this->warehouse_name    = $warehouse->name;
-            $this->batch_code        = $batch->code();
+            $this->batch_code        = $batch->code;
             $this->current_quantity  = $stock->current_quantity;
             $this->quantity          = $line->quantity;
             $this->warehouse_dest_id = $line->warehouse_dest_id;

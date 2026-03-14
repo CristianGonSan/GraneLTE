@@ -28,13 +28,25 @@
                 <x-adminlte-input name="receivedTo" label="Recibido hasta" type="date" fgroup-class="col-md-2"
                     wire:model="receivedTo" />
 
-                <x-adminlte-select name="expirationFilter" label="Vencimiento" fgroup-class="col-md-4"
-                    class="custom-select" wire:model="expirationFilter">
-                    <option value="">Todos</option>
-                    <option value="no_expiration">Sin fecha de vencimiento</option>
-                    <option value="expiring">Por vencer (30 días)</option>
-                    <option value="expired">Vencidos</option>
-                </x-adminlte-select>
+                <div class="form-group col-md-4 mb-0">
+                    <label>Caducidad</label>
+                    <div class="input-group">
+                        <select class="form-control custom-select" wire:model.live="expirationFilter">
+                            <option value="">Todos</option>
+                            <option value="expiring">Por caducar</option>
+                            <option value="not_expired">No caducados</option>
+                            <option value="expired">Caducados</option>
+                            <option value="non_perishable">Imperecederos</option>
+                        </select>
+                        @if ($expirationFilter === 'expiring')
+                            <input type="number" class="form-control" min="1" step="1"
+                                wire:model.live.debounce.600ms="expirationDays" title="Días hasta caducidad" />
+                            <div class="input-group-append">
+                                <span class="input-group-text">días</span>
+                            </div>
+                        @endif
+                    </div>
+                </div>
             </div>
 
             {{-- Fila 3: Ordenamiento --}}

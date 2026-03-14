@@ -2,6 +2,7 @@
 
 namespace App\Livewire\Inventory\RawMaterials;
 
+use App\Exports\Pdf\Inventory\RawMaterialPdfExport;
 use App\Models\Inventory\RawMaterial;
 use App\Traits\SweetAlert2\FlashAlert;
 use App\Traits\SweetAlert2\FlashToast;
@@ -11,6 +12,8 @@ use App\Traits\SweetAlert2\Livewire\Toast;
 use Illuminate\View\View;
 use Livewire\Attributes\Locked;
 use Livewire\Component;
+use Barryvdh\DomPDF\Facade\Pdf;
+use Symfony\Component\HttpFoundation\StreamedResponse;
 
 class RawMaterialShow extends Component
 {

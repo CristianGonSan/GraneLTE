@@ -27,8 +27,10 @@ class StocksTable extends Component
     public string $sortDirection = 'desc';
 
     public array $filters = [
-        'quantityMin' => 0.001,
-        'quantityMax' => null,
+        'quantityMin'      => 0.001,
+        'quantityMax'      => null,
+        'expirationFilter' => 'all',
+        'expirationDays'   => 30,
     ];
 
     protected array $theadConfig = [
@@ -43,6 +45,10 @@ class StocksTable extends Component
         [
             'column' => 'current_quantity',
             'label'  => 'En stock',
+        ],
+        [
+            'column' => 'expiration_date',
+            'label'  => 'Caducidad',
         ],
         [
             'label' => 'Ver más',
@@ -71,6 +77,10 @@ class StocksTable extends Component
             $this->filters[$key] = null;
         }
 
+        if ($key === 'expirationDays') {
+            $this->filters['expirationDays'] = max(1, (int) $this->filters['expirationDays']);
+        }
+
         $this->resetPage();
     }
 
@@ -81,7 +91,7 @@ class StocksTable extends Component
             ->leftJoin('raw_material_batches as batches', 'stocks.batch_id', '=', 'batches.id')
             ->leftJoin('raw_materials as materials', 'batches.material_id', '=', 'materials.id')
             ->with([
-                'batch:id,external_batch_code,batch_code,material_id',
+                'batch:id,external_batch_code,batch_code,expiration_date,material_id',
                 'batch.material:id,name,unit_id',
                 'batch.material.unit:id,symbol',
             ])
@@ -97,6 +107,20 @@ class StocksTable extends Component
             $query->where('stocks.current_quantity', '<=', $this->filters['quantityMax']);
         }
 
+        match ($this->filters['expirationFilter']) {
+            'not_expired'    => $query->where(fn(Builder $q) => $q
+                ->whereNull('batches.expiration_date')
+                ->orWhere('batches.expiration_date', '>', now())),
+            'expiring'       => $query->whereNotNull('batches.expiration_date')
+                ->where('batches.expiration_date', '>', now())
+                ->where('batches.expiration_date', '<=', now()->addDays($this->filters['expirationDays']))
+                ->orderBy('batches.expiration_date', 'asc'),
+            'expired'        => $query->whereNotNull('batches.expiration_date')
+                ->where('batches.expiration_date', '<=', now()),
+            'non_perishable' => $query->whereNull('batches.expiration_date'),
+            default          => null,
+        };
+
         if ($term = $this->searchTerm) {
             $query->where(function (Builder $q) use ($term): void {
                 $q->where('materials.name', 'like', "%$term%")
@@ -107,6 +131,13 @@ class StocksTable extends Component
 
         if ($this->sortColumn === 'batch') {
             $query->orderByRaw("COALESCE(batches.external_batch_code, batches.batch_code) {$this->sortDirection}");
+
+            return $query;
+        }
+
+        if ($this->sortColumn === 'expiration_date') {
+            $query->orderByRaw("batches.expiration_date IS NULL")
+                ->orderBy('batches.expiration_date', $this->sortDirection);
 
             return $query;
         }

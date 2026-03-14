@@ -1,7 +1,6 @@
 <?php
 
 use App\Http\Controllers\AccountController;
-use App\Http\Controllers\Inventory\DashboardController;
 use App\Http\Controllers\InfoController;
 
 use App\Http\Controllers\Auth\{
@@ -13,6 +12,7 @@ use App\Http\Controllers\Admin\UserController;
 use App\Http\Controllers\Exports\ExportController;
 use App\Http\Controllers\Inventory\{
     CategoryController,
+    DashboardController,
     RawMaterialBatchController,
     SupplierController,
     UnitController,
