@@ -122,14 +122,15 @@ class RawMaterial extends Model
     {
         return Attribute::make(
             fn() => $this->batches()
+                ->where('current_quantity', '>', 0)
                 ->sum(DB::raw('current_quantity * received_unit_cost'))
         );
     }
 
     public static function totalCost(): float
     {
-        return (float) self::join("raw_material_batches as batches", "batches.material_id", "raw_materials.id")
-            ->sum(DB::raw("batches.current_quantity * batches.received_unit_cost"));
+        return (float) RawMaterialBatch::where('current_quantity', '>', 0)
+            ->sum(DB::raw("current_quantity * received_unit_cost"));
     }
 
     public function unit(): BelongsTo

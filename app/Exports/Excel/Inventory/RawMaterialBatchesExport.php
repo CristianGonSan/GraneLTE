@@ -78,7 +78,7 @@ class RawMaterialBatchesExport implements
             $row->code,                                               // A
             $material->name,                                          // B
             // — agrupación —
-            $material->category->name,                               // C
+            $material->category->name,                                // C
             // — unidad —
             $material->unit->symbol,                                  // D
             // — estado actual —
@@ -90,8 +90,8 @@ class RawMaterialBatchesExport implements
             $row->received_total_cost,                                // I
             // — trazabilidad —
             $row->supplier->name,                                     // J
-            $row->received_at->format('d/m/Y'),                      // K
-            $row->expiration_date?->format('d/m/Y') ?? '--/--/----', // L
+            $row->received_at->format('d/m/Y'),                       // K
+            $row->expiration_date?->format('d/m/Y') ?? '--/--/----',  // L
             // — vigencia —
             $this->daysUntilExpiration($row),                         // M
         ];

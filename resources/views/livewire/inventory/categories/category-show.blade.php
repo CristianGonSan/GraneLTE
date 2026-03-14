@@ -19,7 +19,7 @@
         </div>
 
         <div class="row">
-            <div class="col-sm-12">
+            <div class="col-sm-6">
                 <div class="info-box">
                     <span class="info-box-icon bg-info">
                         <i class="fas fa-boxes"></i>
@@ -27,7 +27,20 @@
                     <div class="info-box-content">
                         <span class="info-box-text">Materias primas</span>
                         <span class="info-box-number">
-                            {{ $category->raw_materials_count ?? $category->rawMaterials()->count() }}
+                            {{ $category->rawMaterials()->count() }}
+                        </span>
+                    </div>
+                </div>
+            </div>
+            <div class="col-sm-6">
+                <div class="info-box">
+                    <span class="info-box-icon bg-teal">
+                        <i class="fas fa-dollar-sign"></i>
+                    </span>
+                    <div class="info-box-content">
+                        <span class="info-box-text">Costo de categoria</span>
+                        <span class="info-box-number">
+                            ${{ number_format($category->current_cost, 2) }}
                         </span>
                     </div>
                 </div>
@@ -69,8 +82,8 @@
                     </dd>
 
                     <dt class="col-6 text-muted">Actualizado</dt>
-                    <dd class="col-6 mb-0" title="{{ $category->updated_at->format('d/m/Y H:i') }}" data-toggle="tooltip"
-                        data-placement="left">
+                    <dd class="col-6 mb-0" title="{{ $category->updated_at->format('d/m/Y H:i') }}"
+                        data-toggle="tooltip" data-placement="left">
                         {{ $category->updated_at->diffForHumans() }}
                     </dd>
                 </dl>

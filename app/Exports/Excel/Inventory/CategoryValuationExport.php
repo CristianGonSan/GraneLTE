@@ -30,24 +30,26 @@ class CategoryValuationExport implements
     public function query(): Builder
     {
         $query = DB::table('categories')
-            ->join('raw_materials as materials',      'materials.category_id', '=', 'categories.id')
+            ->join('raw_materials as materials', 'materials.category_id', '=', 'categories.id')
             ->leftJoin('raw_material_batches as batches', 'batches.material_id', '=', 'materials.id')
             ->select([
                 'categories.id',
                 'categories.name as category_name',
-                DB::raw('COUNT(DISTINCT materials.id)                               as distinct_materials'),
-                DB::raw('SUM(batches.current_quantity * batches.received_unit_cost) as total_cost'),
+                DB::raw('COUNT(DISTINCT CASE WHEN batches.current_quantity > 0 THEN materials.id END) as distinct_materials'),
+                DB::raw('COALESCE(SUM(CASE WHEN batches.current_quantity > 0 THEN batches.current_quantity * batches.received_unit_cost ELSE 0 END), 0) as total_cost'),
             ])
             ->groupBy(['categories.id', 'categories.name'])
             ->when($this->onlyWithStock, fn(Builder $q): Builder => $q->having('total_cost', '>', 0));
 
         $dir = $this->sanitizedDirection();
 
-        match ($this->orderBy) {
-            'distinct_materials' => $query->orderByRaw("distinct_materials $dir"),
-            'total_cost'         => $query->orderByRaw("total_cost $dir"),
-            default              => $query->orderBy('categories.name', $dir),
-        };
+        if ($this->orderBy === 'distinct_materials') {
+            $query->orderByRaw("distinct_materials $dir");
+        } elseif ($this->orderBy === 'total_cost') {
+            $query->orderByRaw("total_cost $dir");
+        } else {
+            $query->orderBy('categories.name', $dir);
+        }
 
         return $query;
     }

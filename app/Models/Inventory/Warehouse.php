@@ -70,7 +70,8 @@ class Warehouse extends Model
         return Attribute::make(
             fn() => $this->rawMaterialStocks()
                 ->join('raw_material_batches as batches', 'batches.id', '=', 'raw_material_stocks.batch_id')
-                ->sum(DB::raw('batches.current_quantity * batches.received_unit_cost'))
+                ->where('raw_material_stocks.current_quantity', '>', 0)
+                ->sum(DB::raw('raw_material_stocks.current_quantity * batches.received_unit_cost'))
         );
     }
 

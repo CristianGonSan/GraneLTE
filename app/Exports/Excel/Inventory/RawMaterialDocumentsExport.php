@@ -73,7 +73,7 @@ class RawMaterialDocumentsExport implements
             $row->id,                                               // A
             $row->type->label(),                                    // B
             $row->status->label(),                                  // C
-            $row->effective_at->format('d/m/Y H:i'),               // D
+            $row->effective_at->format('d/m/Y H:i'),                // D
             $row->reference_type ?? '—',                            // E
             $row->reference_number ?? '—',                          // F
             $row->total_cost,                                       // G

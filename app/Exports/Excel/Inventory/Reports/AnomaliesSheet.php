@@ -123,11 +123,11 @@ class AnomaliesSheet implements WithTitle, WithEvents
     private static function writeTableHeadings(Worksheet $sheet, int $row, array $headings): void
     {
         foreach ($headings as $i => $heading) {
-            $col = chr(65 + $i);
+            $col = \chr(65 + $i);
             $sheet->setCellValue("{$col}{$row}", $heading);
         }
 
-        $lastCol = chr(64 + count($headings));
+        $lastCol = \chr(64 + \count($headings));
         $sheet->getStyle("A{$row}:{$lastCol}{$row}")->applyFromArray([
             'font' => ['bold' => true],
             'fill' => ['fillType' => Fill::FILL_SOLID, 'startColor' => ['rgb' => 'FADBD8']],

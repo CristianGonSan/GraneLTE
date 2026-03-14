@@ -29,7 +29,8 @@ class LowStockSheet implements WithTitle, FromQuery, WithHeadings, WithMapping, 
         return RawMaterial::active()
             ->with(['category', 'unit'])
             ->where('minimum_stock', '>', 0)
-            ->whereColumn('current_quantity', '<', 'minimum_stock')->orderByRaw("(minimum_stock - current_quantity) desc");
+            ->whereColumn('current_quantity', '<', 'minimum_stock')
+            ->orderByRaw("(minimum_stock - current_quantity) desc");
     }
 
     /**
@@ -44,7 +45,7 @@ class LowStockSheet implements WithTitle, FromQuery, WithHeadings, WithMapping, 
             'Unidad',        // D
             'Stock Minimo',  // E
             'Stock Actual',  // F
-            'Faltante',    // G
+            'Faltante',      // G
         ];
     }
 

@@ -28,9 +28,7 @@ class BatchExpirationTable extends Component
         return RawMaterialBatch::where('current_quantity', '>', 0)->expiring(30, includeExpired: true)
             ->with([
                 'material:id,name,abbreviation,unit_id',
-                'material.unit:id,symbol',
-                'stocks:id,batch_id,warehouse_id,current_quantity',
-                'stocks.warehouse:id,name',
+                'material.unit:id,symbol'
             ])
             ->orderByDesc('expiration_date')
             ->limit(10)

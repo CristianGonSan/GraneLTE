@@ -75,8 +75,8 @@ class RawMaterialsExport implements
             $row->current_cost,                         // E
             $row->minimum_stock,                        // F
             // — metadata —
-            $row->isLowStock() ? 'Sí' : 'No',          // G
-            $row->is_active ? 'Activo' : 'Inactivo',   // H
+            $row->isLowStock() ? 'Sí' : 'No',           // G
+            $row->is_active ? 'Activo' : 'Inactivo',    // H
         ];
     }
 

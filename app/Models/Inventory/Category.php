@@ -62,6 +62,7 @@ class Category extends Model
         return Attribute::make(
             fn() => $this->rawMaterials()
                 ->join('raw_material_batches as batches', 'batches.material_id', '=', 'raw_materials.id')
+                ->where('batches.current_quantity', '>', 0)
                 ->sum(DB::raw('batches.current_quantity * batches.received_unit_cost'))
         );
     }

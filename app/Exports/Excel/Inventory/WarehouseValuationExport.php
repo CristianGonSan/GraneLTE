@@ -30,22 +30,23 @@ class WarehouseValuationExport implements
     public function query(): Builder
     {
         $query = DB::table('warehouses')
-            ->leftJoin('raw_material_stocks as stocks',    'stocks.warehouse_id',  '=', 'warehouses.id')
-            ->leftJoin('raw_material_batches as batches',  'batches.id',           '=', 'stocks.batch_id')
+            ->join('raw_material_stocks as stocks', 'stocks.warehouse_id', '=', 'warehouses.id')
+            ->join('raw_material_batches as batches', 'batches.id', '=', 'stocks.batch_id')
             ->select([
                 'warehouses.id',
                 'warehouses.name as warehouse_name',
-                DB::raw('SUM(stocks.current_quantity * batches.received_unit_cost) as total_cost'),
+                DB::raw('COALESCE(SUM(CASE WHEN stocks.current_quantity > 0 THEN stocks.current_quantity * batches.received_unit_cost ELSE 0 END), 0) as total_cost'),
             ])
             ->groupBy(['warehouses.id', 'warehouses.name'])
             ->when($this->onlyWithStock, fn(Builder $q): Builder => $q->having('total_cost', '>', 0));
 
         $dir = $this->sanitizedDirection();
 
-        match ($this->orderBy) {
-            'total_cost' => $query->orderByRaw("total_cost $dir"),
-            default      => $query->orderBy('warehouses.name', $dir),
-        };
+        if ($this->orderBy === 'total_cost') {
+            $query->orderByRaw("total_cost $dir");
+        } else {
+            $query->orderBy('warehouses.name', $dir);
+        }
 
         return $query;
     }
