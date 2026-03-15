@@ -58,9 +58,9 @@ class RawMaterialMovement extends Model
         'effective_at' => 'datetime',
     ];
 
-    public function execute(): void
+    public function execute(?RawMaterialStock $originStock = null): void
     {
-        ExecuteRawMaterialMovement::execute($this);
+        ExecuteRawMaterialMovement::execute($this, $originStock);
     }
 
     public function batch(): BelongsTo
