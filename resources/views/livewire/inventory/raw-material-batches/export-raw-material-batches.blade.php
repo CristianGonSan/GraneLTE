@@ -1,4 +1,4 @@
-<form wire:submit.prevent="export">
+<form wire:submit="export">
     <div class="card">
         <div class="card-body">
 

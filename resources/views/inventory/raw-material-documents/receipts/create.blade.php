@@ -16,5 +16,6 @@
 @endsection
 
 @section('content')
+    <h1 class="h4">Crear entrada de materia prima</h1>
     <livewire:Inventory.RawMaterialDocuments.Receipts.ReceiptCreate />
 @endsection

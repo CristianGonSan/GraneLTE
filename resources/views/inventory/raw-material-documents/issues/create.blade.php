@@ -17,6 +17,7 @@
 @endsection
 
 @section('content')
+    <h1 class="h4">Crear salida de materia prima</h1>
     <livewire:Inventory.RawMaterialDocuments.Issues.IssueCreate />
 
     <livewire:Inventory.RawMaterialStocks.ModalStockSelector />

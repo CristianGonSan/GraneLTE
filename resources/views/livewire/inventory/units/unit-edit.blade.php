@@ -1,5 +1,5 @@
 <div>
-    <form wire:submit.prevent='save'>
+    <form wire:submit='save'>
         <div class="card">
             <div class="card-body">
                 <x-adminlte-input id="name" name="name" label="Nombre *" placeholder="ejemplo: kilogramo"

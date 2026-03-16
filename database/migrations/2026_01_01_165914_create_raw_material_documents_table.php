@@ -23,7 +23,7 @@ return new class extends Migration
             $table->string('reference_type', 32)->nullable()->index(); // tipo de documento externo (factura, remisión, guía, etc.)
             $table->string('reference_number', 128)->nullable(); // número de factura/remisión/etc.
 
-            $table->decimal('total_cost', 15, 2)->nullable();
+            $table->decimal('total_cost', 15, 2)->default(0);
 
             $table->foreignId('responsible_id')
                 ->nullable()

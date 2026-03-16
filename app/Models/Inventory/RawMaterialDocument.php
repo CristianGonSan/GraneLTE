@@ -13,6 +13,9 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Support\Facades\DB;
+use Spatie\MediaLibrary\HasMedia;
+use Spatie\MediaLibrary\InteractsWithMedia;
+use Spatie\MediaLibrary\MediaCollections\Models\Media;
 
 /**
  * @property int $id
@@ -34,6 +37,7 @@ use Illuminate\Support\Facades\DB;
  * @property-read User $creator
  * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Inventory\RawMaterialIssueLine> $issueLines
  * @property-read int|null $issue_lines_count
+ * @property-read int|null $media_count
  * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Inventory\RawMaterialMovement> $movements
  * @property-read int|null $movements_count
  * @property-read \App\Models\Inventory\RawMaterialReceipt|null $receipt
@@ -63,9 +67,12 @@ use Illuminate\Support\Facades\DB;
  * @method static \Illuminate\Database\Eloquent\Builder<static>|RawMaterialDocument whereValidatedBy($value)
  * @mixin \Eloquent
  */
-class RawMaterialDocument extends Model
+class RawMaterialDocument extends Model implements HasMedia
 {
-    use HasFactory, TruncateText;
+    use HasFactory, TruncateText, InteractsWithMedia;
+
+    /** Coleccion de archivos adjuntos generales del documento (facturas, remisiones, PDFs, imagenes). */
+    public const COLLECTION_ATTACHMENTS = 'attachments';
 
     protected $table = 'raw_material_documents';
 
@@ -90,6 +97,32 @@ class RawMaterialDocument extends Model
         'validated_at'  => 'datetime',
         'total_cost'    => 'decimal:2',
     ];
+
+    // -------------------------------------------------------------------------
+    // Media Library
+    // -------------------------------------------------------------------------
+
+    public function registerMediaCollections(): void
+    {
+        $this->addMediaCollection(self::COLLECTION_ATTACHMENTS)
+            ->singleFile()
+            ->useDisk('local')
+            ->acceptsMimeTypes([
+                'application/pdf',
+                'image/jpeg',
+                'image/png',
+                'image/webp',
+            ]);
+    }
+
+    public function getAttachment(): ?Media
+    {
+        return $this->getFirstMedia(self::COLLECTION_ATTACHMENTS);
+    }
+
+    // -------------------------------------------------------------------------
+    // Business logic
+    // -------------------------------------------------------------------------
 
     public function validateStatusChange(RawMaterialDocumentStatus $newStatus, User $user): bool
     {
@@ -117,6 +150,49 @@ class RawMaterialDocument extends Model
     {
         ExecuteRawMaterialDocument::execute($this);
     }
+
+    // -------------------------------------------------------------------------
+    // Hard delete
+    // -------------------------------------------------------------------------
+
+    public function hardDelete(): void
+    {
+        DB::transaction(function (): void {
+            $this->movements()->delete();
+
+            $this->receipt()->delete();
+            $this->receiptLines()->delete();
+            $this->issueLines()->delete();
+            $this->transferLines()->delete();
+            $this->adjustmentLines()->delete();
+
+            $this->clearMediaCollection(self::COLLECTION_ATTACHMENTS);
+
+            $this->delete();
+        });
+    }
+
+    // -------------------------------------------------------------------------
+    // Routing
+    // -------------------------------------------------------------------------
+
+    public function getRoute(string $action = 'show'): string
+    {
+        $prefixName = 'raw-material-documents';
+
+        $routeName = match ($this->type) {
+            RawMaterialDocumentType::RECEIPT    => "$prefixName.receipts.$action",
+            RawMaterialDocumentType::ISSUE      => "$prefixName.issues.$action",
+            RawMaterialDocumentType::TRANSFER   => "$prefixName.transfers.$action",
+            RawMaterialDocumentType::ADJUSTMENT => "$prefixName.adjustments.$action",
+        };
+
+        return route($routeName, ['document' => $this->id]);
+    }
+
+    // -------------------------------------------------------------------------
+    // Relations
+    // -------------------------------------------------------------------------
 
     public function receipt(): HasOne
     {
@@ -169,34 +245,5 @@ class RawMaterialDocument extends Model
     public function movements(): HasMany
     {
         return $this->hasMany(RawMaterialMovement::class, 'document_id');
-    }
-
-    public function getRoute(string $action = 'show'): string
-    {
-        $prefixName = 'raw-material-documents';
-
-        $routeName = match ($this->type) {
-            RawMaterialDocumentType::RECEIPT    => "$prefixName.receipts.$action",
-            RawMaterialDocumentType::ISSUE      => "$prefixName.issues.$action",
-            RawMaterialDocumentType::TRANSFER   => "$prefixName.transfers.$action",
-            RawMaterialDocumentType::ADJUSTMENT => "$prefixName.adjustments.$action",
-        };
-
-        return route($routeName, ['document' => $this->id]);
-    }
-
-    public function hardDelete(): void
-    {
-        DB::transaction(function (): void {
-            $this->movements()->delete();
-
-            $this->receipt()->delete();
-            $this->receiptLines()->delete();
-            $this->issueLines()->delete();
-            $this->transferLines()->delete();
-            $this->adjustmentLines()->delete();
-
-            $this->delete();
-        });
     }
 }

@@ -1,16 +1,14 @@
 <div>
-    <h1 class="h4">Editar Entrada de Materia Prima</h1>
-
-    <form wire:submit.prevent="save">
+    <form wire:submit="save">
         <div class="card">
             <div class="card-body form-row">
                 <x-adminlte-input fgroup-class="col-md-2" name="effective_at" label="Fecha efectiva *" type="datetime-local"
                     wire:model="effective_at" required />
 
-                <x-adminlte-input fgroup-class="col-md-2" name="reference_type" label="Tipo de referencia"
+                <x-adminlte-input fgroup-class="col-sm-6 col-md-2" name="reference_type" label="Tipo de referencia"
                     placeholder="Factura, pedido, etc." type="text" wire:model="reference_type" maxlength="32" />
 
-                <x-adminlte-input fgroup-class="col-md-2" name="reference_number" label="Número de referencia"
+                <x-adminlte-input fgroup-class="col-sm-6 col-md-2" name="reference_number" label="Numero de referencia"
                     placeholder="Número de referencia" type="text" wire:model="reference_number" maxlength="128" />
 
                 <x-form.select-wire-ignore fgroup-class="col-md-3" name="responsible_id" label="Responsable"
@@ -24,12 +22,24 @@
                 <x-adminlte-textarea fgroup-class="col-md-12" name="description" label="Descripción"
                     placeholder="Descripción de la transacción" wire:model="description" rows="2"
                     maxlength="255" />
+
+                {{-- Adjunto --}}
+                <x-livewire.file-upload name="attachment" label="Archivo adjunto" fgroup-class="col-md-6 col-sm-12 mb-1"
+                    accept=".pdf,.jpg,.jpeg,.png,.webp" hint="PDF, JPG, PNG o WEBP. Máximo 10 MB.">
+                    @if ($attachment)
+                        {{ $attachment->getClientOriginalName() }}
+                    @else
+                        {{ $this->document()->getAttachment()?->file_name ?? 'Seleccionar archivo' }}
+                    @endif
+                </x-livewire.file-upload>
             </div>
         </div>
 
         <h2 class="h5">Lista de entradas</h2>
 
-        @include('partials.livewire.inventory.raw-material-documents.receipts.lines')
+        <div x-on:keydown.enter.prevent>
+            @include('partials.livewire.inventory.raw-material-documents.receipts.receipt-lines')
+        </div>
 
         <div class="mb-3">
             <x-livewire.loading-button type="submit" label="Actualizar documento" class="mr-1" />
@@ -70,7 +80,7 @@
                         return $(`
                         <div class="p-1">
                             <strong class="d-block">${data.text}</strong>
-                            <small>${data.description}</small>
+                            <small>${data.description ?? ''}</small>
                         </div>
                         `);
                     }

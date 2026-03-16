@@ -18,76 +18,62 @@
 @endsection
 
 @section('content')
-    <h1 class="h4">Detalles de Entrada de Materia Prima</h1>
+    @php
+        use App\Enums\Inventory\RawMaterialDocument\RawMaterialDocumentStatus as Status;
+    @endphp
+    <h1 class="h4">Detalles de entrada de materia prima</h1>
 
     @include('partials.inventory.raw-material-documents.show.card-details')
 
     <h2 class="h5">Lista de entradas</h2>
 
-    @forelse ($document->receiptLines as $line)
-        <div class="card">
-            <div class="card-body py-3">
-                <div>
-                    <strong class="mb-0 text-dark">{{ $line->material->name }}</strong>
-                </div>
-
-                <hr class="my-2">
-
-                <dl class="row mb-0">
-                    <div class="col-sm-6 col-md-3">
-                        <dt class="text-muted">Código de lote externo</dt>
-                        <dd>{{ $line->external_batch_code ?? 'S/N' }}</dd>
-                    </div>
-
-                    <div class="col-sm-6 col-md-3">
-                        <dt class="text-muted">Fecha de expiración</dt>
-                        <dd>{{ $line->expiration_date?->format('d/m/Y') ?? '--/--/----' }}</dd>
-                    </div>
-
-                    <div class="col-sm-4 col-md-2 col-6">
-                        <dt class="text-muted">Cantidad</dt>
-                        <dd>
-                            {{ number_format($line->received_quantity, 3) }}
-                            <span title="{{ $line->material->unit->name }}">
-                                {{ $line->material->unit->symbol }}
-                            </span>
-                        </dd>
-                    </div>
-
-                    <div class="col-sm-4 col-md-2 col-6">
-                        <dt class="text-muted">Costo unitario</dt>
-                        <dd>$ {{ number_format($line->received_unit_cost, 2) }}</dd>
-                    </div>
-
-                    <div class="col-sm-4 col-md-2">
-                        <dt class="text-muted">Total MXN</dt>
-                        <dd>$ {{ number_format($line->received_total_cost, 2) }}</dd>
-                    </div>
-                </dl>
-
-                <hr class="my-2">
-
-                <div class="text-muted">
-                    {{ $line->warehouse->name }}
-                </div>
-            </div>
-        </div>
-    @empty
-        <div class="card">
-            <div class="card-body">
-                <div class="text-center text-muted py-4">
-                    <i class="fas fa-box-open fa-2x mb-2 d-block"></i>
-                    No hay lotes registrados
-                </div>
-            </div>
-        </div>
-    @endforelse
-
     <div class="card">
-        <div class="card-body py-2">
-            <div class="d-flex justify-content-between align-items-center">
-                <strong class="text-muted">Total MXN</strong>
-                <strong>$ {{ number_format($document->total_cost, 2) }}</strong>
+        <div class="card-body p-0">
+            <div class="table-responsive">
+                <table class="table table-sm table-hover mb-0">
+                    <thead class="thead-dark text-nowrap border-top-0">
+                        <tr>
+                            <th>Materia prima</th>
+                            <th>Almacén</th>
+                            <th>Lote externo</th>
+                            <th>Fecha expiración</th>
+                            <th>Cantidad</th>
+                            <th>Costo unitario</th>
+                            <th>Total MXN</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @forelse ($document->receiptLines as $line)
+                            <tr>
+                                <td>{{ $line->material->name }}</td>
+                                <td>{{ $line->warehouse->name }}</td>
+                                <td>{{ $line->external_batch_code ?? 'S/N' }}</td>
+                                <td>{{ $line->expiration_date?->format('d/m/Y') ?? '--/--/----' }}</td>
+                                <td title="{{ $line->material->unit->name }}">
+                                    {{ number_format($line->received_quantity, 3) }}
+                                    <span>{{ $line->material->unit->symbol }}</span>
+                                </td>
+                                <td>$ {{ number_format($line->received_unit_cost, 2) }}</td>
+                                <td>$ {{ number_format($line->received_total_cost, 2) }}</td>
+                            </tr>
+                        @empty
+                            <tr>
+                                <td colspan="7">
+                                    <div class="text-center text-muted py-4">
+                                        <i class="fas fa-box-open fa-2x mb-2 d-block"></i>
+                                        No hay lotes registrados
+                                    </div>
+                                </td>
+                            </tr>
+                        @endforelse
+                    </tbody>
+                    <tfoot>
+                        <tr>
+                            <td colspan="6" class="font-weight-bold text-muted">Total MXN</td>
+                            <td><strong>$ {{ number_format($document->total_cost, 2) }}</strong></td>
+                        </tr>
+                    </tfoot>
+                </table>
             </div>
         </div>
     </div>
@@ -96,11 +82,10 @@
 
     <livewire:Inventory.RawMaterialDocuments.ChangeDocumentStatus :documentId="$document->id" />
 
-    @if ($document->status === App\Enums\Inventory\RawMaterialDocument\RawMaterialDocumentStatus::ACCEPTED)
+    @if ($document->status === Status::ACCEPTED || $document->status === Status::CANCELED)
         <hr>
         <h2 class="h5">Movimientos generados por este documento</h2>
         <livewire:Inventory.RawMaterialDocuments.MovementsTable :documentId="$document->id" />
-
         <livewire:Inventory.RawMaterialMovements.ModalMovementShow />
     @endif
 @endsection

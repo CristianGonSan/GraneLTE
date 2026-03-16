@@ -1,4 +1,4 @@
-<form wire:submit.prevent="update">
+<form wire:submit="update">
     <div class="card">
         <div class="card-header border-0">
             <p class="card-title">CAMBIAR CONTRASEÑA</p>

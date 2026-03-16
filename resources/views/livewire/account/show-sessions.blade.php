@@ -1,4 +1,4 @@
-<form wire:submit.prevent="logoutOtherDevices">
+<form wire:submit="logoutOtherDevices">
     <div class="card">
         <div class="card-header border-0">
             <p class="card-title">SESIONES ACTIVAS</p>

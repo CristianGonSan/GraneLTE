@@ -27,7 +27,7 @@
     </div>
 
     <div class="mb-3">
-        @switch($document->status)
+        @switch($status)
             @case(Status::DRAFT)
                 @if ($document->created_by === auth()->id())
                     <a href="{{ $document->getRoute('edit') }}" class="btn btn-outline-warning mr-1">
@@ -64,7 +64,7 @@
 
         @endswitch
 
-        <a href="{{ route('raw-material-documents.index') }}" class="btn btn-outline-secondary mr-1">
+        <a href="{{ route('raw-material-documents.index') }}" class="btn btn-outline-secondary ml-1">
             <i class="fas fa-fw fa-chevron-left mr-1"></i> Volver
         </a>
     </div>

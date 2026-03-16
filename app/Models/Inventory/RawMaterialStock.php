@@ -43,7 +43,7 @@ class RawMaterialStock extends Model
     ];
 
     protected $casts = [
-        'stock' => 'decimal:3',
+        'current_quantity' => 'decimal:3',
     ];
 
     protected $appends = [

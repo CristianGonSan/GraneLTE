@@ -33,7 +33,7 @@ class RawMaterialReceipt extends Model
 
     protected $fillable = [
         'supplier_id',
-        'transaction_id',
+        'document_id',
     ];
 
     public function supplier(): BelongsTo

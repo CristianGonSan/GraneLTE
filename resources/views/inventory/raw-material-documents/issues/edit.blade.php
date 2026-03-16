@@ -12,12 +12,13 @@
             </li>
             <li class="breadcrumb-item active">Salidas</li>
             <li class="breadcrumb-item active">{{ $documentId }}</li>
-            <li class="breadcrumb-item active">Editar</li>
+            <li class="breadcrumb-item active">Edición</li>
         </ol>
     </nav>
 @endsection
 
 @section('content')
+    <h1 class="h4">Edición de salida de materia prima</h1>
     <livewire:Inventory.RawMaterialDocuments.Issues.IssueEdit :documentId="$documentId" />
 
     <livewire:Inventory.RawMaterialStocks.ModalStockSelector />

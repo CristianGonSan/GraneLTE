@@ -1,5 +1,5 @@
 <div>
-    <form wire:submit.prevent="save">
+    <form wire:submit="save">
         <div class="card">
             <div class="card-body form-row">
                 <x-adminlte-input fgroup-class="col-md-12" name="name" label="Nombre *" placeholder="Nombre del rol"
@@ -41,7 +41,6 @@
                 allowClear: true,
                 language: 'es',
                 dropdownAutoWidth: true,
-                width: 'resolve'
             });
 
             permisions.on('change', function(e) {

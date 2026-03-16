@@ -12,12 +12,13 @@
             </li>
             <li class="breadcrumb-item active">Ajustes</li>
             <li class="breadcrumb-item active">{{ $documentId }}</li>
-            <li class="breadcrumb-item active">Editar</li>
+            <li class="breadcrumb-item active">Edición</li>
         </ol>
     </nav>
 @endsection
 
 @section('content')
+    <h1 class="h4">Edición de ajuste de existencias</h1>
     <livewire:Inventory.RawMaterialDocuments.Adjustments.AdjustmentEdit :documentId="$documentId" />
 
     <livewire:Inventory.RawMaterialStocks.ModalStockSelector :stockOperator="null" />

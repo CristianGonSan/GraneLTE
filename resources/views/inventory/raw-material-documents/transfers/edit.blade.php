@@ -12,12 +12,12 @@
             </li>
             <li class="breadcrumb-item active">Transferencias</li>
             <li class="breadcrumb-item active">{{ $documentId }}</li>
-            <li class="breadcrumb-item active">Editar</li>
+            <li class="breadcrumb-item active">Edición</li>
         </ol>
     </nav>
 @endsection
 
-@section('content')
+@section('content')Edición de transferencia de Materia Prima</h1>
     <livewire:Inventory.RawMaterialDocuments.Transfers.TransferEdit :documentId="$documentId" />
 
     <livewire:Inventory.RawMaterialStocks.ModalStockSelector :closeAfterSeleted="true" />

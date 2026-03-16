@@ -1,5 +1,5 @@
 <div>
-    <form wire:submit.prevent="save">
+    <form wire:submit="save">
         <div class="card">
             <div class="card-body form-row">
                 <x-adminlte-input fgroup-class="col-md-4" name="name" label="Nombre *"

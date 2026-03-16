@@ -1,5 +1,5 @@
 <div>
-    <form wire:submit.prevent="save">
+    <form wire:submit="save">
         <div class="card">
             <div class="card-body">
                 <x-adminlte-input name="name" label="Nombre *" placeholder="Nombre de usuario" autocomplete="username"
@@ -25,7 +25,7 @@
     </form>
 
     <h2 class="h5">Cambiar contraseña</h2>
-    <form wire:submit.prevent="changePassword">
+    <form wire:submit="changePassword">
         <div class="card">
             <div class="card-body">
                 <x-adminlte-input name="password" label="Contraseña *" class="show-p" placeholder="Nueva Contraseña"
@@ -57,9 +57,9 @@
             const roles = $('#roles').select2({
                 placeholder: 'Seleccione los roles...',
                 theme: 'bootstrap4',
-                allowClear: true,
-                language: 'es',
                 width: '100%',
+                language: 'es',
+                dropdownAutoWidth: true,
             });
 
             roles.on('change', function(e) {

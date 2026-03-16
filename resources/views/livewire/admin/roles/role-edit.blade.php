@@ -1,5 +1,5 @@
 <div>
-    <form wire:submit.prevent="save">
+    <form wire:submit="save">
         <div class="card">
             <div class="card-body">
                 <x-adminlte-input name="name" label="Nombre *" placeholder="Nombre del rol" type="text" maxlength="64"
@@ -34,7 +34,6 @@
                 allowClear: true,
                 language: 'es',
                 dropdownAutoWidth: true,
-                width: 'resolve'
             });
 
             permisions.on('change', function(e) {

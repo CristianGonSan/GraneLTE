@@ -40,6 +40,7 @@ use App\Http\Controllers\Lookups\{
     UserLookup,
     WarehouseLookup
 };
+use App\Http\Controllers\MediaController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', fn() =>  redirect()->route('dashboard'))->name('root');
@@ -147,5 +148,10 @@ Route::middleware(['auth', 'check.user.active'])->group(function () {
         Route::get('users/select2', [UserLookup::class, 'select2'])->name('users.select2');
         Route::get('warehouses/select2', [WarehouseLookup::class, 'select2'])->name('warehouses.select2');
         Route::get('raw-materials/select2', [RawMaterialLookup::class, 'select2'])->name('raw-materials.select2');
+    });
+
+    Route::prefix('media')->name('media.')->group(function () {
+        Route::get('{media}/show', [MediaController::class, 'show'])->name('show');
+        Route::get('{media}/download', [MediaController::class, 'download'])->name('download');
     });
 });

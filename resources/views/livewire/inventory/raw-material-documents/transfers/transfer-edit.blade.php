@@ -1,7 +1,5 @@
 <div>
-    <h1 class="h4">Editar Transferencia de Materia Prima</h1>
-
-    <form wire:submit.prevent="save">
+    <form wire:submit="save">
         <div class="card">
             <div class="card-body form-row">
                 <x-adminlte-input fgroup-class="col-md-3" name="effective_at" label="Fecha efectiva *" type="datetime-local"
@@ -19,12 +17,24 @@
                 <x-adminlte-textarea fgroup-class="col-md-12" name="description" label="Descripción"
                     placeholder="Descripción de la transacción" wire:model="description" rows="2"
                     maxlength="255" />
+
+                {{-- Adjunto --}}
+                <x-livewire.file-upload name="attachment" label="Archivo adjunto" fgroup-class="col-md-6 col-sm-12 mb-1"
+                    accept=".pdf,.jpg,.jpeg,.png,.webp" hint="PDF, JPG, PNG o WEBP. Máximo 10 MB.">
+                    @if ($attachment)
+                        {{ $attachment->getClientOriginalName() }}
+                    @else
+                        {{ $this->document()->getAttachment()?->file_name ?? 'Seleccionar archivo' }}
+                    @endif
+                </x-livewire.file-upload>
             </div>
         </div>
 
-        <h2 class="h5">Detalle de la Transferencia</h2>
+        <h2 class="h5">Detalle de la transferencia</h2>
 
-        @include('partials.livewire.inventory.raw-material-documents.transfers.lines')
+        <div x-on:keydown.enter.prevent>
+            @include('partials.livewire.inventory.raw-material-documents.transfers.transfer-lines')
+        </div>
 
         <div class="mb-3 mt-3">
             <x-livewire.loading-button type="submit" label="Actualizar documento" class="mr-1" />
@@ -63,14 +73,14 @@
                         return $(`
                             <div class="p-1">
                                 <strong class="d-block">${data.text}</strong>
-                                <small>${data.description}</small>
+                                <small>${data.description ?? ''}</small>
                             </div>
                         `);
                     }
                 }).build();
 
             select2Builder.selector('#warehouse_dest_id').wireModel('warehouse_dest_id')
-                .value(@json($warehouse_dest_id), @json($warehouseDestText ?? null))
+                .value(@json($warehouse_dest_id), @json($warehouseDestText))
                 .appendConfig({
                     placeholder: 'Seleccionar almacén de destino',
                     ajax: {

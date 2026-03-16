@@ -2,12 +2,12 @@ class LivewireSelect2Builder {
 
     constructor(wireInstance = null) {
         this.select2Config = {
+            allowClear: true,
             theme: 'bootstrap4',
             language: 'es',
             width: '100%',
             placeholder: 'Seleccionar...',
             minimumInputLength: 1,
-            allowClear: false,
             dropdownAutoWidth: true,
         };
 
