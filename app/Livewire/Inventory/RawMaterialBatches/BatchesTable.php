@@ -69,6 +69,14 @@ class BatchesTable extends Component
 
     public function mount(): void
     {
+        if (request()->has('expiration-filter')) {
+            $expirationFilter = request()->query('expiration-filter');
+
+            if (\in_array($expirationFilter, ['all', 'not_expired', 'expiring', 'expired', 'non_perishable'])) {
+                $this->filters['expirationFilter'] = $expirationFilter;
+            }
+        }
+
         $this->setPage($this->page);
     }
 

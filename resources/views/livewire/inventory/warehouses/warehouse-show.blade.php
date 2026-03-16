@@ -46,7 +46,7 @@
                     <div class="info-box-content">
                         <span class="info-box-text">Costo en almacén</span>
                         <span class="info-box-number">
-                            ${{ number_format($warehouse->current_cost, 2) }}
+                            $ {{ number_format($warehouse->current_cost, 2) }}
                         </span>
                     </div>
                 </div>

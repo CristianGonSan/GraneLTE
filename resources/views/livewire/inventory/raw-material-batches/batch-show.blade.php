@@ -33,12 +33,12 @@
 
                     <dt class="col-sm-4 text-muted">Costo unitario</dt>
                     <dd class="col-sm-8">
-                        ${{ number_format($batch->received_unit_cost, 2) }}
+                        $ {{ number_format($batch->received_unit_cost, 2) }}
                     </dd>
 
                     <dt class="col-sm-4 text-muted">Costo total recibido</dt>
                     <dd class="col-sm-8 mb-0">
-                        ${{ number_format($batch->received_total_cost, 2) }}
+                        $ {{ number_format($batch->received_total_cost, 2) }}
                     </dd>
                 </dl>
             </div>
@@ -68,7 +68,7 @@
                     <div class="info-box-content">
                         <span class="info-box-text">Costo de stock</span>
                         <span class="info-box-number">
-                            ${{ number_format($batch->current_cost, 2) }}
+                            $ {{ number_format($batch->current_cost, 2) }}
                         </span>
                     </div>
                 </div>

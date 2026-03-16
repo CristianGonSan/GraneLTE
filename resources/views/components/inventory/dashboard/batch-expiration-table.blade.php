@@ -56,7 +56,7 @@
     </div>
     @if ($batches->isNotEmpty())
         <div class="card-footer text-right">
-            <a href="{{ route('raw-material-batches.index', ['filter' => 'expiring']) }}" target="_blank">
+            <a href="{{ route('raw-material-batches.index', ['expiration-filter' => 'expiring']) }}" target="_blank">
                 Ver todos<i class="fas fa-arrow-circle-right ml-1"></i>
             </a>
         </div>

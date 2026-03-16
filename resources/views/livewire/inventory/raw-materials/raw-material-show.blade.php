@@ -63,7 +63,7 @@
                     <div class="info-box-content">
                         <span class="info-box-text">Costo de stock</span>
                         <span class="info-box-number">
-                            ${{ number_format($rawMaterial->current_cost, 2) }}
+                            $ {{ number_format($rawMaterial->current_cost, 2) }}
                         </span>
                     </div>
                 </div>

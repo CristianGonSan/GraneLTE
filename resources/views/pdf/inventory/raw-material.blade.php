@@ -99,7 +99,7 @@
                 <p
                     style="font-size: 9px; font-weight: bold; text-transform: uppercase; color: #888888; margin: 0 0 3px 0;">
                     Costo Total</p>
-                <p style="font-size: 12px; margin: 0;">${{ number_format($material->current_cost, 2) }}</p>
+                <p style="font-size: 12px; margin: 0;">$ {{ number_format($material->current_cost, 2) }}</p>
             </td>
         </tr>
         @if ($material->description)
@@ -200,13 +200,13 @@
                             {{ number_format($batch->received_quantity, 3) }}</td>
                         <td
                             style="font-size: 10px; text-align: right; border: 1px solid #cccccc; color: {{ $textColor }};">
-                            ${{ number_format($batch->received_unit_cost, 2) }}</td>
+                            $ {{ number_format($batch->received_unit_cost, 2) }}</td>
                         <td
                             style="font-size: 10px; text-align: right; border: 1px solid #cccccc; color: {{ $textColor }};">
                             {{ number_format($batch->current_quantity, 3) }}</td>
                         <td
                             style="font-size: 10px; text-align: right; border: 1px solid #cccccc; color: {{ $textColor }};">
-                            ${{ number_format($batch->current_cost, 2) }}</td>
+                            $ {{ number_format($batch->current_cost, 2) }}</td>
                     </tr>
                 @endforeach
             </tbody>
@@ -224,7 +224,7 @@
                         {{ number_format($totalCurrentQty, 3) }}</td>
                     <td
                         style="font-size: 10px; font-weight: bold; text-align: right; border: 1px solid #bbbbbb; padding: 6px 6px;">
-                        ${{ number_format($totalCurrentCost, 2) }}</td>
+                        $ {{ number_format($totalCurrentCost, 2) }}</td>
                 </tr>
             </tfoot>
         </table>

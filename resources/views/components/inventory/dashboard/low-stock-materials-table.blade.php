@@ -59,7 +59,7 @@
     </div>
     @if ($materials->isNotEmpty())
         <div class="card-footer text-right">
-            <a href="{{ route('raw-materials.index', ['filter' => 'low_stock']) }}" target="_blank">
+            <a href="{{ route('raw-materials.index', ['low-stock-filter' => 'low_stock']) }}" target="_blank">
                 Ver todos<i class="fas fa-arrow-circle-right ml-1"></i>
             </a>
         </div>

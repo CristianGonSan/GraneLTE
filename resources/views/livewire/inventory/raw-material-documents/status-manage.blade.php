@@ -37,7 +37,7 @@
                     <x-livewire.loading-button label="Eliminar" icon="trash-alt" theme="outline-danger" class="mr-1"
                         wire:click='delete' wire:swal-confirm="¿Eliminar este borrador?" swal-icon="warning" />
 
-                    <x-livewire.loading-button label="Pasar a pendiente" theme="outline-primary" icon="clock"
+                    <x-livewire.loading-button label="Pasar a pendiente" theme="outline-primary" icon="clock" class="mr-1"
                         wire:click="changeStatus('{{ Status::PENDING }}')"
                         wire:swal-confirm="¿Seguro que deseas pasar el documento a Pendiente?" />
                 @endif
@@ -64,7 +64,7 @@
 
         @endswitch
 
-        <a href="{{ route('raw-material-documents.index') }}" class="btn btn-outline-secondary ml-1">
+        <a href="{{ route('raw-material-documents.index') }}" class="btn btn-outline-secondary mr-1">
             <i class="fas fa-fw fa-chevron-left mr-1"></i> Volver
         </a>
     </div>

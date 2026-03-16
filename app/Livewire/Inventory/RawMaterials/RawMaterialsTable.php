@@ -66,6 +66,14 @@ class RawMaterialsTable extends Component
 
     public function mount(): void
     {
+        if (request()->has('low-stock-filter')) {
+            $lowStockFilter = request()->query('low-stock-filter');
+
+            if (\in_array($lowStockFilter, ['all', 'low_stock', 'ok'])) {
+                $this->filters['lowStockFilter'] = $lowStockFilter;
+            }
+        }
+
         $this->setPage($this->page);
     }
 

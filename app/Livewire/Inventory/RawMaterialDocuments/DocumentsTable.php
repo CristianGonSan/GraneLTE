@@ -83,6 +83,14 @@ class DocumentsTable extends Component
 
     public function mount(): void
     {
+        if (request()->has('status')) {
+            $status = RawMaterialDocumentStatus::tryFrom(request()->query('status'));
+
+            if ($status !== null) {
+                $this->filters['status'] = $status->value;
+            }
+        }
+        
         $this->setPage($this->page);
     }
 
