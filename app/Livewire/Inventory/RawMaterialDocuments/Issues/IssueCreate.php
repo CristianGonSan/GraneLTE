@@ -88,7 +88,7 @@ class IssueCreate extends Component
             return;
         }
 
-        $this->lines[] = IssueLineData::fromStock($stock, 32)->toArray();
+        $this->lines[] = IssueLineData::fromStock($stock)->toArray();
 
         $this->toastSuccess('Stock seleccionado.');
     }

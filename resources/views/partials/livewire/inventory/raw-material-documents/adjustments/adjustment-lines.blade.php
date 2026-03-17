@@ -1,26 +1,20 @@
 <div class="card">
     <div class="card-header">
-        <div class="row align-items-end">
-            <div class="col-md-4">
-                <x-livewire.loading-button label="Seleccionar existencias" icon="magnifying-glass"
-                    wire:click="$dispatch('openStockSelector')" wire:target="addLine" class="btn-block btn-sm" />
-            </div>
-        </div>
+        <x-livewire.loading-button label="Seleccionar existencias" icon="magnifying-glass"
+            wire:click="$dispatch('openStockSelector')" wire:target="addLine" />
     </div>
     <div class="card-body p-0">
         <div class="table-responsive">
-            <table class="table table-sm table-bordered table-hover mb-0">
-                <thead class="thead-dark text-nowrap border-top-0">
+            <table class="table table-hover mb-0">
+                <thead class="text-nowrap border-top-0">
                     <tr>
-                        <th style="min-width:150px" class="pl-4">Materia prima</th>
-                        <th style="min-width:130px">Lote</th>
-                        <th style="min-width:150px">Almacén</th>
-                        <th style="min-width:180px">Cantidad contada</th>
-                        <th style="min-width:130px">Cantidad teórica</th>
-                        <th style="min-width:130px">Diferencia</th>
-                        <th style="min-width:145px">Costo unit. MXN</th>
-                        <th style="min-width:120px">Subtotal MXN</th>
-                        <th style="width:40px"></th>
+                        <th style="min-width: 200px">Materia prima</th>
+                        <th style="min-width: 220px">Origen</th>
+                        <th style="min-width: 200px; width: 200px;">Conteo</th>
+                        <th style="min-width: 140px">Teórico</th>
+                        <th style="min-width: 140px">Diferencia</th>
+                        <th style="width: 160px">Impacto MXN</th>
+                        <th class="text-center" style="width: 1%">Quitar</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -34,14 +28,19 @@
                             };
                         @endphp
                         <tr wire:key="line-{{ $index }}">
-                            <td class="align-middle small pl-4">{{ $line['raw_material_name'] }}</td>
-                            <td class="align-middle text-muted small">{{ $line['batch_code'] }}</td>
-                            <td class="align-middle text-muted small">{{ $line['warehouse_name'] }}</td>
-                            <td class="align-top p-2">
+                            <td class="align-middle">
+                                {{ $line['raw_material_name'] }}
+                            </td>
+                            <td class="align-middle">
+                                <div class="text-nowrap">{{ $line['batch_code'] }}</div>
+                                <small class="text-muted">{{ $line['warehouse_name'] }}</small>
+                            </td>
+                            <!-- Columna Conteo -->
+                            <td class="align-middle p-2">
                                 <x-adminlte-input type="number" name="lines.{{ $index }}.counted_quantity"
                                     placeholder="0" step="0.001" min="0"
                                     wire:model.live.debounce.500ms="lines.{{ $index }}.counted_quantity"
-                                    igroup-size="sm" fgroup-class="mb-0" required label-class="text-muted mb-0">
+                                    igroup-size="sm" fgroup-class="mb-0" required label-class="mb-0">
                                     <x-slot name="appendSlot">
                                         <div class="input-group-text" title="{{ $line['unit_name'] }}">
                                             {{ $line['unit_symbol'] }}
@@ -49,21 +48,23 @@
                                     </x-slot>
                                 </x-adminlte-input>
                             </td>
-                            <td class="align-middle text-muted">
-                                {{ number_format($line['theoretical_quantity'], 3) }}
-                                <small>{{ $line['unit_symbol'] }}</small>
+                            <!-- Columna Teórico -->
+                            <td class="align-middle">
+                                {{ number_format($line['theoretical_quantity'], 3) }} {{ $line['unit_symbol'] }}
                             </td>
-                            <td class="align-middle font-weight-bold {{ $diffClass }}">
-                                {{ number_format($line['difference_quantity'], 3) }}
-                                <small>{{ $line['unit_symbol'] }}</small>
+                            <!-- Columna Diferencia -->
+                            <td class="align-middle">
+                                <div class="{{ $diffClass }}">
+                                    {{ $diffSign > 0 ? '+' : '' }}{{ number_format($line['difference_quantity'], 3) }}
+                                </div>
                             </td>
                             <td class="align-middle">
-                                $ {{ number_format($line['unit_cost'], 2) }}
+                                <div class="{{ $diffClass }}">
+                                    $ {{ number_format($line['total_cost'], 2) }}
+                                </div>
+                                <small class="text-muted">$ {{ number_format($line['unit_cost'], 2) }} c/u</small>
                             </td>
-                            <td class="align-middle font-weight-bold {{ $diffClass }}">
-                                $ {{ number_format($line['total_cost'], 2) }}
-                            </td>
-                            <td class="align-middle">
+                            <td class="align-middle text-center">
                                 <x-livewire.loading-button theme="outline-danger" class="btn-sm" icon="trash-alt"
                                     title="Eliminar línea" wire:click="removeLine({{ $index }})"
                                     wire:target="removeLine({{ $index }})" />
@@ -71,9 +72,9 @@
                         </tr>
                     @empty
                         <tr>
-                            <td colspan="9" class="text-center text-muted py-5">
+                            <td colspan="7" class="text-center text-muted py-5">
                                 <i class="fas fa-box-open fa-2x mb-2 d-block"></i>
-                                No hay stocks seleccionados
+                                No hay stocks seleccionados para ajuste
                             </td>
                         </tr>
                     @endforelse
@@ -90,10 +91,10 @@
                     @endphp
                     <tfoot>
                         <tr>
-                            <td colspan="7" class="font-weight-bold text-muted">
+                            <td colspan="4" class="font-weight-bold text-muted">
                                 Total MXN
                             </td>
-                            <td class="font-weight-bold {{ $totalClass }}">
+                            <td class="font-weight-bold text-nowrap {{ $totalClass }}">
                                 $ {{ number_format($total_cost, 2) }}
                             </td>
                             <td></td>

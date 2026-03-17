@@ -30,49 +30,63 @@
     <div class="card">
         <div class="card-body p-0">
             <div class="table-responsive">
-                <table class="table table-sm table-hover mb-0">
-                    <thead class="thead-dark text-nowrap border-top-0">
+                <table class="table table-hover mb-0">
+                    <thead class="text-nowrap border-top-0">
                         <tr>
-                            <th>Materia prima</th>
-                            <th>Almacén</th>
-                            <th>Lote externo</th>
-                            <th>Fecha expiración</th>
-                            <th>Cantidad</th>
-                            <th>Costo unitario</th>
-                            <th>Total MXN</th>
+                            <th style="min-width: 220px">Ítem / Destino</th>
+                            <th style="min-width: 180px">Lote Externo</th>
+                            <th style="min-width: 160px">Vencimiento</th>
+                            <th style="min-width: 160px; width: 160px;">Cantidad</th>
+                            <th style="min-width: 160px; width: 160px;">Costo Unit.</th>
+                            <th style="min-width: 120px">Subtotal</th>
                         </tr>
                     </thead>
                     <tbody>
                         @forelse ($document->receiptLines as $line)
                             <tr>
-                                <td>{{ $line->material->name }}</td>
-                                <td>{{ $line->warehouse->name }}</td>
-                                <td>{{ $line->external_batch_code ?? 'S/N' }}</td>
-                                <td>{{ $line->expiration_date?->format('d/m/Y') ?? '--/--/----' }}</td>
-                                <td title="{{ $line->material->unit->name }}">
-                                    {{ number_format($line->received_quantity, 3) }}
-                                    <span>{{ $line->material->unit->symbol }}</span>
+                                <td class="align-middle">
+                                    <div>{{ $line->material->mediumText('name') }}</div>
+                                    <small class="text-muted">{{ $line->warehouse->mediumText('name') }}</small>
                                 </td>
-                                <td>$ {{ number_format($line->received_unit_cost, 2) }}</td>
-                                <td>$ {{ number_format($line->received_total_cost, 2) }}</td>
+                                <td class="align-middle">
+                                    {{ $line->external_batch_code ?? 'S/N' }}
+                                </td>
+                                <td class="align-middle">
+                                    {{ $line->expiration_date?->format('d/m/Y') ?? '--/--/----' }}
+                                </td>
+                                <td class="text-nowrap align-middle">
+                                    {{ number_format($line->received_quantity, 3) }}
+                                    <span class="text-muted">{{ $line->material->unit->symbol }}</span>
+                                </td>
+                                <td class="text-nowrap align-middle">
+                                    $ {{ number_format($line->received_unit_cost, 2) }}
+                                </td>
+                                <td class="text-nowrap align-middle">
+                                    $ {{ number_format($line->received_total_cost, 2) }}
+                                </td>
                             </tr>
                         @empty
                             <tr>
-                                <td colspan="7">
-                                    <div class="text-center text-muted py-4">
-                                        <i class="fas fa-box-open fa-2x mb-2 d-block"></i>
-                                        No hay lotes registrados
-                                    </div>
+                                <td colspan="6" class="text-center text-muted py-5">
+                                    <i class="fas fa-box-open fa-2x mb-2 d-block"></i>
+                                    No hay lotes registrados
                                 </td>
                             </tr>
                         @endforelse
                     </tbody>
-                    <tfoot>
-                        <tr>
-                            <td colspan="6" class="font-weight-bold text-muted">Total MXN</td>
-                            <td><strong>$ {{ number_format($document->total_cost, 2) }}</strong></td>
-                        </tr>
-                    </tfoot>
+
+                    @if ($document->receiptLines->isNotEmpty())
+                        <tfoot>
+                            <tr>
+                                <td colspan="5" class="font-weight-bold text-muted">
+                                    Total MXN
+                                </td>
+                                <td class="font-weight-bold">
+                                    $ {{ number_format($document->total_cost, 2) }}
+                                </td>
+                            </tr>
+                        </tfoot>
+                    @endif
                 </table>
             </div>
         </div>

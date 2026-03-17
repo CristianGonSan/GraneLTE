@@ -17,7 +17,8 @@
     </nav>
 @endsection
 
-@section('content')Edición de transferencia de Materia Prima</h1>
+@section('content')
+    <h1 class="h4">Edición de transferencia de Materia Prima</h1>
     <livewire:Inventory.RawMaterialDocuments.Transfers.TransferEdit :documentId="$documentId" />
 
     <livewire:Inventory.RawMaterialStocks.ModalStockSelector :closeAfterSeleted="true" />

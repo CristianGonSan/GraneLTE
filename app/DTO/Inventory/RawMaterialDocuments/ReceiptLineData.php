@@ -21,32 +21,30 @@ final readonly class ReceiptLineData
         public int     $warehouse_id,
         public string  $warehouse_name,
         public ?string $external_batch_code = null,
-        public string  $received_quantity   = '0',
-        public string  $received_unit_cost  = '0.00',
+        public ?string  $received_quantity  = null,
+        public ?string  $received_unit_cost = null,
         public string  $received_total_cost = '0.00',
         public ?string $expiration_date     = null,
     ) {}
 
-    public static function fromModels(RawMaterial $material, Warehouse $warehouse, int $truncateText = 0): self
+    public static function fromModels(RawMaterial $material, Warehouse $warehouse, string $textSize = 'medium'): self
     {
-        if ($truncateText > 0) {
-            return new self(
-                material_id:        $material->id,
-                raw_material_name:  $material->truncateText('name', $truncateText),
-                unit_name:          $material->unit->name,
-                unit_symbol:        $material->unit->symbol,
-                warehouse_id:       $warehouse->id,
-                warehouse_name:     $warehouse->truncateText('name', $truncateText),
-            );
-        }
+        return new self(
+            material_id: $material->id,
+            raw_material_name: $material->truncateText('name', $textSize),
+            unit_name: $material->unit->name,
+            unit_symbol: $material->unit->symbol,
+            warehouse_id: $warehouse->id,
+            warehouse_name: $warehouse->truncateText('name', $textSize),
+        );
 
         return new self(
-            material_id:        $material->id,
-            raw_material_name:  $material->name,
-            unit_name:          $material->unit->name,
-            unit_symbol:        $material->unit->symbol,
-            warehouse_id:       $warehouse->id,
-            warehouse_name:     $warehouse->name,
+            material_id: $material->id,
+            raw_material_name: $material->name,
+            unit_name: $material->unit->name,
+            unit_symbol: $material->unit->symbol,
+            warehouse_id: $warehouse->id,
+            warehouse_name: $warehouse->name,
         );
     }
 

@@ -1,33 +1,29 @@
 <div class="card">
     <div class="card-header">
-        <div class="row align-items-end">
-            <div class="col-md-4">
-                <x-livewire.loading-button label="Seleccionar existencias" icon="magnifying-glass"
-                    wire:click="$dispatch('openStockSelector')" wire:target="addLine" class="btn-block btn-sm" />
-            </div>
-        </div>
+        <x-livewire.loading-button label="Seleccionar existencias" icon="magnifying-glass"
+            wire:click="$dispatch('openStockSelector')" wire:target="addLine" />
     </div>
     <div class="card-body p-0">
         <div class="table-responsive">
-            <table class="table table-sm table-bordered table-hover mb-0">
-                <thead class="thead-dark text-nowrap border-top-0">
+            <table class="table table-hover mb-0">
+                <thead class="text-nowrap border-top-0">
                     <tr>
-                        <th style="min-width:150px" class="pl-4">Materia prima</th>
-                        <th style="min-width:130px">Lote</th>
-                        <th style="min-width:150px">Almacén</th>
-                        <th style="min-width:180px">Cantidad</th>
-                        <th style="min-width:145px">Costo unit. MXN</th>
-                        <th style="min-width:100px">Total MXN</th>
-                        <th style="width:40px"></th>
+                        <th style="min-width: 220px">Materia prima</th>
+                        <th style="min-width: 230px">Origen</th>
+                        <th style="min-width: 200px; width: 200px;">Cantidad</th>
+                        <th style="width: 160px">Total MXN</th>
+                        <th class="text-center" style="width: 1%">Quitar</th>
                     </tr>
                 </thead>
                 <tbody>
                     @forelse ($lines as $index => $line)
                         <tr wire:key="line-{{ $index }}">
-                            <td class="align-middle small pl-4">{{ $line['raw_material_name'] }}</td>
-                            <td class="align-middle text-muted small">{{ $line['batch_code'] }}</td>
-                            <td class="align-middle text-muted small">{{ $line['warehouse_name'] }}</td>
-                            <td class="align-top p-2">
+                            <td class="align-middle">{{ $line['raw_material_name'] }}</td>
+                            <td class="align-middle">
+                                <div class="text-nowrap">{{ $line['batch_code'] }}</div>
+                                <small class="text-muted">{{ $line['warehouse_name'] }}</small>
+                            </td>
+                            <td class="align-middle p-2">
                                 <x-adminlte-input type="number" name="lines.{{ $index }}.quantity"
                                     placeholder="0" step="0.001" min="0.001" max="{{ $line['current_quantity'] }}"
                                     wire:model.live.debounce.500ms="lines.{{ $index }}.quantity" igroup-size="sm"
@@ -39,17 +35,16 @@
                                         </div>
                                     </x-slot>
                                 </x-adminlte-input>
-                                <small class="{{ $line['invalid_quantity'] ? 'text-danger' : 'text-muted' }}">
+                                <small
+                                    class="text-nowrap {{ $line['invalid_quantity'] ? 'text-danger' : 'text-muted' }}">
                                     En stock: {{ number_format($line['current_quantity'], 3) }}
                                 </small>
                             </td>
-                            <td class="align-middle">
-                                $ {{ number_format($line['unit_cost'], 2) }}
+                            <td class="text-nowrap align-middle">
+                                <div>$ {{ number_format($line['total_cost'], 2) }}</div>
+                                <small class="text-muted">$ {{ number_format($line['unit_cost'], 2) }} c/u</small>
                             </td>
-                            <td class="align-middle">
-                                $ {{ number_format($line['total_cost'], 2) }}
-                            </td>
-                            <td class="align-middle">
+                            <td class="align-middle text-center">
                                 <x-livewire.loading-button theme="outline-danger" class="btn-sm" icon="trash-alt"
                                     title="Eliminar línea" wire:click="removeLine({{ $index }})"
                                     wire:target="removeLine({{ $index }})" />
@@ -68,10 +63,10 @@
                 @if (!empty($lines))
                     <tfoot>
                         <tr>
-                            <td colspan="5" class="font-weight-bold text-muted">
+                            <td colspan="3" class="font-weight-bold text-muted">
                                 Total MXN
                             </td>
-                            <td class="font-weight-bold">
+                            <td class="font-weight-bold text-nowrap">
                                 $ {{ number_format($total_cost, 2) }}
                             </td>
                             <td></td>

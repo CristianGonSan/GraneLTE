@@ -68,10 +68,10 @@ class AdjustmentEdit extends Component
 
                 return [
                     'stock_id'             => $stock->id,
-                    'raw_material_name'    => $material->name,
+                    'raw_material_name'    => $material->mediumText('name'),
                     'unit_name'            => $material->unit->name,
                     'unit_symbol'          => $material->unit->symbol,
-                    'warehouse_name'       => $stock->warehouse->name,
+                    'warehouse_name'       => $stock->warehouse->mediumText('name'),
                     'batch_code'           => $batch->code,
                     'unit_cost'            => $unitCost,
                     'theoretical_quantity' => $theoretical,
@@ -133,7 +133,7 @@ class AdjustmentEdit extends Component
             return;
         }
 
-        $this->lines[] = AdjustmentLineData::fromStock($stock, 32)->toArray();
+        $this->lines[] = AdjustmentLineData::fromStock($stock)->toArray();
 
         $this->toastSuccess('Stock seleccionado.');
     }

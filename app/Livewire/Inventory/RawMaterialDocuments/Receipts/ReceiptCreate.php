@@ -98,7 +98,7 @@ class ReceiptCreate extends Component
             return;
         }
 
-        $this->lines[] = ReceiptLineData::fromModels($material, $warehouse, 32)->toArray();
+        $this->lines[] = ReceiptLineData::fromModels($material, $warehouse)->toArray();
     }
 
     public function removeLine(int $index): void

@@ -66,11 +66,11 @@ class ReceiptEdit extends Component
             ->get()
             ->map(fn($line) => [
                 'material_id'         => $line->material->id,
-                'raw_material_name'   => $line->material->name,
+                'raw_material_name'   => $line->material->mediumText('name'),
                 'unit_name'           => $line->material->unit->name,
                 'unit_symbol'         => $line->material->unit->symbol,
                 'warehouse_id'        => $line->warehouse_id,
-                'warehouse_name'      => $line->warehouse->name,
+                'warehouse_name'      => $line->warehouse->mediumText('name'),
                 'external_batch_code' => $line->external_batch_code,
                 'received_quantity'   => $line->received_quantity,
                 'received_unit_cost'  => $line->received_unit_cost,
@@ -134,7 +134,7 @@ class ReceiptEdit extends Component
             return;
         }
 
-        $this->lines[] = ReceiptLineData::fromModels($material, $warehouse, 32)->toArray();
+        $this->lines[] = ReceiptLineData::fromModels($material, $warehouse)->toArray();
     }
 
     public function removeLine(int $index): void

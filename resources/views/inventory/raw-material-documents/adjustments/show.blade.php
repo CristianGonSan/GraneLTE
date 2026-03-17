@@ -31,16 +31,15 @@
     <div class="card">
         <div class="card-body p-0">
             <div class="table-responsive">
-                <table class="table table-sm table-hover mb-0">
-                    <thead class="thead-dark text-nowrap border-top-0">
+                <table class="table table-hover mb-0">
+                    <thead class="text-nowrap border-top-0">
                         <tr>
-                            <th>Materia prima</th>
-                            <th>Almacén</th>
-                            <th>Lote</th>
-                            <th>Cantidad contada</th>
-                            <th>Cantidad teórica</th>
-                            <th>Diferencia</th>
-                            <th>Total MXN</th>
+                            <th style="min-width: 180px">Materia prima</th>
+                            <th style="min-width: 220px">Origen</th>
+                            <th style="min-width: 150px;">Conteo</th>
+                            <th style="min-width: 140px">Teórico</th>
+                            <th style="min-width: 140px">Diferencia</th>
+                            <th style="width: 160px">Impacto MXN</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -50,50 +49,77 @@
                                 $batch = $stock->batch;
                                 $material = $batch->material;
                                 $lineCost = bcmul($batch->received_unit_cost, $line->difference_quantity, 2);
-                                $diff = bccomp((string) $line->difference_quantity, '0', 3);
+                                $diffSign = bccomp($line->difference_quantity, '0', 3);
                                 $diffClass = match (true) {
-                                    $diff > 0 => 'text-success',
-                                    $diff < 0 => 'text-danger',
+                                    $diffSign > 0 => 'text-success',
+                                    $diffSign < 0 => 'text-danger',
                                     default => 'text-muted',
                                 };
+                                $finalStock = bcadd($stock->quantity, $line->difference_quantity, 3);
                             @endphp
                             <tr>
-                                <td>{{ $material->name }}</td>
-                                <td>{{ $stock->warehouse->name }}</td>
-                                <td>{{ $batch->code }}</td>
-                                <td title="{{ $material->unit->name }}">
+                                <td class="align-middle">
+                                    {{ $material->mediumText('name') }}
+                                </td>
+                                <td class="align-middle">
+                                    <div class="text-nowrap">{{ $batch->code }}</div>
+                                    <small class="text-muted">{{ $stock->warehouse->mediumText('name') }}</small>
+                                </td>
+                                <!-- Conteo -->
+                                <td class="align-middle">
                                     {{ number_format($line->counted_quantity, 3) }}
-                                    <span>{{ $material->unit->symbol }}</span>
+                                    <span class="text-muted">{{ $material->unit->symbol }}</span>
                                 </td>
-                                <td title="{{ $material->unit->name }}">
-                                    {{ number_format($line->theoretical_quantity, 3) }}
-                                    <span>{{ $material->unit->symbol }}</span>
+                                <!-- Teórico -->
+                                <td class="align-middle">
+                                    {{ number_format($line->theoretical_quantity, 3) }} {{ $material->unit->symbol }}
                                 </td>
-                                <td class="{{ $diffClass }}" title="{{ $material->unit->name }}">
-                                    {{ number_format($line->difference_quantity, 3) }}
-                                    <span>{{ $material->unit->symbol }}</span>
+                                <!-- Diferencia -->
+                                <td class="align-middle">
+                                    <div class="{{ $diffClass }}">
+                                        {{ $diffSign > 0 ? '+' : '' }}{{ number_format($line->difference_quantity, 3) }}
+                                    </div>
+                                    @if (bccomp($finalStock, '0', 3) < 0)
+                                        <div class="text-danger small">Error: stock final negativo</div>
+                                    @endif
                                 </td>
-                                <td class="{{ $diffClass }}">
-                                    $ {{ number_format($lineCost, 2) }}
+                                <td class="align-middle">
+                                    <div class="{{ $diffClass }}">
+                                        $ {{ number_format($lineCost, 2) }}
+                                    </div>
+                                    <small class="text-muted">$ {{ number_format($batch->received_unit_cost, 2) }}
+                                        c/u</small>
                                 </td>
                             </tr>
                         @empty
                             <tr>
-                                <td colspan="7">
-                                    <div class="text-center text-muted py-4">
-                                        <i class="fas fa-box-open fa-2x mb-2 d-block"></i>
-                                        No hay líneas registradas
-                                    </div>
+                                <td colspan="6" class="text-center text-muted py-5">
+                                    <i class="fas fa-box-open fa-2x mb-2 d-block"></i>
+                                    No hay líneas registradas
                                 </td>
                             </tr>
                         @endforelse
                     </tbody>
-                    <tfoot>
-                        <tr>
-                            <td colspan="6" class="font-weight-bold text-muted">Total MXN</td>
-                            <td><strong>$ {{ number_format($document->total_cost, 2) }}</strong></td>
-                        </tr>
-                    </tfoot>
+                    @if ($document->adjustmentLines->isNotEmpty())
+                        @php
+                            $totalSign = bccomp((string) $document->total_cost, '0', 2);
+                            $totalClass = match (true) {
+                                $totalSign > 0 => 'text-success',
+                                $totalSign < 0 => 'text-danger',
+                                default => 'text-muted',
+                            };
+                        @endphp
+                        <tfoot>
+                            <tr>
+                                <td colspan="5" class="font-weight-bold text-muted">
+                                    Total MXN
+                                </td>
+                                <td class="font-weight-bold text-nowrap {{ $totalClass }}">
+                                    $ {{ number_format($document->total_cost, 2) }}
+                                </td>
+                            </tr>
+                        </tfoot>
+                    @endif
                 </table>
             </div>
         </div>

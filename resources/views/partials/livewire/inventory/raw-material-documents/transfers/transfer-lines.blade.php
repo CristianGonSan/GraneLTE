@@ -1,48 +1,44 @@
 <div class="card">
     <div class="card-header">
-        <div class="row align-items-end">
+        <div class="form-row align-items-end">
             <div class="col-md-4">
-                <x-livewire.loading-button label="Seleccionar origen" icon="magnifying-glass"
-                    wire:click="$dispatch('openStockSelector')" wire:target="setLine" class="btn-block btn-sm" />
+                <div class="form-group mb-0">
+                    <label class="text-muted mb-0">Stock de origen</label>
+                    <x-livewire.loading-button label="Seleccionar existencias" icon="magnifying-glass"
+                        wire:click="$dispatch('openStockSelector')" wire:target="setLine" class="btn-block" />
+                </div>
+            </div>
+
+            <div class="col-md-4">
+                <x-form.select-wire-ignore label-class="text-muted mb-0" label="Almacén de destino *"
+                    name="warehouse_dest_id" wire:loading.attr="readonly" wire:target="setLine" fgroup-class="mb-0" />
             </div>
         </div>
     </div>
     <div class="card-body p-0">
         <div class="table-responsive">
-            <table class="table table-sm table-bordered table-hover mb-0">
-                <thead class="thead-dark text-nowrap border-top-0">
+            <table class="table table-hover mb-0">
+                <thead class="text-nowrap border-top-0">
                     <tr>
-                        <th style="min-width:150px" class="pl-4">Materia prima</th>
-                        <th style="min-width:130px">Lote</th>
-                        <th style="min-width:150px">Almacén origen</th>
-                        <th style="min-width:200px">Almacén destino</th>
-                        <th style="min-width:180px">Cantidad</th>
-                        <th style="min-width:145px">Costo unit. MXN</th>
-                        <th style="min-width:145px">Total MXN</th>
+                        <th style="min-width: 220px">Materia prima</th>
+                        <th style="min-width: 230px">Origen</th>
+                        <th style="min-width: 200px; width: 200px;">Cantidad a mover</th>
+                        <th style="width: 160px">Total MXN</th>
                     </tr>
                 </thead>
                 <tbody>
-                    <tr>
-                        <td class="align-middle small pl-4">
-                            {{ $raw_material_name ?? '—' }}
-                        </td>
-                        <td class="align-middle text-muted small">
-                            {{ $batch_code ?? '—' }}
-                        </td>
-                        <td class="align-middle text-muted small">
-                            {{ $warehouse_name ?? '—' }}
-                        </td>
-                        <td class="align-top p-2">
-                            <div @if (!$stock_origin_id) style="display:none" @endif>
-                                <x-form.select-wire-ignore igroup-size="sm" label-class="d-none"
-                                    label="Almacén de destino" name="warehouse_dest_id" wire:loading.attr="readonly"
-                                    wire:target="setLine" />
-                            </div>
-                        </td>
-                        <td class="align-top p-2">
-                            <div @if (!$stock_origin_id) style="display:none" @endif>
+                    @if ($stock_origin_id)
+                        <tr>
+                            <td class="align-middle">
+                                {{ $raw_material_name }}
+                            </td>
+                            <td class="align-middle">
+                                <div class="text-nowrap">{{ $batch_code }}</div>
+                                <small class="text-muted">{{ $warehouse_name }}</small>
+                            </td>
+                            <td class="align-middle p-2">
                                 <x-adminlte-input type="number" name="quantity" placeholder="0" step="0.001"
-                                    min="0.001" max="{{ $current_quantity ?? 0 }}"
+                                    min="0.001" max="{{ $current_quantity }}"
                                     wire:model.live.debounce.500ms="quantity" igroup-size="sm" fgroup-class="mb-0"
                                     required label-class="{{ $invalid_quantity ? 'text-danger' : 'text-muted' }} mb-0">
                                     <x-slot name="appendSlot">
@@ -51,18 +47,23 @@
                                         </div>
                                     </x-slot>
                                 </x-adminlte-input>
-                                <small class="{{ $invalid_quantity ? 'text-danger' : 'text-muted' }}">
-                                    En stock: {{ number_format($current_quantity ?? 0, 3) }}
+                                <small class="text-nowrap {{ $invalid_quantity ? 'text-danger' : 'text-muted' }}">
+                                    En stock: {{ number_format($current_quantity, 3) }}
                                 </small>
-                            </div>
-                        </td>
-                        <td class="align-middle">
-                            $ {{ number_format($unit_cost ?? 0, 2) }}
-                        </td>
-                        <td class="align-middle font-weight-bold">
-                            $ {{ number_format($total_cost ?? 0, 2) }}
-                        </td>
-                    </tr>
+                            </td>
+                            <td class="text-nowrap align-middle">
+                                <div>$ {{ number_format($total_cost, 2) }}</div>
+                                <small class="text-muted">$ {{ number_format($unit_cost, 2) }} c/u</small>
+                            </td>
+                        </tr>
+                    @else
+                        <tr>
+                            <td colspan="4" class="text-center text-muted py-5">
+                                <i class="fas fa-box-open fa-2x mb-2 d-block"></i>
+                                No hay un stock de origen seleccionado
+                            </td>
+                        </tr>
+                    @endif
                 </tbody>
             </table>
         </div>

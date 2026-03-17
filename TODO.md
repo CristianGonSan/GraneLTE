@@ -7,7 +7,7 @@
     - Reforzar los ejecutadores de documentos y movimientos. +
     - Almacenar el total en los documentos de transferecnia y ajuste. +
     - Refactorizar el calculo de los totales. +
-    - Refactorizar la vista. -
+    - Refactorizar la vista. +
     - Reforzar la validación para evitar stock negativo. +
     - Incluiy soporte de documentos adjuntos. +
       -- Progreso: entradas, salidas, ajustes, transfer

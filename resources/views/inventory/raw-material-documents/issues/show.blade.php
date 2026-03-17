@@ -30,15 +30,13 @@
     <div class="card">
         <div class="card-body p-0">
             <div class="table-responsive">
-                <table class="table table-sm table-hover mb-0">
-                    <thead class="thead-dark text-nowrap border-top-0">
+                <table class="table table-hover mb-0">
+                    <thead class="text-nowrap border-top-0">
                         <tr>
-                            <th>Materia prima</th>
-                            <th>Almacén</th>
-                            <th>Lote</th>
-                            <th>Cantidad</th>
-                            <th>Costo unitario</th>
-                            <th>Total MXN</th>
+                            <th style="min-width: 220px">Materia prima</th>
+                            <th style="min-width: 230px">Origen</th>
+                            <th style="min-width: 200px; width: 200px;">Cantidad</th>
+                            <th style="width: 160px">Total MXN</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -47,38 +45,55 @@
                                 $stock = $line->stock;
                                 $batch = $stock->batch;
                                 $material = $batch->material;
+                                $isInsufficient = bccomp($line->quantity, $stock->current_quantity, 3) > 0;
                             @endphp
                             <tr>
-                                <td>{{ $material->name }}</td>
-                                <td>{{ $line->warehouse->name }}</td>
-                                <td>{{ $batch->code }}</td>
-                                <td title="{{ $material->unit->name }}">
-                                    {{ number_format($line->quantity, 3) }}
-                                    <span>{{ $material->unit->symbol }}</span>
-                                    @if (bccomp($line->quantity, $stock->current_quantity, 3) > 0)
-                                        <br><small class="text-danger">Stock insuficiente</small>
+                                <td class="align-middle">
+                                    {{ $material->mediumText('name') }}
+                                </td>
+                                <td class="align-middle">
+                                    <div class="text-nowrap">{{ $batch->code }}</div>
+                                    <small class="text-muted">{{ $line->warehouse->mediumText('name') }}</small>
+                                </td>
+                                <td class="align-middle">
+                                    <div>
+                                        {{ number_format($line->quantity, 3) }}
+                                        <span class="text-muted">{{ $material->unit->symbol }}</span>
+                                    </div>
+                                    @if ($isInsufficient)
+                                        <small class="text-danger">
+                                            Stock insuficiente (Disp: {{ number_format($stock->current_quantity, 3) }})
+                                        </small>
                                     @endif
                                 </td>
-                                <td>$ {{ number_format($batch->received_unit_cost, 2) }}</td>
-                                <td>$ {{ number_format($line->totalCost(), 2) }}</td>
+                                <td class="text-nowrap align-middle">
+                                    <div>$ {{ number_format($line->totalCost(), 2) }}</div>
+                                    <small class="text-muted">$ {{ number_format($batch->received_unit_cost, 2) }}
+                                        c/u</small>
+                                </td>
                             </tr>
                         @empty
                             <tr>
-                                <td colspan="6">
-                                    <div class="text-center text-muted py-4">
-                                        <i class="fas fa-box-open fa-2x mb-2 d-block"></i>
-                                        No hay lotes registrados
-                                    </div>
+                                <td colspan="4" class="text-center text-muted py-5">
+                                    <i class="fas fa-box-open fa-2x mb-2 d-block"></i>
+                                    No hay lotes registrados
                                 </td>
                             </tr>
                         @endforelse
                     </tbody>
-                    <tfoot>
-                        <tr>
-                            <td colspan="5" class="font-weight-bold text-muted">Total MXN</td>
-                            <td><strong>$ {{ number_format($document->total_cost, 2) }}</strong></td>
-                        </tr>
-                    </tfoot>
+
+                    @if ($document->issueLines->isNotEmpty())
+                        <tfoot>
+                            <tr>
+                                <td colspan="3" class="font-weight-bold text-muted">
+                                    Total MXN
+                                </td>
+                                <td class="font-weight-bold text-nowrap">
+                                    $ {{ number_format($document->total_cost, 2) }}
+                                </td>
+                            </tr>
+                        </tfoot>
+                    @endif
                 </table>
             </div>
         </div>

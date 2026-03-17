@@ -62,10 +62,10 @@ class IssueEdit extends Component
 
                 return [
                     'stock_id'          => $stock->id,
-                    'raw_material_name' => $material->name,
+                    'raw_material_name' => $material->mediumText('name'),
                     'unit_name'         => $material->unit->name,
                     'unit_symbol'       => $material->unit->symbol,
-                    'warehouse_name'    => $stock->warehouse->name,
+                    'warehouse_name'    => $stock->warehouse->mediumText('name'),
                     'batch_code'        => $batch->code,
                     'unit_cost'         => $batch->received_unit_cost,
                     'current_quantity'  => $stock->current_quantity,
@@ -126,7 +126,7 @@ class IssueEdit extends Component
             return;
         }
 
-        $this->lines[] = IssueLineData::fromStock($stock, 32)->toArray();
+        $this->lines[] = IssueLineData::fromStock($stock)->toArray();
 
         $this->toastSuccess('Stock seleccionado.');
     }

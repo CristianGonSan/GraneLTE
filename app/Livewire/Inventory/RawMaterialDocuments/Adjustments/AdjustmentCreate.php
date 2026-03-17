@@ -88,7 +88,7 @@ class AdjustmentCreate extends Component
             return;
         }
 
-        $this->lines[] = AdjustmentLineData::fromStock($stock, 32)->toArray();
+        $this->lines[] = AdjustmentLineData::fromStock($stock)->toArray();
 
         $this->toastSuccess('Stock seleccionado.');
     }

@@ -1,39 +1,54 @@
 <div>
     <form wire:submit="save">
         <div class="card">
-            <div class="card-body form-row">
-                <x-adminlte-input fgroup-class="col-md-2" name="effective_at" label="Fecha efectiva *" type="datetime-local"
-                    wire:model="effective_at" required />
+            <div class="card-header border-0 p-0" wire:ignore>
+                <ul class="nav nav-tabs" role="tablist">
+                    <li class="nav-item">
+                        <a class="nav-link active" data-toggle="tab" href="#tab-general" role="tab">
+                            General
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" data-toggle="tab" href="#tab-extra" role="tab">
+                            Referencia y adjunto
+                        </a>
+                    </li>
+                </ul>
+            </div>
 
-                <x-adminlte-input fgroup-class="col-sm-6 col-md-2" name="reference_type" label="Tipo de referencia"
-                    placeholder="Factura, pedido, etc." type="text" wire:model="reference_type" maxlength="32" />
+            <div class="card-body tab-content">
+                <div class="tab-pane fade show active" id="tab-general" role="tabpanel" wire:ignore.self>
+                    <div class="form-row">
+                        <x-adminlte-input fgroup-class="col-md-4" name="effective_at" label="Fecha efectiva *"
+                            type="datetime-local" wire:model="effective_at" required />
 
-                <x-adminlte-input fgroup-class="col-sm-6 col-md-2" name="reference_number" label="Numero de referencia"
-                    placeholder="Número de referencia" type="text" wire:model="reference_number" maxlength="128" />
+                        <x-form.select-wire-ignore fgroup-class="col-md-4" name="responsible_id" label="Responsable"
+                            wire:loading.attr="readonly" wire:target="save" />
 
-                <x-form.select-wire-ignore fgroup-class="col-md-3" name="responsible_id" label="Responsable"
-                    wire:loading.attr="readonly" wire:target="save" />
+                        <x-form.select-wire-ignore fgroup-class="col-md-4" name="supplier_id" label="Proveedor *"
+                            wire:loading.attr="readonly" wire:target="save" />
 
-                <x-form.select-wire-ignore fgroup-class="col-md-3" name="supplier_id" label="Proveedor *"
-                    wire:loading.attr="readonly" wire:target="save" />
-
-                <x-adminlte-textarea fgroup-class="col-md-12" name="description" label="Descripción"
-                    placeholder="Descripción de la transacción" wire:model="description" rows="2"
-                    maxlength="255" />
-
-                {{-- Adjunto --}}
-                <x-livewire.file-upload name="attachment" label="Archivo adjunto" fgroup-class="col-md-6 col-sm-12 mb-1"
-                    accept=".pdf,.jpg,.jpeg,.png,.webp" hint="PDF, JPG, PNG o WEBP. Máximo 10 MB.">
-                    {{ $attachment?->getClientOriginalName() ?? 'Seleccionar archivo' }}
-                </x-livewire.file-upload>
-
-                <div class="col-12">
-                    <hr>
+                        <x-adminlte-textarea fgroup-class="col-md-12" name="description" label="Descripción"
+                            placeholder="Descripción de la transacción" wire:model="description" rows="2"
+                            maxlength="255" />
+                    </div>
                 </div>
 
-                <div class="col-12">
-                    <x-checkbox name="isDraft" label="Guardar como borrador" title="Guarda este documento como borrador"
-                        wire:model='isDraft' />
+                <div class="tab-pane fade" id="tab-extra" role="tabpanel" wire:ignore.self>
+                    <div class="form-row">
+                        <x-adminlte-input fgroup-class="col-md-6" name="reference_type" label="Tipo de referencia"
+                            placeholder="Factura, pedido, etc." type="text" wire:model="reference_type"
+                            maxlength="32" />
+
+                        <x-adminlte-input fgroup-class="col-md-6" name="reference_number" label="Número de referencia"
+                            placeholder="Número de referencia" type="text" wire:model="reference_number"
+                            maxlength="128" />
+
+                        <x-livewire.file-upload name="attachment" label="Archivo adjunto" fgroup-class="col-md-12"
+                            accept=".pdf,.jpg,.jpeg,.png,.webp" hint="PDF, JPG, PNG o WEBP. Máximo 10 MB.">
+                            {{ $attachment?->getClientOriginalName() ?? 'Seleccionar archivo' }}
+                        </x-livewire.file-upload>
+                    </div>
                 </div>
             </div>
         </div>
@@ -45,6 +60,11 @@
         </div>
 
         <div class="mb-3">
+            <div class="mb-3">
+                <x-checkbox name="isDraft" label="Guardar como borrador" title="Guarda este documento como borrador"
+                    wire:model="isDraft" />
+            </div>
+
             <x-livewire.loading-button type="submit" label="Validar documento" class="mr-1" />
 
             <a href="{{ route('raw-material-documents.index') }}" class="btn btn-outline-secondary"

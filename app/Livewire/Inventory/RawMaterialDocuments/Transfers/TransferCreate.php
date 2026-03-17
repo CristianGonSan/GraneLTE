@@ -77,7 +77,7 @@ class TransferCreate extends Component
             return;
         }
 
-        $dto = TransferLineData::fromStock($stock, 32);
+        $dto = TransferLineData::fromStock($stock);
 
         $this->stock_origin_id   = $dto->stock_origin_id;
         $this->raw_material_name = $dto->raw_material_name;

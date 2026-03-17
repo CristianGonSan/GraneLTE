@@ -26,34 +26,32 @@ final readonly class AdjustmentLineData
         public bool    $is_increment        = false,
     ) {}
 
-    public static function fromStock(RawMaterialStock $stock, int $truncateText = 0): self
+    public static function fromStock(RawMaterialStock $stock, string $textSize = 'medium'): self
     {
         $batch     = $stock->batch;
         $material  = $batch->material;
         $warehouse = $stock->warehouse;
 
-        if ($truncateText > 0) {
-            return new self(
-                stock_id: $stock->id,
-                raw_material_name:      $material->truncateText('name', $truncateText),
-                unit_name:              $material->unit->name,
-                unit_symbol:            $material->unit->symbol,
-                warehouse_name:         $warehouse->truncateText('name', $truncateText),
-                batch_code:             $batch->code,
-                unit_cost:              $batch->received_unit_cost,
-                theoretical_quantity:   $stock->current_quantity,
-            );
-        }
+        return new self(
+            stock_id: $stock->id,
+            raw_material_name: $material->truncateText('name', $textSize),
+            unit_name: $material->unit->name,
+            unit_symbol: $material->unit->symbol,
+            warehouse_name: $warehouse->truncateText('name', $textSize),
+            batch_code: $batch->code,
+            unit_cost: $batch->received_unit_cost,
+            theoretical_quantity: $stock->current_quantity,
+        );
 
         return new self(
             stock_id: $stock->id,
-            raw_material_name:      $material->name,
-            unit_name:              $material->unit->name,
-            unit_symbol:            $material->unit->symbol,
-            warehouse_name:         $warehouse->name,
-            batch_code:             $batch->code,
-            unit_cost:              $batch->received_unit_cost,
-            theoretical_quantity:   $stock->current_quantity,
+            raw_material_name: $material->name,
+            unit_name: $material->unit->name,
+            unit_symbol: $material->unit->symbol,
+            warehouse_name: $warehouse->name,
+            batch_code: $batch->code,
+            unit_cost: $batch->received_unit_cost,
+            theoretical_quantity: $stock->current_quantity,
         );
     }
 
