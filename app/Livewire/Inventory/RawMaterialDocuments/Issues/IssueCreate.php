@@ -88,6 +88,11 @@ class IssueCreate extends Component
             return;
         }
 
+        if (bccomp($stock->current_quantity, "0", 3) <= 0) {
+            $this->toastError('Stock invalido.');
+            return;
+        }
+
         $this->lines[] = IssueLineData::fromStock($stock)->toArray();
 
         $this->toastSuccess('Stock seleccionado.');

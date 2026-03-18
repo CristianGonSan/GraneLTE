@@ -112,6 +112,11 @@ class TransferEdit extends Component
             return;
         }
 
+        if (bccomp($stock->current_quantity, "0", 3) <= 0) {
+            $this->toastError('Stock invalido.');
+            return;
+        }
+
         $dto = TransferLineData::fromStock($stock);
 
         $this->stock_origin_id   = $dto->stock_origin_id;
