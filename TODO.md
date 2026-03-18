@@ -3,7 +3,7 @@
     - Componentes Dashboard +
     - Exports +
 
-2. Refactorizar el modulo de documentos.
+2. Refactorizar el modulo de documentos. +
     - Reforzar los ejecutadores de documentos y movimientos. +
     - Almacenar el total en los documentos de transferecnia y ajuste. +
     - Refactorizar el calculo de los totales. +
@@ -12,12 +12,11 @@
     - Incluiy soporte de documentos adjuntos. +
       -- Progreso: entradas, salidas, ajustes, transfer
 
-3. Refactorizar el selector de stock, mejorar la visualización de los items y filtros.
+3. Refactorizar el selector de stock, mejorar la visualización de los items y filtros. +
 
 4. Definir permisos e implementar los middlewares.
+5. Detalles menores; agregar los titulos a las paginas.
 
-5. Detalles menores; agregar los titulos a las paginas, corregir la representación de monedas, espacio entre $ y el monto.
+6. Corregir la representación de monedas, espacio entre $ y el monto. +
 
-6. Crear la paginas info.
-
-Posiblemente dinamitar la DB y poblarla desde cero. 
+7. Crear la paginas info.

@@ -91,7 +91,7 @@
                     @endphp
                     <tfoot>
                         <tr>
-                            <td colspan="4" class="font-weight-bold text-muted">
+                            <td colspan="5" class="font-weight-bold text-muted">
                                 Total MXN
                             </td>
                             <td class="font-weight-bold text-nowrap {{ $totalClass }}">

@@ -20,5 +20,5 @@
     <h1 class="h4">Crear ajuste de existencias</h1>
     <livewire:Inventory.RawMaterialDocuments.Adjustments.AdjustmentCreate />
 
-    <livewire:Inventory.RawMaterialStocks.ModalStockSelector :stockOperator="null" />
+    <livewire:Inventory.RawMaterialStocks.ModalStockSelector />
 @endsection

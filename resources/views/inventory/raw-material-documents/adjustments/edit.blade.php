@@ -21,5 +21,5 @@
     <h1 class="h4">Edición de ajuste de existencias</h1>
     <livewire:Inventory.RawMaterialDocuments.Adjustments.AdjustmentEdit :documentId="$documentId" />
 
-    <livewire:Inventory.RawMaterialStocks.ModalStockSelector :stockOperator="null" />
+    <livewire:Inventory.RawMaterialStocks.ModalStockSelector />
 @endsection

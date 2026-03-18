@@ -20,5 +20,5 @@
     <h1 class="h4">Crear transferencia de materia prima</h1>
     <livewire:Inventory.RawMaterialDocuments.Transfers.TransferCreate />
 
-    <livewire:Inventory.RawMaterialStocks.ModalStockSelector :closeAfterSeleted="true" />
+    <livewire:Inventory.RawMaterialStocks.ModalStockSelector />
 @endsection
