@@ -1,7 +1,8 @@
 <div class="card card-outline card-primary">
     <div class="card-header">
         <h3 class="card-title">
-            <i class="fas fa-chart-line"></i><span class="ml-1">Tendencia de movimientos (últimos 12 meses)</span>
+            <i class="fas fa-chart-line"></i><span class="ml-1">Tendencia de costos de movimientos
+                (últimos 12 meses)</span>
         </h3>
     </div>
     <div class="card-body">
@@ -53,7 +54,7 @@
                         },
                         tooltip: {
                             callbacks: {
-                                label: (ctx) => ' ' + ctx.dataset.label + ': ' +
+                                label: (ctx) => ' ' + ctx.dataset.label + ': $ ' +
                                     Math.round(ctx.parsed.y).toLocaleString('en'),
                             },
                         },
