@@ -127,9 +127,18 @@ class RawMaterial extends Model
         );
     }
 
-    public static function totalCost(): float
+    public function avgUnitCost(int $lastBatches = 30): string
     {
-        return (float) RawMaterialBatch::where('current_quantity', '>', 0)
+        return $this->batches()
+            ->orderByDesc('received_at')
+            ->limit($lastBatches)
+            ->get()
+            ->avg('received_unit_cost');
+    }
+
+    public static function totalCost(): string
+    {
+        return RawMaterialBatch::where('current_quantity', '>', 0)
             ->sum(DB::raw("current_quantity * received_unit_cost"));
     }
 

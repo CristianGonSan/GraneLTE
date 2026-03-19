@@ -32,6 +32,12 @@
                         {{ $rawMaterial->unit->symbol }}
                     </dd>
 
+                    <dt class="col-sm-4 text-muted">Costo unit. promedio</dt>
+                    <dd class="col-sm-8">
+                        $ {{ number_format($rawMaterial->avgUnitCost(), 2) }} —
+                        <small class="text-muted">Últimos 30 lotes ingresados</small>
+                    </dd>
+
                     <dt class="col-sm-4 text-muted">Descripción</dt>
                     <dd class="col-sm-8 text-muted mb-0">
                         {{ $rawMaterial->description ?? 'Sin descripción' }}
