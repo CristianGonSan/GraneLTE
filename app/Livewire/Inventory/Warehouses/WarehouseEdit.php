@@ -3,9 +3,7 @@
 namespace App\Livewire\Inventory\Warehouses;
 
 use App\Models\Inventory\Warehouse;
-use App\Traits\SweetAlert2\FlashAlert;
 use App\Traits\SweetAlert2\FlashToast;
-use App\Traits\SweetAlert2\Livewire\Alert;
 use App\Traits\SweetAlert2\Livewire\Toast;
 
 use Illuminate\Validation\Rule;
@@ -14,7 +12,7 @@ use Livewire\Component;
 
 class WarehouseEdit extends Component
 {
-    use Toast, FlashToast, Alert, FlashAlert;
+    use Toast, FlashToast;
 
     public int $warehouseId;
 

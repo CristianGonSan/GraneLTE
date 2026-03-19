@@ -3,18 +3,15 @@
 namespace App\Livewire\Inventory\Units;
 
 use App\Models\Inventory\Unit;
-use App\Traits\SweetAlert2\FlashAlert;
 use App\Traits\SweetAlert2\FlashToast;
-use App\Traits\SweetAlert2\Livewire\Alert;
 use App\Traits\SweetAlert2\Livewire\Toast;
-
 use Illuminate\View\View;
 use Livewire\Attributes\Locked;
 use Livewire\Component;
 
 class UnitShow extends Component
 {
-    use Toast, FlashToast, Alert, FlashAlert;
+    use Toast, FlashToast;
 
     #[Locked]
     public int $unitId;
@@ -27,12 +24,17 @@ class UnitShow extends Component
     public function render(): View
     {
         return view('livewire.inventory.units.unit-show', [
-            'unit'   => $this->unit()
+            'unit' => $this->unit()
         ]);
     }
 
     public function toggleActive(): void
     {
+        if (cannot('units.toggle')) {
+            $this->toastError('No tienes permiso para realizar esta acción');
+            return;
+        }
+
         $this->toastSuccess(
             $this->unit()->toggleActive()
                 ? 'Unidad activada'
@@ -42,12 +44,16 @@ class UnitShow extends Component
 
     public function delete(): void
     {
+        if (cannot('units.delete')) {
+            $this->toastError('No tienes permiso para realizar esta acción');
+            return;
+        }
+
         $unit = $this->unit();
 
         if ($unit->isInUse()) {
-            $this->alertError(
-                'La Unidad está en uso, se recomienda desactivarla.',
-                'Unidad en uso'
+            $this->toastError(
+                'No se puede eliminar: la unidad está en uso.'
             );
         } else {
             $unit->delete();

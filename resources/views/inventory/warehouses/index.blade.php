@@ -11,9 +11,11 @@
             </ol>
         </nav>
 
-        <a href="{{ route('warehouses.create') }}" class="btn btn-outline-primary">
-            <i class="fas fa-fw fa-plus mr-1"></i>Nuevo almacén
-        </a>
+        @can('warehouses.create')
+            <a href="{{ route('warehouses.create') }}" class="btn btn-outline-primary">
+                <i class="fas fa-fw fa-plus mr-1"></i>Nuevo almacén
+            </a>
+        @endcan
     </div>
 @endsection
 

@@ -11,9 +11,11 @@
             </ol>
         </nav>
 
-        <a href="{{ route('raw-materials.create') }}" class="btn btn-outline-primary">
-            <i class="fas fa-fw fa-plus mr-1"></i>Nueva materia prima
-        </a>
+        @can('raw-materials.create')
+            <a href="{{ route('raw-materials.create') }}" class="btn btn-outline-primary">
+                <i class="fas fa-fw fa-plus mr-1"></i>Nueva materia prima
+            </a>
+        @endcan
     </div>
 @endsection
 

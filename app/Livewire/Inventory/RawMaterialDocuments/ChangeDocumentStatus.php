@@ -4,8 +4,8 @@ namespace App\Livewire\Inventory\RawMaterialDocuments;
 
 use App\Enums\Inventory\RawMaterialDocument\RawMaterialDocumentStatus;
 use App\Models\Inventory\RawMaterialDocument;
-use App\Traits\SweetAlert2\Livewire\WithSweetAlert;
-use App\Traits\SweetAlert2\WithSweetAlertFlash;
+use App\Traits\SweetAlert2\FlashToast;
+use App\Traits\SweetAlert2\Livewire\Toast;
 use DomainException;
 use Illuminate\View\View;
 use Livewire\Component;
@@ -13,7 +13,7 @@ use Throwable;
 
 class ChangeDocumentStatus extends Component
 {
-    use WithSweetAlert, WithSweetAlertFlash;
+    use Toast, FlashToast;
 
     public int $documentId;
 
@@ -33,15 +33,14 @@ class ChangeDocumentStatus extends Component
     {
         try {
             $document = $this->document();
-            $user     = auth()->user();
 
-            if (!$document->validateStatusChange($newStatus, $user)) {
-                $this->dispatchToast('error', "Acción invalida");
+            if (!$document->canChangeTo($newStatus)) {
+                $this->toastError("Acción invalida");
                 return;
             }
 
             if ($newStatus !== RawMaterialDocumentStatus::PENDING) {
-                $document->validated_by = $user->id;
+                $document->validated_by = auth()->id();
                 $document->validated_at = now();
             }
 
@@ -52,12 +51,12 @@ class ChangeDocumentStatus extends Component
             $document->status = $newStatus;
             $document->save();
 
-            $this->dispatchToast('success', "El documento cambió a {$newStatus->label()}");
+            $this->toastSuccess("El documento cambió a {$newStatus->label()}");
         } catch (DomainException $e) {
-            $this->dispatchToast('error', $e->getMessage());
+            $this->toastError($e->getMessage());
         } catch (Throwable $e) {
             report($e); // log técnico
-            $this->dispatchToast('error', 'Ocurrió un error inesperado al procesar el documento.');
+            $this->toastError('Ocurrió un error inesperado al procesar el documento.');
         }
     }
 
@@ -65,13 +64,13 @@ class ChangeDocumentStatus extends Component
     {
         $document = $this->document();
 
-        if (!$document->validateDelete(auth()->user())) {
-            $this->dispatchToast('error', 'Solo se puede eliminar si es un borrador y por el propietario');
+        if (!$document->canDelete()) {
+            $this->toastError('No tienes permiso para realizar esta acción');
             return;
         }
 
         $document->hardDelete();
-        $this->flashToast('success', 'Documento eliminado.');
+        $this->flashToastSuccess('Documento eliminado');
         redirect()->route('raw-material-documents.index');
     }
 

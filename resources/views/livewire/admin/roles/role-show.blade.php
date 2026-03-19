@@ -50,12 +50,16 @@
         </div>
 
         <div class="mb-3">
-            <a href="{{ route('admin.roles.edit', $role->id) }}" class="btn btn-outline-primary mr-1">
-                <i class="fas fa-edit mr-1"></i> Editar
-            </a>
+            @can('roles.edit')
+                <a href="{{ route('admin.roles.edit', $role->id) }}" class="btn btn-outline-primary mr-1">
+                    <i class="fas fa-edit mr-1"></i> Editar
+                </a>
+            @endcan
 
-            <x-livewire.loading-button label="Eliminar" theme="outline-danger" icon="trash" wire:click="delete"
-                wire:target="delete" wire:swal-confirm="¿Eliminar este rol?" swal-icon="warning" class="mr-1" />
+            @can('roles.delete')
+                <x-livewire.loading-button label="Eliminar" theme="outline-danger" class="mr-1" icon="trash"
+                    wire:click="delete" wire:target="delete" wire:swal-confirm="¿Eliminar este rol?" swal-icon="warning" />
+            @endcan
 
             <a href="{{ route('admin.roles.index') }}" class="btn btn-outline-secondary mr-1">
                 <i class="fas fa-fw fa-chevron-left mr-1"></i> Volver

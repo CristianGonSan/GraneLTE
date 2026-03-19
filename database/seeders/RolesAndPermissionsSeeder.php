@@ -17,54 +17,54 @@ final class RolesAndPermissionsSeeder extends Seeder
         $permissions = [
             'users.view',
             'users.create',
-            'users.update',
+            'users.edit',
             'users.delete',
             'users.toggle',
 
             'roles.view',
             'roles.create',
-            'roles.update',
+            'roles.edit',
             'roles.delete',
 
             'categories.view',
             'categories.create',
-            'categories.update',
+            'categories.edit',
             'categories.delete',
             'categories.toggle',
 
             'raw-materials.view',
             'raw-materials.create',
-            'raw-materials.update',
+            'raw-materials.edit',
             'raw-materials.delete',
             'raw-materials.toggle',
 
             'units.view',
             'units.create',
-            'units.update',
+            'units.edit',
             'units.delete',
             'units.toggle',
 
             'warehouses.view',
             'warehouses.create',
-            'warehouses.update',
+            'warehouses.edit',
             'warehouses.delete',
             'warehouses.toggle',
 
             'suppliers.view',
             'suppliers.create',
-            'suppliers.update',
+            'suppliers.edit',
             'suppliers.delete',
             'suppliers.toggle',
 
             'responsibles.view',
             'responsibles.create',
-            'responsibles.update',
+            'responsibles.edit',
             'responsibles.delete',
             'responsibles.toggle',
 
             'raw-material-documents.view',
             'raw-material-documents.create',
-            'raw-material-documents.update',
+            'raw-material-documents.edit',
             'raw-material-documents.delete',
             'raw-material-documents.accept',
             'raw-material-documents.reject',
@@ -74,14 +74,15 @@ final class RolesAndPermissionsSeeder extends Seeder
             'raw-material-movements.view',
             'raw-material-stocks.view',
 
-            'export'
+            'reports.export',
+            'media.view'
         ];
 
         foreach ($permissions as $name) {
             Permission::firstOrCreate(['name' => $name, 'guard_name' => 'web']);
         }
 
-        $role = Role::firstOrCreate(['name' => 'admin', 'guard_name' => 'web']);
+        $role = Role::firstOrCreate(['name' => 'Admin', 'guard_name' => 'web']);
         $role->syncPermissions($permissions);
 
         $user = User::firstOrCreate(

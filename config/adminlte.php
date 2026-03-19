@@ -400,7 +400,7 @@ return [
             'text' => 'export',
             'route' => 'exports.index',
             'icon' => 'fas fa-fw fa-file-excel',
-            'can' => 'export'
+            'can' => 'reports.export'
         ],
         [
             'text' => 'info',

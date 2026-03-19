@@ -3,11 +3,8 @@
 namespace App\Livewire\Inventory\RawMaterials;
 
 use App\Models\Inventory\RawMaterial;
-use App\Traits\SweetAlert2\FlashAlert;
 use App\Traits\SweetAlert2\FlashToast;
-use App\Traits\SweetAlert2\Livewire\Alert;
 use App\Traits\SweetAlert2\Livewire\Toast;
-
 use Illuminate\Validation\Rule;
 use Illuminate\View\View;
 use Livewire\Attributes\Locked;
@@ -15,7 +12,7 @@ use Livewire\Component;
 
 class RawMaterialEdit extends Component
 {
-    use Toast, FlashToast, Alert, FlashAlert;
+    use Toast, FlashToast;
 
     #[Locked]
     public int $rawMaterialId;

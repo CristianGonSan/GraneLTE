@@ -10,26 +10,27 @@
                 <li class="breadcrumb-item active">Documentos de materia prima</li>
             </ol>
         </nav>
-
-        <div class="dropdown">
-            <button class="btn btn-outline-primary dropdown-toggle" type="button" data-toggle="dropdown">
-                <i class="fas fa-fw fa-plus mr-1"></i>Nuevo documento
-            </button>
-            <div class="dropdown-menu dropdown-menu-right">
-                <a class="dropdown-item" href="{{ route('raw-material-documents.receipts.create') }}">
-                    <i class="fas fa-fw fa-arrow-right-to-bracket mr-2"></i>Entrada
-                </a>
-                <a class="dropdown-item" href="{{ route('raw-material-documents.issues.create') }}">
-                    <i class="fas fa-fw fa-arrow-right-from-bracket mr-2"></i>Salida
-                </a>
-                <a class="dropdown-item" href="{{ route('raw-material-documents.transfers.create') }}">
-                    <i class="fas fa-fw fa-right-left mr-2"></i>Transferencia
-                </a>
-                <a class="dropdown-item" href="{{ route('raw-material-documents.adjustments.create') }}">
-                    <i class="fas fa-fw fa-sliders mr-2"></i>Ajuste
-                </a>
+        @can('raw-material-documents.create')
+            <div class="dropdown">
+                <button class="btn btn-outline-primary dropdown-toggle" type="button" data-toggle="dropdown">
+                    <i class="fas fa-fw fa-plus mr-1"></i>Nuevo documento
+                </button>
+                <div class="dropdown-menu dropdown-menu-right">
+                    <a class="dropdown-item" href="{{ route('raw-material-documents.receipts.create') }}">
+                        <i class="fas fa-fw fa-arrow-right-to-bracket mr-2"></i>Entrada
+                    </a>
+                    <a class="dropdown-item" href="{{ route('raw-material-documents.issues.create') }}">
+                        <i class="fas fa-fw fa-arrow-right-from-bracket mr-2"></i>Salida
+                    </a>
+                    <a class="dropdown-item" href="{{ route('raw-material-documents.transfers.create') }}">
+                        <i class="fas fa-fw fa-right-left mr-2"></i>Transferencia
+                    </a>
+                    <a class="dropdown-item" href="{{ route('raw-material-documents.adjustments.create') }}">
+                        <i class="fas fa-fw fa-sliders mr-2"></i>Ajuste
+                    </a>
+                </div>
             </div>
-        </div>
+        @endcan
     </div>
 @endsection
 

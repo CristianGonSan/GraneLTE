@@ -3,18 +3,15 @@
 namespace App\Livewire\Inventory\Categories;
 
 use App\Models\Inventory\Category;
-use App\Traits\SweetAlert2\FlashAlert;
 use App\Traits\SweetAlert2\FlashToast;
-use App\Traits\SweetAlert2\Livewire\Alert;
 use App\Traits\SweetAlert2\Livewire\Toast;
-
 use Illuminate\View\View;
 use Livewire\Attributes\Locked;
 use Livewire\Component;
 
 class CategoryShow extends Component
 {
-    use Toast, FlashToast, Alert, FlashAlert;
+    use Toast, FlashToast;
 
     #[Locked]
     public int $categoryId;
@@ -33,6 +30,11 @@ class CategoryShow extends Component
 
     public function toggleActive(): void
     {
+        if (cannot('categories.toggle')) {
+            $this->toastError('No tienes permiso para realizar esta acción');
+            return;
+        }
+
         $this->toastSuccess(
             $this->category()->toggleActive()
                 ? 'Categoría activada'
@@ -42,12 +44,16 @@ class CategoryShow extends Component
 
     public function delete(): void
     {
+        if (cannot('categories.delete')) {
+            $this->toastError('No tienes permiso para realizar esta acción');
+            return;
+        }
+
         $category = $this->category();
 
         if ($category->isInUse()) {
-            $this->alertError(
-                'La categoría está en uso, se recomienda desactivarla.',
-                'Categoría en uso'
+            $this->toastError(
+                'No se puede eliminar: la categoría está en uso'
             );
         } else {
             $category->delete();

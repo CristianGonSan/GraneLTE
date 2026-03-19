@@ -10,10 +10,12 @@
                 <li class="breadcrumb-item active">Proveedores</li>
             </ol>
         </nav>
-
-        <a href="{{ route('suppliers.create') }}" class="btn btn-outline-primary">
-            <i class="fas fa-fw fa-plus mr-1"></i>Nuevo proveedor
-        </a>
+        
+        @can('suppliers.create')
+            <a href="{{ route('suppliers.create') }}" class="btn btn-outline-primary">
+                <i class="fas fa-fw fa-plus mr-1"></i>Nuevo proveedor
+            </a>
+        @endcan
     </div>
 @endsection
 

@@ -11,9 +11,11 @@
             </ol>
         </nav>
 
-        <a href="{{ route('units.create') }}" class="btn btn-outline-primary">
-            <i class="fas fa-fw fa-plus mr-1"></i>Nueva unidad
-        </a>
+        @can('units.create')
+            <a href="{{ route('units.create') }}" class="btn btn-outline-primary">
+                <i class="fas fa-fw fa-plus mr-1"></i>Nueva unidad
+            </a>
+        @endcan
     </div>
 @endsection
 

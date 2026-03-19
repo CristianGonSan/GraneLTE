@@ -30,12 +30,16 @@
         @switch($status)
             @case(Status::DRAFT)
                 @if ($document->created_by === auth()->id())
-                    <a href="{{ $document->getRoute('edit') }}" class="btn btn-outline-warning mr-1">
-                        <i class="fas fa-fw fa-edit"></i> Editar
-                    </a>
+                    @can('raw-material-documents.edit')
+                        <a href="{{ $document->getRoute('edit') }}" class="btn btn-outline-warning mr-1">
+                            <i class="fas fa-fw fa-edit"></i> Editar
+                        </a>
+                    @endcan
 
-                    <x-livewire.loading-button label="Eliminar" icon="trash-alt" theme="outline-danger" class="mr-1"
-                        wire:click='delete' wire:swal-confirm="¿Eliminar este borrador?" swal-icon="warning" />
+                    @can('raw-material-documents.delete')
+                        <x-livewire.loading-button label="Eliminar" icon="trash-alt" theme="outline-danger" class="mr-1"
+                            wire:click='delete' wire:swal-confirm="¿Eliminar este borrador?" swal-icon="warning" />
+                    @endcan
 
                     <x-livewire.loading-button label="Pasar a pendiente" theme="outline-primary" icon="clock" class="mr-1"
                         wire:click="changeStatus('{{ Status::PENDING }}')"

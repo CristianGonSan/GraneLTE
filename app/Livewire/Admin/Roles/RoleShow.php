@@ -2,12 +2,8 @@
 
 namespace App\Livewire\Admin\Roles;
 
-use App\Models\User;
-use App\Traits\SweetAlert2\FlashAlert;
 use App\Traits\SweetAlert2\FlashToast;
-use App\Traits\SweetAlert2\Livewire\Alert;
 use App\Traits\SweetAlert2\Livewire\Toast;
-
 use Illuminate\View\View;
 use Livewire\Attributes\Locked;
 use Livewire\Component;
@@ -15,7 +11,7 @@ use Spatie\Permission\Models\Role;
 
 class RoleShow extends Component
 {
-    use Toast, FlashToast, Alert, FlashAlert;
+    use Toast, FlashToast;
 
     #[Locked]
     public int $roleId;
@@ -34,6 +30,13 @@ class RoleShow extends Component
 
     public function delete(): void
     {
+        if (cannot('roles.delete')) {
+            $this->toastError(
+                'No tienes permiso para realizar esta acción',
+            );
+            return;
+        }
+
         $role = $this->role();
 
         $role->delete();

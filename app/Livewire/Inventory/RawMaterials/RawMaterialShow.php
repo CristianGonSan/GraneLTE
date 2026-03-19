@@ -2,22 +2,16 @@
 
 namespace App\Livewire\Inventory\RawMaterials;
 
-use App\Exports\Pdf\Inventory\RawMaterialPdfExport;
 use App\Models\Inventory\RawMaterial;
-use App\Traits\SweetAlert2\FlashAlert;
 use App\Traits\SweetAlert2\FlashToast;
-use App\Traits\SweetAlert2\Livewire\Alert;
 use App\Traits\SweetAlert2\Livewire\Toast;
-
 use Illuminate\View\View;
 use Livewire\Attributes\Locked;
 use Livewire\Component;
-use Barryvdh\DomPDF\Facade\Pdf;
-use Symfony\Component\HttpFoundation\StreamedResponse;
 
 class RawMaterialShow extends Component
 {
-    use Toast, FlashToast, Alert, FlashAlert;
+    use Toast, FlashToast;
 
     #[Locked]
     public int $rawMaterialId;
@@ -36,6 +30,11 @@ class RawMaterialShow extends Component
 
     public function toggleActive(): void
     {
+        if (cannot('raw-materials.toggle')) {
+            $this->toastError('No tienes permiso para realizar esta acción');
+            return;
+        }
+
         $this->toastSuccess(
             $this->rawMaterial()->toggleActive()
                 ? 'Materia prima activada'
@@ -45,13 +44,15 @@ class RawMaterialShow extends Component
 
     public function delete(): void
     {
+        if (cannot('raw-materials.delete')) {
+            $this->toastError('No tienes permiso para realizar esta acción');
+            return;
+        }
+
         $rawMaterial = $this->rawMaterial();
 
         if ($rawMaterial->isInUse()) {
-            $this->alertError(
-                'La materia prima está en uso, se recomienda desactivarla.',
-                'Materia prima en uso'
-            );
+            $this->toastError('No se puede eliminar: la materia prima está en uso');
         } else {
             $rawMaterial->delete();
             $this->flashToastSuccess('Materia prima eliminada');

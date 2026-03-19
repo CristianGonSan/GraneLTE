@@ -3,10 +3,7 @@
 namespace App\Livewire\Inventory\Categories;
 
 use App\Models\Inventory\Category;
-
-use App\Traits\SweetAlert2\FlashAlert;
 use App\Traits\SweetAlert2\FlashToast;
-use App\Traits\SweetAlert2\Livewire\Alert;
 use App\Traits\SweetAlert2\Livewire\Toast;
 
 use Illuminate\Validation\Rule;
@@ -15,7 +12,7 @@ use Livewire\Component;
 
 class CategoryEdit extends Component
 {
-    use Toast, FlashToast, Alert, FlashAlert;
+    use Toast, FlashToast;
 
     public int $categoryId;
 

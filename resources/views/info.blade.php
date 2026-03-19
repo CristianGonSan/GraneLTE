@@ -1,6 +1,6 @@
 @extends('adminlte::page')
 
-@section('title', 'Acerca del Sistema')
+@section('title_prefix', 'Acerca del Sistema |')
 
 @section('content_header')
     <h1>Acerca del Sistema</h1>

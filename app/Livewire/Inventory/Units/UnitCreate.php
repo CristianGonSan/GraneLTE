@@ -5,7 +5,6 @@ namespace App\Livewire\Inventory\Units;
 use App\Models\Inventory\Unit;
 use App\Traits\SweetAlert2\FlashToast;
 use App\Traits\SweetAlert2\Livewire\Toast;
-
 use Illuminate\Validation\Rule;
 use Illuminate\View\View;
 use Livewire\Component;

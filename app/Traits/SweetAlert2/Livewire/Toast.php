@@ -37,7 +37,7 @@ trait Toast
             'icon'  => $icon,
             'toast' => true,
             'position' => 'top-end',
-            'timer' => 3000,
+            'timer' => $icon === "error" ? 4000 : 3000,
             'showConfirmButton' => false,
             'customClass' => [
                 'popup' => 'custom-toast-position'

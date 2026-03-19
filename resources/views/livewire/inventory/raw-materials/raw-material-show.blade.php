@@ -1,6 +1,7 @@
 @php
     $stockOk = !$rawMaterial->isLowStock();
     $isActive = $rawMaterial->is_active;
+    $isInUse = $rawMaterial->isInUse();
 @endphp
 
 <div class="row">
@@ -89,13 +90,17 @@
         @endif
 
         <div class="mb-3">
-            <a href="{{ route('raw-materials.edit', $rawMaterial->id) }}" class="btn btn-outline-primary mr-1">
-                <i class="fas fa-fw fa-edit mr-1"></i> Editar
-            </a>
+            @can('raw-materials.edit')
+                <a href="{{ route('raw-materials.edit', $rawMaterial->id) }}" class="btn btn-outline-primary mr-1">
+                    <i class="fas fa-fw fa-edit mr-1"></i> Editar
+                </a>
+            @endcan
 
-            <x-livewire.loading-button label="Eliminar" theme="outline-danger" icon="trash" wire:click="delete"
-                wire:target="delete" wire:swal-confirm="¿Eliminar esta materia prima?" swal-icon="warning"
-                class="mr-1" />
+            @can('raw-materials.delete')
+                <x-livewire.loading-button label="Eliminar" theme="outline-danger" class="mr-1" icon="trash"
+                    wire:click="delete" wire:target="delete" wire:swal-confirm="¿Eliminar esta materia prima?"
+                    swal-icon="warning" :disabled="$isInUse" :title="$isInUse ? 'No se puede eliminar: la materia prima está en uso' : ''" />
+            @endcan
 
             <a href="{{ route('raw-materials.index') }}" class="btn btn-outline-secondary mr-1">
                 <i class="fas fa-fw fa-chevron-left mr-1"></i> Volver
@@ -106,14 +111,22 @@
     <div class="col-lg-4">
         <div class="card">
             <div class="card-body">
-                <div class="custom-control custom-switch mb-3">
-                    <input type="checkbox" class="custom-control-input" id="toggleActive"
-                        {{ $isActive ? 'checked' : '' }} wire:click="toggleActive">
-                    <label class="custom-control-label" for="toggleActive">
+                @can('raw-materials.toggle')
+                    <div class="custom-control custom-switch mb-3">
+                        <input type="checkbox" class="custom-control-input" id="toggleActive"
+                            {{ $isActive ? 'checked' : '' }} wire:click="toggleActive" />
+                        <label class="custom-control-label" for="toggleActive">
+                            {{ $isActive ? 'Activo' : 'Inactivo' }}
+                        </label>
+                    </div>
+                @else
+                    <span class="badge {{ $isActive ? 'badge-success' : 'badge-secondary' }}">
                         {{ $isActive ? 'Activo' : 'Inactivo' }}
-                    </label>
-                </div>
+                    </span>
+                @endcan
+
                 <hr>
+
                 <dl class="row mb-0">
                     <dt class="col-6 text-muted">Creado</dt>
                     <dd class="col-6" title="{{ $rawMaterial->created_at->format('d/m/Y H:i') }}"

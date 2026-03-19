@@ -3,18 +3,15 @@
 namespace App\Livewire\Inventory\Warehouses;
 
 use App\Models\Inventory\Warehouse;
-use App\Traits\SweetAlert2\FlashAlert;
 use App\Traits\SweetAlert2\FlashToast;
-use App\Traits\SweetAlert2\Livewire\Alert;
 use App\Traits\SweetAlert2\Livewire\Toast;
-
 use Illuminate\View\View;
 use Livewire\Attributes\Locked;
 use Livewire\Component;
 
 class WarehouseShow extends Component
 {
-    use Toast, FlashToast, Alert, FlashAlert;
+    use Toast, FlashToast;
 
     #[Locked]
     public int $warehouseId;
@@ -33,6 +30,11 @@ class WarehouseShow extends Component
 
     public function toggleActive(): void
     {
+        if (cannot('warehouses.toggle')) {
+            $this->toastError('No tienes permiso para realizar esta acción');
+            return;
+        }
+
         $this->toastSuccess(
             $this->warehouse()->toggleActive()
                 ? 'Almacén activado'
@@ -42,12 +44,16 @@ class WarehouseShow extends Component
 
     public function delete(): void
     {
+        if (cannot('warehouses.delete')) {
+            $this->toastError('No tienes permiso para realizar esta acción');
+            return;
+        }
+
         $warehouse = $this->warehouse();
 
         if ($warehouse->isInUse()) {
-            $this->alertError(
-                'El almacén está en uso, se recomienda desactivarlo.',
-                'Almacén en uso'
+            $this->toastError(
+                'No se puede eliminar: el almacén está en uso'
             );
         } else {
             $warehouse->delete();

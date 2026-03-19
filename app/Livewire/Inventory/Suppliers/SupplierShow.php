@@ -2,20 +2,16 @@
 
 namespace App\Livewire\Inventory\Suppliers;
 
-use App\Models\Inventory\Responsible;
 use App\Models\Inventory\Supplier;
-use App\Traits\SweetAlert2\FlashAlert;
 use App\Traits\SweetAlert2\FlashToast;
-use App\Traits\SweetAlert2\Livewire\Alert;
 use App\Traits\SweetAlert2\Livewire\Toast;
-
 use Illuminate\View\View;
 use Livewire\Attributes\Locked;
 use Livewire\Component;
 
 class SupplierShow extends Component
 {
-    use Toast, FlashToast, Alert, FlashAlert;
+    use Toast, FlashToast;
 
     #[Locked]
     public int $supplierId;
@@ -34,6 +30,11 @@ class SupplierShow extends Component
 
     public function toggleActive(): void
     {
+        if (cannot('suppliers.toggle')) {
+            $this->toastError('No tienes permiso para realizar esta acción');
+            return;
+        }
+
         $this->toastSuccess(
             $this->supplier()->toggleActive()
                 ? 'Proveedor activado'
@@ -43,12 +44,16 @@ class SupplierShow extends Component
 
     public function delete(): void
     {
+        if (cannot('suppliers.delete')) {
+            $this->toastError('No tienes permiso para realizar esta acción');
+            return;
+        }
+
         $supplier = $this->supplier();
 
         if ($supplier->isInUse()) {
-            $this->alertError(
-                'El proveedor está en uso, se recomienda desactivarlo.',
-                'Proveedor en uso'
+            $this->toastError(
+                'No se puede eliminar: el proveedor está en uso'
             );
         } else {
             $supplier->delete();

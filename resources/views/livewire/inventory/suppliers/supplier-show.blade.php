@@ -1,5 +1,6 @@
 @php
     $isActive = $supplier->is_active;
+    $isInUse = $supplier->isInUse();
 @endphp
 
 <div class="row">
@@ -69,12 +70,17 @@
         </div>
 
         <div class="mb-3">
-            <a href="{{ route('suppliers.edit', $supplier->id) }}" class="btn btn-outline-primary mr-1">
-                <i class="fas fa-edit mr-1"></i> Editar
-            </a>
+            @can('suppliers.edit')
+                <a href="{{ route('suppliers.edit', $supplier->id) }}" class="btn btn-outline-primary mr-1">
+                    <i class="fas fa-edit mr-1"></i> Editar
+                </a>
+            @endcan
 
-            <x-livewire.loading-button label="Eliminar" theme="outline-danger" icon="trash" wire:click="delete"
-                wire:target="delete" wire:swal-confirm="¿Eliminar este proveedor?" swal-icon="warning" class="mr-1" />
+            @can('suppliers.delete')
+                <x-livewire.loading-button label="Eliminar" theme="outline-danger" class="mr-1" icon="trash"
+                    wire:click="delete" wire:target="delete" wire:swal-confirm="¿Eliminar este proveedor?"
+                    swal-icon="warning" :disabled="$isInUse" :title="$isInUse ? 'No se puede eliminar: el proveedor está en uso' : ''" />
+            @endcan
 
             <a href="{{ route('suppliers.index') }}" class="btn btn-outline-secondary mr-1">
                 <i class="fas fa-fw fa-chevron-left mr-1"></i> Volver
@@ -85,13 +91,19 @@
     <div class="col-lg-4">
         <div class="card">
             <div class="card-body">
-                <div class="custom-control custom-switch mb-3">
-                    <input type="checkbox" class="custom-control-input" id="toggleActive"
-                        {{ $isActive ? 'checked' : '' }} wire:click="toggleActive">
-                    <label class="custom-control-label" for="toggleActive">
+                @can('suppliers.toggle')
+                    <div class="custom-control custom-switch mb-3">
+                        <input type="checkbox" class="custom-control-input" id="toggleActive"
+                            {{ $isActive ? 'checked' : '' }} wire:click="toggleActive" />
+                        <label class="custom-control-label" for="toggleActive">
+                            {{ $isActive ? 'Activo' : 'Inactivo' }}
+                        </label>
+                    </div>
+                @else
+                    <span class="badge {{ $isActive ? 'badge-success' : 'badge-secondary' }}">
                         {{ $isActive ? 'Activo' : 'Inactivo' }}
-                    </label>
-                </div>
+                    </span>
+                @endcan
 
                 <hr>
 

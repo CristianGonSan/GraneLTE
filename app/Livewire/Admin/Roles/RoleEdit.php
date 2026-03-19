@@ -8,13 +8,12 @@ use Illuminate\Validation\Rule;
 use Illuminate\View\View;
 use Livewire\Attributes\Locked;
 use Livewire\Component;
-use Livewire\WithPagination;
 use Spatie\Permission\Models\Permission;
 use Spatie\Permission\Models\Role;
 
 class RoleEdit extends Component
 {
-    use WithPagination, Toast, FlashToast;
+    use Toast, FlashToast;
 
     #[Locked]
     public int $roleId;

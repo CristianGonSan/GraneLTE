@@ -3,18 +3,15 @@
 namespace App\Livewire\Inventory\Responsibles;
 
 use App\Models\Inventory\Responsible;
-use App\Traits\SweetAlert2\FlashAlert;
 use App\Traits\SweetAlert2\FlashToast;
-use App\Traits\SweetAlert2\Livewire\Alert;
 use App\Traits\SweetAlert2\Livewire\Toast;
-
 use Illuminate\View\View;
 use Livewire\Attributes\Locked;
 use Livewire\Component;
 
 class ResponsibleShow extends Component
 {
-    use Toast, FlashToast, Alert, FlashAlert;
+    use Toast, FlashToast;
 
     #[Locked]
     public int $responsibleId;
@@ -33,6 +30,11 @@ class ResponsibleShow extends Component
 
     public function toggleActive(): void
     {
+        if (cannot('responsibles.toggle')) {
+            $this->toastError('No tienes permiso para realizar esta acción');
+            return;
+        }
+
         $this->toastSuccess(
             $this->responsible()->toggleActive()
                 ? 'Responsable activado'
@@ -42,12 +44,16 @@ class ResponsibleShow extends Component
 
     public function delete(): void
     {
+        if (cannot('responsibles.delete')) {
+            $this->toastError('No tienes permiso para realizar esta acción');
+            return;
+        }
+
         $responsible = $this->responsible();
 
         if ($responsible->isInUse()) {
-            $this->alertError(
-                'El responsable está en uso, se recomienda desactivarlo.',
-                'Responsable en uso'
+            $this->toastError(
+                'No se puede eliminar: el responsable está en uso'
             );
         } else {
             $responsible->delete();

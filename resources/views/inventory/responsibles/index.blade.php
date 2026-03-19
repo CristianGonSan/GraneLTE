@@ -10,10 +10,12 @@
                 <li class="breadcrumb-item active">Responsables</li>
             </ol>
         </nav>
-
-        <a href="{{ route('responsibles.create') }}" class="btn btn-outline-primary">
-            <i class="fas fa-fw fa-plus mr-1"></i>Nuevo responsable
-        </a>
+        
+        @can('responsibles.create')
+            <a href="{{ route('responsibles.create') }}" class="btn btn-outline-primary">
+                <i class="fas fa-fw fa-plus mr-1"></i>Nuevo responsable
+            </a>
+        @endcan
     </div>
 @endsection
 

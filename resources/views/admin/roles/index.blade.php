@@ -11,9 +11,11 @@
             </ol>
         </nav>
 
-        <a href="{{ route('admin.roles.create') }}" class="btn btn-outline-primary">
-            <i class="fas fa-fw fa-plus mr-1"></i>Nuevo rol
-        </a>
+        @can('roles.create')
+            <a href="{{ route('admin.roles.create') }}" class="btn btn-outline-primary">
+                <i class="fas fa-fw fa-plus mr-1"></i>Nuevo rol
+            </a>
+        @endcan
     </div>
 @endsection
 

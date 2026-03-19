@@ -11,9 +11,11 @@
             </ol>
         </nav>
 
-        <a href="{{ route('categories.create') }}" class="btn btn-outline-primary">
-            <i class="fas fa-fw fa-plus mr-1"></i>Nueva categoría
-        </a>
+        @can('categories.create')
+            <a href="{{ route('categories.create') }}" class="btn btn-outline-primary">
+                <i class="fas fa-fw fa-plus mr-1"></i>Nueva categoría
+            </a>
+        @endcan
     </div>
 @endsection
 

@@ -124,8 +124,10 @@ class RawMaterialDocument extends Model implements HasMedia
     // Business logic
     // -------------------------------------------------------------------------
 
-    public function validateStatusChange(RawMaterialDocumentStatus $newStatus, User $user): bool
+    public function canChangeTo(RawMaterialDocumentStatus $newStatus): bool
     {
+        $user = auth()->user();
+
         if (!$this->status->canChangeTo($newStatus)) {
             return false;
         }
@@ -141,9 +143,10 @@ class RawMaterialDocument extends Model implements HasMedia
         return true;
     }
 
-    public function validateDelete(User $user): bool
+    public function canDelete(): bool
     {
-        return $this->created_by == $user->id && $this->status == RawMaterialDocumentStatus::DRAFT;
+        $user = auth()->user();
+        return can('raw-material-documents.delete') && $this->created_by == $user->id && $this->status == RawMaterialDocumentStatus::DRAFT;
     }
 
     public function execute(): void
