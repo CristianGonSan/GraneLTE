@@ -32,6 +32,7 @@
                 placeholder: 'Seleccione los permisos...',
                 theme: 'bootstrap4',
                 allowClear: true,
+                width: '100%',
                 language: 'es',
                 dropdownAutoWidth: true,
             });

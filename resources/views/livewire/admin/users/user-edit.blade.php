@@ -57,6 +57,7 @@
             const roles = $('#roles').select2({
                 placeholder: 'Seleccione los roles...',
                 theme: 'bootstrap4',
+                allowClear: true,
                 width: '100%',
                 language: 'es',
                 dropdownAutoWidth: true,
