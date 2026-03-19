@@ -1,6 +1,6 @@
 @extends('adminlte::page')
 
-@section('title', 'Responsables')
+@section('title_prefix', 'Responsables |')
 
 @section('content_header')
     <div class="d-flex justify-content-between align-items-center">
@@ -12,7 +12,7 @@
         </nav>
 
         <a href="{{ route('responsibles.create') }}" class="btn btn-outline-primary">
-            <i class="fas fa-fw fa-plus mr-1"></i>Crear responsable
+            <i class="fas fa-fw fa-plus mr-1"></i>Nuevo responsable
         </a>
     </div>
 @endsection

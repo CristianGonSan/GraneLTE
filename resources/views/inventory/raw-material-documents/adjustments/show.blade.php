@@ -2,7 +2,7 @@
 
 @section('plugins.Select2', true)
 
-@section('title', 'Detalles de Ajuste')
+@section('title_prefix', 'Ajuste de Existencias |')
 
 @section('content_header')
     <nav aria-label="breadcrumb">
@@ -12,7 +12,7 @@
                 <a href="{{ route('raw-material-documents.index') }}">Documentos de materia prima</a>
             </li>
             <li class="breadcrumb-item active">Ajustes</li>
-            <li class="breadcrumb-item active">{{ $document->id }}</li>
+            <li class="breadcrumb-item">#{{ $document->id }}</li>
             <li class="breadcrumb-item active">Detalles</li>
         </ol>
     </nav>

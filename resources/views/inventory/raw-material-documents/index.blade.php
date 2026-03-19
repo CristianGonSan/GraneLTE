@@ -1,6 +1,6 @@
 @extends('adminlte::page')
 
-@section('title', 'Documentos MP')
+@section('title_prefix', 'Documentos de Materia Prima |')
 
 @section('content_header')
     <div class="d-flex justify-content-between align-items-center">
@@ -13,7 +13,7 @@
 
         <div class="dropdown">
             <button class="btn btn-outline-primary dropdown-toggle" type="button" data-toggle="dropdown">
-                <i class="fas fa-fw fa-plus mr-1"></i>Crear documento
+                <i class="fas fa-fw fa-plus mr-1"></i>Nuevo documento
             </button>
             <div class="dropdown-menu dropdown-menu-right">
                 <a class="dropdown-item" href="{{ route('raw-material-documents.receipts.create') }}">

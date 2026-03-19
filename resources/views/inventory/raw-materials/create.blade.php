@@ -2,11 +2,13 @@
 
 @section('plugins.Select2', true)
 
+@section('title_prefix', 'Nueva Materia Prima |')
+
 @section('content_header')
     <nav aria-label="breadcrumb">
         <ol class="breadcrumb">
             <li class="breadcrumb-item"><a href="{{ route('dashboard') }}">Inicio</a></li>
-            <li class="breadcrumb-item"><a href="{{ route('raw-materials.index') }}">Materias prima</a></li>
+            <li class="breadcrumb-item"><a href="{{ route('raw-materials.index') }}">Materias primas</a></li>
             <li class="breadcrumb-item active">Nueva</li>
         </ol>
     </nav>

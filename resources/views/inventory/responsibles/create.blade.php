@@ -1,5 +1,7 @@
 @extends('adminlte::page')
 
+@section('title_prefix', 'Nuevo Responsable |')
+
 @section('content_header')
     <nav aria-label="breadcrumb">
         <ol class="breadcrumb">

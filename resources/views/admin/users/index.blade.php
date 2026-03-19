@@ -1,6 +1,6 @@
 @extends('adminlte::page')
 
-@section('title', 'Usuarios')
+@section('title_prefix', 'Usuarios |')
 
 @section('content_header')
     <div class="d-flex justify-content-between align-items-center">
@@ -12,7 +12,7 @@
         </nav>
 
         <a href="{{ route('admin.users.create') }}" class="btn btn-outline-primary">
-            <i class="fas fa-fw fa-plus mr-1"></i>Crear usuario
+            <i class="fas fa-fw fa-plus mr-1"></i>Nuevo usuario
         </a>
     </div>
 @endsection

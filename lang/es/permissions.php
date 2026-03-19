@@ -3,76 +3,64 @@
 declare(strict_types=1);
 
 return [
-    'users' => [
-        'view'        => 'Ver usuarios',
-        'create'      => 'Crear usuarios',
-        'edit'        => 'Editar usuarios',
-        'deactivate'  => 'Desactivar usuarios',
-        'delete'      => 'Eliminar usuarios',
-    ],
+    'users.view'   => 'Ver usuarios',
+    'users.create' => 'Crear usuarios',
+    'users.update' => 'Actualizar usuarios',
+    'users.delete' => 'Eliminar usuarios',
+    'users.toggle' => 'Activar/Desactivar usuarios',
 
-    'roles' => [
-        'view'        => 'Ver roles',
-        'create'      => 'Crear roles',
-        'edit'        => 'Editar roles',
-        'delete'      => 'Eliminar roles',
-    ],
+    'roles.view'   => 'Ver roles',
+    'roles.create' => 'Crear roles',
+    'roles.update' => 'Actualizar roles',
+    'roles.delete' => 'Eliminar roles',
 
-    'categories' => [
-        'view'        => 'Ver categorías',
-        'create'      => 'Crear categorías',
-        'edit'        => 'Editar categorías',
-        'deactivate'  => 'Desactivar categorías',
-        'delete'      => 'Eliminar categorías',
-    ],
+    'categories.view'   => 'Ver categorías',
+    'categories.create' => 'Crear categorías',
+    'categories.update' => 'Actualizar categorías',
+    'categories.delete' => 'Eliminar categorías',
+    'categories.toggle' => 'Activar/Desactivar categorías',
 
-    'raw-materials' => [
-        'view'        => 'Ver materias primas',
-        'create'      => 'Crear materias primas',
-        'edit'        => 'Editar materias primas',
-        'deactivate'  => 'Desactivar materias primas',
-        'delete'      => 'Eliminar materias primas',
-    ],
+    'raw-materials.view'   => 'Ver materias primas',
+    'raw-materials.create' => 'Crear materias primas',
+    'raw-materials.update' => 'Actualizar materias primas',
+    'raw-materials.delete' => 'Eliminar materias primas',
+    'raw-materials.toggle' => 'Activar/Desactivar materias primas',
 
-    'units' => [
-        'view'        => 'Ver unidades',
-        'create'      => 'Crear unidades',
-        'edit'        => 'Editar unidades',
-        'deactivate'  => 'Desactivar unidades',
-        'delete'      => 'Eliminar unidades',
-    ],
+    'units.view'   => 'Ver unidades',
+    'units.create' => 'Crear unidades',
+    'units.update' => 'Actualizar unidades',
+    'units.delete' => 'Eliminar unidades',
+    'units.toggle' => 'Activar/Desactivar unidades',
 
-    'warehouses' => [
-        'view'        => 'Ver almacenes',
-        'create'      => 'Crear almacenes',
-        'edit'        => 'Editar almacenes',
-        'deactivate'  => 'Desactivar almacenes',
-        'delete'      => 'Eliminar almacenes',
-    ],
+    'warehouses.view'   => 'Ver almacenes',
+    'warehouses.create' => 'Crear almacenes',
+    'warehouses.update' => 'Actualizar almacenes',
+    'warehouses.delete' => 'Eliminar almacenes',
+    'warehouses.toggle' => 'Activar/Desactivar almacenes',
 
-    'suppliers' => [
-        'view'        => 'Ver proveedores',
-        'create'      => 'Crear proveedores',
-        'edit'        => 'Editar proveedores',
-        'deactivate'  => 'Desactivar proveedores',
-        'delete'      => 'Eliminar proveedores',
-    ],
+    'suppliers.view'   => 'Ver proveedores',
+    'suppliers.create' => 'Crear proveedores',
+    'suppliers.update' => 'Actualizar proveedores',
+    'suppliers.delete' => 'Eliminar proveedores',
+    'suppliers.toggle' => 'Activar/Desactivar proveedores',
 
-    'responsibles' => [
-        'view'        => 'Ver responsables',
-        'create'      => 'Crear responsables',
-        'edit'        => 'Editar responsables',
-        'deactivate'  => 'Desactivar responsables',
-        'delete'      => 'Eliminar responsables',
-    ],
+    'responsibles.view'   => 'Ver responsables',
+    'responsibles.create' => 'Crear responsables',
+    'responsibles.update' => 'Actualizar responsables',
+    'responsibles.delete' => 'Eliminar responsables',
+    'responsibles.toggle' => 'Activar/Desactivar responsables',
 
-    'raw-material-documents' => [
-        'view'        => 'Ver documentos de materias primas',
-        'create'      => 'Crear documentos de materias primas',
-        'edit'        => 'Editar documentos de materias primas',
-        'delete'      => 'Eliminar documentos de materias primas',
-        'accept'      => 'Aceptar documentos de materias primas',
-        'reject'      => 'Rechazar documentos de materias primas',
-        'cancel'      => 'Cancelar documentos de materias primas'
-    ],
+    'raw-material-documents.view'   => 'Ver documentos de materia prima',
+    'raw-material-documents.create' => 'Crear documentos de materia prima',
+    'raw-material-documents.update' => 'Actualizar documentos de materia prima',
+    'raw-material-documents.delete' => 'Eliminar documentos de materia prima',
+    'raw-material-documents.accept' => 'Aceptar documentos de materia prima',
+    'raw-material-documents.reject' => 'Rechazar documentos de materia prima',
+    'raw-material-documents.cancel' => 'Cancelar documentos de materia prima',
+
+    'raw-material-batches.view'     => 'Ver lotes de materia prima',
+    'raw-material-movements.view'   => 'Ver movimientos de materia prima',
+    'raw-material-stocks.view'      => 'Ver existencias de materia prima',
+
+    'export' => 'Exportar'
 ];

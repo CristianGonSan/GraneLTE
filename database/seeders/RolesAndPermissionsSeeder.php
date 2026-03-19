@@ -17,50 +17,64 @@ final class RolesAndPermissionsSeeder extends Seeder
         $permissions = [
             'users.view',
             'users.create',
-            'users.edit',
-            'users.deactivate',
+            'users.update',
             'users.delete',
+            'users.toggle',
+
             'roles.view',
             'roles.create',
-            'roles.edit',
+            'roles.update',
             'roles.delete',
+
             'categories.view',
             'categories.create',
-            'categories.edit',
-            'categories.deactivate',
+            'categories.update',
             'categories.delete',
+            'categories.toggle',
+
             'raw-materials.view',
             'raw-materials.create',
-            'raw-materials.edit',
-            'raw-materials.deactivate',
+            'raw-materials.update',
             'raw-materials.delete',
+            'raw-materials.toggle',
+
             'units.view',
             'units.create',
-            'units.edit',
-            'units.deactivate',
+            'units.update',
             'units.delete',
+            'units.toggle',
+
             'warehouses.view',
             'warehouses.create',
-            'warehouses.edit',
-            'warehouses.deactivate',
+            'warehouses.update',
             'warehouses.delete',
+            'warehouses.toggle',
+
             'suppliers.view',
             'suppliers.create',
-            'suppliers.edit',
-            'suppliers.deactivate',
+            'suppliers.update',
             'suppliers.delete',
+            'suppliers.toggle',
+
             'responsibles.view',
             'responsibles.create',
-            'responsibles.edit',
-            'responsibles.deactivate',
+            'responsibles.update',
             'responsibles.delete',
+            'responsibles.toggle',
+
             'raw-material-documents.view',
             'raw-material-documents.create',
-            'raw-material-documents.edit',
+            'raw-material-documents.update',
             'raw-material-documents.delete',
             'raw-material-documents.accept',
             'raw-material-documents.reject',
             'raw-material-documents.cancel',
+
+            'raw-material-batches.view',
+            'raw-material-movements.view',
+            'raw-material-stocks.view',
+
+            'export'
         ];
 
         foreach ($permissions as $name) {

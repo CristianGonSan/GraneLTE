@@ -1,9 +1,6 @@
 <form wire:submit="update">
     <div class="card">
-        <div class="card-header border-0">
-            <p class="card-title">CAMBIAR CONTRASEÑA</p>
-        </div>
-        <div class="card-body pt-0">
+        <div class="card-body">
             <input type="email" name="email" class="d-none" autocomplete="username">
 
             <x-adminlte-input fgroup-class="mb-1" name="current_password" placeholder="Contraseña Vieja"

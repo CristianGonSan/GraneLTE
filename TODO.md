@@ -15,7 +15,7 @@
 3. Refactorizar el selector de stock, mejorar la visualización de los items y filtros. +
 
 4. Definir permisos e implementar los middlewares.
-5. Detalles menores; agregar los titulos a las paginas.
+5. Detalles menores; agregar los titulos a las paginas y corregir nomenclatura. +
 
 6. Corregir la representación de monedas, espacio entre $ y el monto. +
 

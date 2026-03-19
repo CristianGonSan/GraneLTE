@@ -1,13 +1,13 @@
 @extends('adminlte::page')
 
-@section('title', 'Usuario')
+@section('title_prefix', 'Usuario |')
 
 @section('content_header')
     <nav aria-label="breadcrumb">
         <ol class="breadcrumb">
             <li class="breadcrumb-item"><a href="{{ route('dashboard') }}">Inicio</a></li>
             <li class="breadcrumb-item"><a href="{{ route('admin.users.index') }}">Usuarios</a></li>
-            <li class="breadcrumb-item active">{{ $userId }}</li>
+            <li class="breadcrumb-item active">#{{ $userId }}</li>
             <li class="breadcrumb-item active">Detalles</li>
         </ol>
     </nav>

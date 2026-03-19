@@ -1,15 +1,18 @@
 @extends('adminlte::page')
 
+@section('title_prefix', 'Mi Cuenta |')
+
 @section('content_header')
     <nav aria-label="breadcrumb">
         <ol class="breadcrumb">
             <li class="breadcrumb-item"><a href="{{ route('dashboard') }}">Inicio</a></li>
-            <li class="breadcrumb-item active">Mi Cuenta</li>
+            <li class="breadcrumb-item active">Mi cuenta</li>
         </ol>
     </nav>
 @endsection
 
 @section('content')
+    <h1 class="h4">Detalles de mi cuenta</h1>
     <div class="row">
         <div class="col-md-8">
             <div class="card">
@@ -33,8 +36,10 @@
                 </div>
             </div>
 
+            <h2 class="h5">Cambiar contraseña</h2>
             <livewire:Account.ChangePassword />
 
+            <h2 class="h5">Sesiones activas</h2>
             <livewire:Account.ShowSessions />
         </div>
 

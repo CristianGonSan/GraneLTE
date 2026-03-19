@@ -1,5 +1,7 @@
 @extends('adminlte::page')
 
+@section('title_prefix', 'Nuevo Almacén |')
+
 @section('content_header')
     <nav aria-label="breadcrumb">
         <ol class="breadcrumb">
@@ -11,6 +13,6 @@
 @endsection
 
 @section('content')
-    <h1 class="h4">Nuevo Almacén</h1>
+    <h1 class="h4">Nuevo almacén</h1>
     <livewire:Inventory.Warehouses.WarehouseCreate />
 @endsection

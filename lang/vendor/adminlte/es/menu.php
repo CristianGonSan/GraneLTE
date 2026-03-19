@@ -10,6 +10,7 @@ return [
 
     'account_settings' => 'AJUSTES DE LA CUENTA',
     'account'          => 'Cuenta',
+    'my_account'       => 'Mi cuenta',
     'profile'          => 'Perfil',
     'change_password'  => 'Cambiar contraseña',
 

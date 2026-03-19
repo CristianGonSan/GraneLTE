@@ -2,7 +2,7 @@
 
 @section('plugins.Chartjs', true)
 
-@section('title', 'Dashboard de Inventario')
+@section('title_prefix', 'Dashboard |')
 
 @section('css')
     <style>

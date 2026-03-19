@@ -1,10 +1,6 @@
 <form wire:submit="logoutOtherDevices">
     <div class="card">
-        <div class="card-header border-0">
-            <p class="card-title">SESIONES ACTIVAS</p>
-        </div>
-
-        <div class="card-body pt-0">
+        <div class="card-body">
             <div>
                 @foreach ($sessions as $session)
                     <div class="d-flex mb-3">

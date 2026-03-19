@@ -1,6 +1,6 @@
 @extends('adminlte::page')
 
-@section('title', 'Unidades')
+@section('title_prefix', 'Unidades |')
 
 @section('content_header')
     <div class="d-flex justify-content-between align-items-center">
@@ -12,7 +12,7 @@
         </nav>
 
         <a href="{{ route('units.create') }}" class="btn btn-outline-primary">
-            <i class="fas fa-fw fa-plus mr-1"></i>Crear unidad de medida
+            <i class="fas fa-fw fa-plus mr-1"></i>Nueva unidad
         </a>
     </div>
 @endsection

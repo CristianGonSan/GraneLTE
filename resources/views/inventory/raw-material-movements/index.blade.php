@@ -2,7 +2,7 @@
 
 @section('plugins.Select2', true)
 
-@section('title', 'Movimientos')
+@section('title_prefix', 'Movimientos de Materia Prima |')
 
 @section('content_header')
     <nav aria-label="breadcrumb">

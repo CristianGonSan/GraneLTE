@@ -1,13 +1,13 @@
 @extends('adminlte::page')
 
-@section('title', 'Lote de materia prima')
+@section('title_prefix', 'Lote de Materia Prima |')
 
 @section('content_header')
     <nav aria-label="breadcrumb">
         <ol class="breadcrumb">
             <li class="breadcrumb-item"><a href="{{ route('dashboard') }}">Inicio</a></li>
-            <li class="breadcrumb-item"><a href="{{ route('raw-material-batches.index') }}">Lotes de materias prima</a></li>
-            <li class="breadcrumb-item active">{{ $batchId }}</li>
+            <li class="breadcrumb-item"><a href="{{ route('raw-material-batches.index') }}">Lotes de materia prima</a></li>
+            <li class="breadcrumb-item active">#{{ $batchId }}</li>
             <li class="breadcrumb-item active">Detalles</li>
         </ol>
     </nav>
@@ -44,7 +44,7 @@
         </div>
 
         <div class="tab-pane fade" id="pills-movements" role="tabpanel" aria-labelledby="pills-movements-tab">
-            <livewire:Inventory.RawMaterialBatches.MovementsTable :batchId="$batchId" lazy/>
+            <livewire:Inventory.RawMaterialBatches.MovementsTable :batchId="$batchId" lazy />
         </div>
     </div>
 

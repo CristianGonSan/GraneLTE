@@ -1,15 +1,13 @@
 @extends('adminlte::page')
 
-@section('plugins.Chartjs', true)
-
-@section('title', 'Materia prima')
+@section('title_prefix', 'Materia Prima |')
 
 @section('content_header')
     <nav aria-label="breadcrumb">
         <ol class="breadcrumb">
             <li class="breadcrumb-item"><a href="{{ route('dashboard') }}">Inicio</a></li>
-            <li class="breadcrumb-item"><a href="{{ route('raw-materials.index') }}">Materias prima</a></li>
-            <li class="breadcrumb-item active">{{ $rawMaterialId }}</li>
+            <li class="breadcrumb-item"><a href="{{ route('raw-materials.index') }}">Materias primas</a></li>
+            <li class="breadcrumb-item active">#{{ $rawMaterialId }}</li>
             <li class="breadcrumb-item active">Detalles</li>
         </ol>
     </nav>

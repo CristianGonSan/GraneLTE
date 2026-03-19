@@ -1,6 +1,6 @@
 @extends('adminlte::page')
 
-@section('title', 'Lotes de materia prima')
+@section('title_prefix', 'Lotes de Materia Prima |')
 
 @section('content_header')
     <nav aria-label="breadcrumb">

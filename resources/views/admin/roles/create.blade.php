@@ -2,6 +2,8 @@
 
 @section('plugins.Select2', true)
 
+@section('title_prefix', 'Nuevo Rol |')
+
 @section('content_header')
     <nav aria-label="breadcrumb">
         <ol class="breadcrumb">

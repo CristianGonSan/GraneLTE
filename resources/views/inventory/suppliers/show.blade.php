@@ -1,13 +1,13 @@
 @extends('adminlte::page')
 
-@section('title', 'Proveedores')
+@section('title_prefix', 'Proveedor |')
 
 @section('content_header')
     <nav aria-label="breadcrumb">
         <ol class="breadcrumb">
             <li class="breadcrumb-item"><a href="{{ route('dashboard') }}">Inicio</a></li>
             <li class="breadcrumb-item"><a href="{{ route('suppliers.index') }}">Proveedores</a></li>
-            <li class="breadcrumb-item active">{{ $supplierId }}</li>
+            <li class="breadcrumb-item active">#{{ $supplierId }}</li>
             <li class="breadcrumb-item active">Detalles</li>
         </ol>
     </nav>

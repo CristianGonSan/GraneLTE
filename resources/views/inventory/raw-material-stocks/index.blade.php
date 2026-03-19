@@ -1,6 +1,6 @@
 @extends('adminlte::page')
 
-@section('title', 'Existencias')
+@section('title_prefix', 'Existencias de Materia Prima |')
 
 @section('content_header')
     <nav aria-label="breadcrumb">

@@ -2,22 +2,23 @@
 
 @section('plugins.Select2', true)
 
-@section('title', 'Crear Ajuste')
+@section('title_prefix', 'Nuevo Ajuste de Existencias |')
 
 @section('content_header')
     <nav aria-label="breadcrumb">
         <ol class="breadcrumb">
             <li class="breadcrumb-item"><a href="{{ route('dashboard') }}">Inicio</a></li>
-            <li class="breadcrumb-item"><a href="{{ route('raw-material-documents.index') }}">Documentos de materia prima</a>
+            <li class="breadcrumb-item">
+                <a href="{{ route('raw-material-documents.index') }}">Documentos de materia prima</a>
             </li>
             <li class="breadcrumb-item active">Ajustes</li>
-            <li class="breadcrumb-item active">Crear</li>
+            <li class="breadcrumb-item active">Nuevo</li>
         </ol>
     </nav>
 @endsection
 
 @section('content')
-    <h1 class="h4">Crear ajuste de existencias</h1>
+    <h1 class="h4">Nuevo ajuste de existencias</h1>
     <livewire:Inventory.RawMaterialDocuments.Adjustments.AdjustmentCreate />
 
     <livewire:Inventory.RawMaterialStocks.ModalStockSelector />

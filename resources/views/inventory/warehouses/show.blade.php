@@ -1,13 +1,13 @@
 @extends('adminlte::page')
 
-@section('title', 'Almacén')
+@section('title_prefix', 'Almacén |')
 
 @section('content_header')
     <nav aria-label="breadcrumb">
         <ol class="breadcrumb">
             <li class="breadcrumb-item"><a href="{{ route('dashboard') }}">Inicio</a></li>
             <li class="breadcrumb-item"><a href="{{ route('warehouses.index') }}">Almacenes</a></li>
-            <li class="breadcrumb-item active">{{ $warehouseId }}</li>
+            <li class="breadcrumb-item active">#{{ $warehouseId }}</li>
             <li class="breadcrumb-item active">Detalles</li>
         </ol>
     </nav>

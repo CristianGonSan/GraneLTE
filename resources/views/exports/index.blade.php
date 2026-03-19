@@ -2,7 +2,7 @@
 
 @section('plugins.Select2', true)
 
-@section('title', 'Exportar')
+@section('title_prefix', 'Exportar |')
 
 @section('content_header')
     <div class="d-flex justify-content-between align-items-center">

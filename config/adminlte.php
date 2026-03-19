@@ -299,105 +299,119 @@ return [
     */
 
     'menu' => [
-        // Navbar items:
         [
             'type' => 'fullscreen-widget',
             'topnav_right' => true,
         ],
-
         [
             'type' => 'darkmode-widget',
-            'topnav_right' => true,     // Or "topnav => true" to place on the left.
+            'topnav_right' => true,
         ],
 
-        // Sidebar items:
         [
             'type' => 'sidebar-menu-search',
             'text' => 'search',
         ],
+
         [
             'text' => 'dashboard',
             'route' => 'dashboard',
             'icon' => 'fas fa-fw fa-chart-line',
         ],
+
+        ['header' => 'INVENTORY'],
+
+        [
+            'text' => 'raw_material_documents',
+            'route' => 'raw-material-documents.index',
+            'icon' => 'fas fa-fw fa-file-lines',
+            'can' => 'raw-material-documents.view'
+        ],
+        [
+            'text' => 'raw_materials',
+            'route' => 'raw-materials.index',
+            'icon' => 'fas fa-fw fa-wheat-awn',
+            'can' => 'raw-materials.view'
+        ],
+
+        [
+            'text' => 'inventory',
+            'icon' => 'fas fa-fw fa-truck-ramp-box',
+            'submenu' => [
+                [
+                    'text' => 'batches',
+                    'route' => 'raw-material-batches.index',
+                    'icon' => 'fas fa-fw fa-box',
+                    'can' => 'raw-material-batches.view'
+                ],
+                [
+                    'text' => 'movements',
+                    'route' => 'raw-material-movements.index',
+                    'icon' => 'fas fa-fw fa-cart-flatbed',
+                    'can' => 'raw-material-movements.view'
+                ],
+                [
+                    'text' => 'stocks',
+                    'route' => 'raw-material-stocks.index',
+                    'icon' => 'fas fa-fw fa-boxes-stacked',
+                    'can' => 'raw-material-stocks.view'
+                ],
+            ],
+        ],
+
+        [
+            'text' => 'catalogs',
+            'icon' => 'fas fa-fw fa-list',
+            'submenu' => [
+                [
+                    'text' => 'warehouses',
+                    'route' => 'warehouses.index',
+                    'icon' => 'fas fa-fw fa-warehouse',
+                    'can' => 'warehouses.view'
+                ],
+                [
+                    'text' => 'suppliers',
+                    'route' => 'suppliers.index',
+                    'icon' => 'fas fa-fw fa-store',
+                    'can' => 'suppliers.view'
+                ],
+                [
+                    'text' => 'responsibles',
+                    'route' => 'responsibles.index',
+                    'icon' => 'fas fa-fw fa-user-check',
+                    'can' => 'responsibles.view'
+                ],
+                [
+                    'text' => 'categories',
+                    'route' => 'categories.index',
+                    'icon' => 'fas fa-fw fa-tags',
+                    'can' => 'categories.view'
+                ],
+                [
+                    'text' => 'units',
+                    'route' => 'units.index',
+                    'icon' => 'fas fa-fw fa-list-ol',
+                    'can' => 'units.view'
+                ],
+            ],
+        ],
+
         [
             'text' => 'export',
             'route' => 'exports.index',
             'icon' => 'fas fa-fw fa-file-excel',
+            'can' => 'export'
         ],
         [
             'text' => 'info',
             'route' => 'info',
             'icon' => 'fas fa-fw fa-circle-info',
         ],
-        ['header' => 'INVENTORY'],
+
+        ['header' => 'ADMINISTRATION'],
 
         [
-            'text' => 'operations',
-            'icon' => 'fas fa-fw fa-truck-ramp-box',
-            'submenu' => [
-                [
-                    'text' => 'raw_material_documents',
-                    'route' => 'raw-material-documents.index',
-                    'icon' => 'fas fa-fw fa-file-lines',
-                ],
-                [
-                    'text' => 'batches',
-                    'route' => 'raw-material-batches.index',
-                    'icon' => 'fas fa-fw fa-box',
-                ],
-                [
-                    'text' => 'movements',
-                    'route' => 'raw-material-movements.index',
-                    'icon' => 'fas fa-fw fa-cart-flatbed',
-                ],
-                [
-                    'text' => 'stocks',
-                    'route' => 'raw-material-stocks.index',
-                    'icon' => 'fas fa-fw fa-boxes-stacked',
-                ],
-            ],
-        ],
-        [
-            'text' => 'catalogs',
-            'icon' => 'fas fa-fw fa-list',
-            'submenu' => [
-                [
-                    'text' => 'raw_materials',
-                    'route' => 'raw-materials.index',
-                    'icon' => 'fas fa-fw fa-wheat-awn',
-                ],
-                [
-                    'text' => 'warehouses',
-                    'route' => 'warehouses.index',
-                    'icon' => 'fas fa-fw fa-warehouse',
-                ],
-                [
-                    'text' => 'suppliers',
-                    'route' => 'suppliers.index',
-                    'icon' => 'fas fa-fw fa-store',
-                ],
-                [
-                    'text' => 'responsibles',
-                    'route' => 'responsibles.index',
-                    'icon' => 'fas fa-fw fa-user-check',
-                ],
-                [
-                    'text' => 'categories',
-                    'route' => 'categories.index',
-                    'icon' => 'fas fa-fw fa-tags',
-                ],
-                [
-                    'text' => 'units',
-                    'route' => 'units.index',
-                    'icon' => 'fas fa-fw fa-list-ol',
-                ],
-            ],
-        ],
-
-        ['header' => 'ADMININISTRATION'],
-        [
-            'text' => 'account',
+            'text' => 'my_account',
             'route' => 'account',
             'icon' => 'fas fa-fw fa-gear',
         ],
@@ -405,11 +419,13 @@ return [
             'text' => 'users',
             'route' => 'admin.users.index',
             'icon' => 'fas fa-fw fa-user',
+            'can' => 'users.view'
         ],
         [
             'text' => 'roles',
             'route' => 'admin.roles.index',
             'icon' => 'fas fa-fw fa-lock',
+            'can' => 'roles.view'
         ],
     ],
 

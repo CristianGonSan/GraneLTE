@@ -1,5 +1,7 @@
 @extends('adminlte::page')
 
+@section('title_prefix', 'Nueva Unidad |')
+
 @section('content_header')
     <nav aria-label="breadcrumb">
         <ol class="breadcrumb">
@@ -11,6 +13,6 @@
 @endsection
 
 @section('content')
-    <h1 class="h4">Nueva unidad de medida</h1>
+    <h1 class="h4">Nueva unidad</h1>
     <livewire:Inventory.Units.UnitCreate />
 @endsection
