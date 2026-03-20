@@ -362,9 +362,9 @@ Route::middleware(['auth', 'check.user.active'])->group(function () {
     Route::prefix('media')->name('media.')->group(function () {
         Route::get('{media}/show', [MediaController::class, 'show'])
             ->name('show')
-            ->middleware('permission:media.view');
+            ->middleware('permission:raw-material-documents.view');
         Route::get('{media}/download', [MediaController::class, 'download'])
             ->name('download')
-            ->middleware('permission:media.view');
+            ->middleware('permission:raw-material-documents.view');
     });
 });

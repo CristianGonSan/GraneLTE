@@ -75,7 +75,6 @@ final class RolesAndPermissionsSeeder extends Seeder
             'raw-material-stocks.view',
 
             'reports.export',
-            'media.view'
         ];
 
         foreach ($permissions as $name) {

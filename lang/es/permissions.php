@@ -63,5 +63,4 @@ return [
     'raw-material-stocks.view'      => 'Ver existencias de materia prima',
 
     'reports.export' => 'Exportar',
-    'media.view' => 'Ver archivos'
 ];
