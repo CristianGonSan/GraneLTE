@@ -127,7 +127,7 @@ class RawMaterial extends Model
         );
     }
 
-    public function avgUnitCost(int $lastBatches = 30): string
+    public function avgUnitCost(int $lastBatches = 30): ?float
     {
         return $this->batches()
             ->orderByDesc('received_at')
