@@ -359,11 +359,11 @@ Route::middleware(['auth', 'check.user.active'])->group(function () {
     | Media
     |--------------------------------------------------------------------------
     */
-    Route::prefix('media')->name('media.')->group(function () {
-        Route::get('{media}/show', [MediaController::class, 'show'])
+    Route::prefix('attachments')->name('attachments.')->group(function () {
+        Route::get('{attachments}/show', [MediaController::class, 'show'])
             ->name('show')
             ->middleware('permission:raw-material-documents.view');
-        Route::get('{media}/download', [MediaController::class, 'download'])
+        Route::get('{attachments}/download', [MediaController::class, 'download'])
             ->name('download')
             ->middleware('permission:raw-material-documents.view');
     });

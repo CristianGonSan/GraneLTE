@@ -44,11 +44,11 @@
                     <div class="text-muted" style="font-size: .8rem">{{ $attachment->human_readable_size }}</div>
                 </div>
                 <div class="ml-3 text-nowrap">
-                    <a href="{{ route('media.show', $attachment->id) }}" target="_blank"
+                    <a href="{{ route('attachments.show', $attachment->id) }}" target="_blank"
                         class="btn btn-outline-secondary btn-sm">
                         <i class="fas fa-fw fa-arrow-up-right-from-square"></i>
                     </a>
-                    <a href="{{ route('media.download', $attachment->id) }}" class="btn btn-outline-secondary btn-sm">
+                    <a href="{{ route('attachments.download', $attachment->id) }}" class="btn btn-outline-secondary btn-sm">
                         <i class="fas fa-fw fa-download"></i>
                     </a>
                 </div>
