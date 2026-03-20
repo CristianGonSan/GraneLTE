@@ -18,7 +18,7 @@
                 </td>
                 <td class="text-center">
                     @if ($canView)
-                        <a href="{{ route('admin.users.show', $user->id) }}" class="d-block text-reset" target="_blank">
+                        <a href="{{ route('users.show', $user->id) }}" class="d-block text-reset" target="_blank">
                             <i class="fas fa-fw fa-arrow-up-right-from-square"></i>
                         </a>
                     @else

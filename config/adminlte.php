@@ -417,13 +417,13 @@ return [
         ],
         [
             'text' => 'users',
-            'route' => 'admin.users.index',
+            'route' => 'users.index',
             'icon' => 'fas fa-fw fa-user',
             'can' => 'users.view'
         ],
         [
             'text' => 'roles',
-            'route' => 'admin.roles.index',
+            'route' => 'roles.index',
             'icon' => 'fas fa-fw fa-lock',
             'can' => 'roles.view'
         ],

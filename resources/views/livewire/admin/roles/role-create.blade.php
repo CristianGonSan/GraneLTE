@@ -23,7 +23,7 @@
         <div class="mb-3">
             <x-livewire.loading-button type='submit' label="Guardar" />
 
-            <a href="{{ route('admin.roles.index') }}" class="btn btn-outline-secondary ml-1">
+            <a href="{{ route('roles.index') }}" class="btn btn-outline-secondary ml-1">
                 Cancelar
             </a>
         </div>

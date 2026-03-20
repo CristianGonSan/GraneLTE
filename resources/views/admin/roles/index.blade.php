@@ -12,7 +12,7 @@
         </nav>
 
         @can('roles.create')
-            <a href="{{ route('admin.roles.create') }}" class="btn btn-outline-primary">
+            <a href="{{ route('roles.create') }}" class="btn btn-outline-primary">
                 <i class="fas fa-fw fa-plus mr-1"></i>Nuevo rol
             </a>
         @endcan

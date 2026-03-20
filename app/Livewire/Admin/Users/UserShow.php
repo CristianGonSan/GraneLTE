@@ -62,7 +62,7 @@ class UserShow extends Component
         } else {
             $user->delete();
             $this->flashToastSuccess('Usuario eliminado');
-            redirect()->route('admin.users.index');
+            redirect()->route('users.index');
         }
     }
 

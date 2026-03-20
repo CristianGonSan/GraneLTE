@@ -51,7 +51,7 @@
 
         <div class="mb-3">
             @can('roles.edit')
-                <a href="{{ route('admin.roles.edit', $role->id) }}" class="btn btn-outline-primary mr-1">
+                <a href="{{ route('roles.edit', $role->id) }}" class="btn btn-outline-primary mr-1">
                     <i class="fas fa-edit mr-1"></i> Editar
                 </a>
             @endcan
@@ -61,7 +61,7 @@
                     wire:click="delete" wire:target="delete" wire:swal-confirm="¿Eliminar este rol?" swal-icon="warning" />
             @endcan
 
-            <a href="{{ route('admin.roles.index') }}" class="btn btn-outline-secondary mr-1">
+            <a href="{{ route('roles.index') }}" class="btn btn-outline-secondary mr-1">
                 <i class="fas fa-fw fa-chevron-left mr-1"></i> Volver
             </a>
         </div>

@@ -41,7 +41,7 @@ class RoleShow extends Component
 
         $role->delete();
         $this->flashToastSuccess('Rol eliminado');
-        redirect()->route('admin.roles.index');
+        redirect()->route('roles.index');
     }
 
     public function getTranslatedPermissions(): array

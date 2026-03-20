@@ -66,7 +66,7 @@ class UserCreate extends Component
             $this->toastSuccess('Usuario creado');
         } else {
             $this->flashToastSuccess('Usuario creado');
-            redirect()->route('admin.users.show', $user->id);
+            redirect()->route('users.show', $user->id);
         }
     }
 }

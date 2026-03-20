@@ -21,7 +21,7 @@
                     <i class="{{ $user->getActiveIconClass() }}"></i>
                 </td>
                 <td class="text-center">
-                    <a href="{{ route('admin.users.show', $user->id) }}" class="d-block text-reset">
+                    <a href="{{ route('users.show', $user->id) }}" class="d-block text-reset">
                         <i class="fa-solid fa-chevron-right"></i>
                     </a>
                 </td>

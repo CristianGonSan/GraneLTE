@@ -12,7 +12,7 @@
         </nav>
 
         @can('users.create')
-            <a href="{{ route('admin.users.create') }}" class="btn btn-outline-primary">
+            <a href="{{ route('users.create') }}" class="btn btn-outline-primary">
                 <i class="fas fa-fw fa-plus mr-1"></i>Nuevo usuario
             </a>
         @endcan

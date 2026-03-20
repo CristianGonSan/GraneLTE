@@ -45,7 +45,7 @@ class RoleCreate extends Component
             $this->toastSuccess('Rol creado.');
         } else {
             $this->flashToastSuccess('Rol creado.');
-            redirect()->route('admin.roles.show', $role->id);
+            redirect()->route('roles.show', $role->id);
         }
     }
 

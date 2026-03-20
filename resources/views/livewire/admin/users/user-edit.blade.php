@@ -18,7 +18,7 @@
         <div class="mb-3">
             <x-livewire.loading-button type='submit' label="Guardar cambios" />
 
-            <a href="{{ route('admin.users.show', $userId) }}" class="btn btn-outline-secondary ml-1">
+            <a href="{{ route('users.show', $userId) }}" class="btn btn-outline-secondary ml-1">
                 Cancelar
             </a>
         </div>

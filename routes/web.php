@@ -92,36 +92,34 @@ Route::middleware(['auth', 'check.user.active'])->group(function () {
     | Admin
     |--------------------------------------------------------------------------
     */
-    Route::prefix('admin')->name('admin.')->group(function () {
 
-        // Users
-        Route::get('users', [UserController::class, 'index'])
-            ->name('users.index')
-            ->middleware('permission:users.view');
-        Route::get('users/create', [UserController::class, 'create'])
-            ->name('users.create')
-            ->middleware('permission:users.create');
-        Route::get('users/{user}', [UserController::class, 'show'])
-            ->name('users.show')
-            ->middleware('permission:users.view');
-        Route::get('users/{user}/edit', [UserController::class, 'edit'])
-            ->name('users.edit')
-            ->middleware('permission:users.edit');
+    // Users
+    Route::get('users', [UserController::class, 'index'])
+        ->name('users.index')
+        ->middleware('permission:users.view');
+    Route::get('users/create', [UserController::class, 'create'])
+        ->name('users.create')
+        ->middleware('permission:users.create');
+    Route::get('users/{user}', [UserController::class, 'show'])
+        ->name('users.show')
+        ->middleware('permission:users.view');
+    Route::get('users/{user}/edit', [UserController::class, 'edit'])
+        ->name('users.edit')
+        ->middleware('permission:users.edit');
 
-        // Roles
-        Route::get('roles', [RoleController::class, 'index'])
-            ->name('roles.index')
-            ->middleware('permission:roles.view');
-        Route::get('roles/create', [RoleController::class, 'create'])
-            ->name('roles.create')
-            ->middleware('permission:roles.create');
-        Route::get('roles/{role}', [RoleController::class, 'show'])
-            ->name('roles.show')
-            ->middleware('permission:roles.view');
-        Route::get('roles/{role}/edit', [RoleController::class, 'edit'])
-            ->name('roles.edit')
-            ->middleware('permission:roles.edit');
-    });
+    // Roles
+    Route::get('roles', [RoleController::class, 'index'])
+        ->name('roles.index')
+        ->middleware('permission:roles.view');
+    Route::get('roles/create', [RoleController::class, 'create'])
+        ->name('roles.create')
+        ->middleware('permission:roles.create');
+    Route::get('roles/{role}', [RoleController::class, 'show'])
+        ->name('roles.show')
+        ->middleware('permission:roles.view');
+    Route::get('roles/{role}/edit', [RoleController::class, 'edit'])
+        ->name('roles.edit')
+        ->middleware('permission:roles.edit');
 
     /*
     |--------------------------------------------------------------------------

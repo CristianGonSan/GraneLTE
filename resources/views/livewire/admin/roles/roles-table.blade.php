@@ -10,7 +10,7 @@
             <tr wire:key="role-{{ $role->id }}">
                 <td>{{ $role->name }}</td>
                 <td class="text-center">
-                    <a href="{{ route('admin.roles.show', $role->id) }}" class="d-block text-reset">
+                    <a href="{{ route('roles.show', $role->id) }}" class="d-block text-reset">
                         <i class="fa-solid fa-chevron-right"></i>
                     </a>
                 </td>

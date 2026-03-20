@@ -44,7 +44,7 @@
 
         <div class="mb-3">
             @can('users.edit')
-                <a href="{{ route('admin.users.edit', $user->id) }}" class="btn btn-outline-primary mr-1">
+                <a href="{{ route('users.edit', $user->id) }}" class="btn btn-outline-primary mr-1">
                     <i class="fas fa-edit mr-1"></i> Editar
                 </a>
             @endcan
@@ -54,7 +54,7 @@
                     :disabled="$isInUse" :title="$isInUse ? 'No se puede eliminar: el usuario está en uso' : ''" />
             @endcan
 
-            <a href="{{ route('admin.users.index') }}" class="btn btn-outline-secondary mr-1">
+            <a href="{{ route('users.index') }}" class="btn btn-outline-secondary mr-1">
                 <i class="fas fa-fw fa-chevron-left mr-1"></i> Volver
             </a>
         </div>

@@ -18,7 +18,7 @@
                 <div>
                     {{ $status->label() }} por
                     @can('users.view')
-                        <a href="{{ route('admin.users.show', $val->id) }}" target="_blank">
+                        <a href="{{ route('users.show', $val->id) }}" target="_blank">
                             {{ $val->name }}
                         </a>
                     @else

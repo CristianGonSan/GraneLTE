@@ -60,7 +60,7 @@
         <div>
             Creado por
             @can('users.view')
-                <a href="{{ route('admin.users.show', $document->created_by) }}" target="_blank">
+                <a href="{{ route('users.show', $document->created_by) }}" target="_blank">
                     {{ $document->creator->name }}
                 </a>
             @else
