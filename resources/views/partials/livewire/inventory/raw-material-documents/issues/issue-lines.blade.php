@@ -10,7 +10,7 @@
                     <tr>
                         <th style="min-width: 220px">Materia prima</th>
                         <th style="min-width: 230px">Origen</th>
-                        <th style="min-width: 200px; width: 200px;">Cantidad</th>
+                        <th style="min-width: 200px; width: 200px;">Cantidad *</th>
                         <th style="width: 160px">Total MXN</th>
                         <th class="text-center" style="width: 1%">Quitar</th>
                     </tr>

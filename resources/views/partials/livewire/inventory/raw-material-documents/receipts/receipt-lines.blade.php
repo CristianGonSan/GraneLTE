@@ -21,8 +21,8 @@
                         <th style="min-width: 220px">Ítem / Destino</th>
                         <th style="min-width: 180px">Lote Externo</th>
                         <th style="min-width: 160px">Vencimiento</th>
-                        <th style="min-width: 160px; width: 160px;">Cantidad</th>
-                        <th style="min-width: 160px; width: 160px;">Costo Unit.</th>
+                        <th style="min-width: 160px; width: 160px;">Cantidad *</th>
+                        <th style="min-width: 160px; width: 160px;">Costo Unit. *</th>
                         <th style="min-width: 120px">Subtotal</th>
                         <th class="text-center" style="width: 1%">Quitar</th>
                     </tr>

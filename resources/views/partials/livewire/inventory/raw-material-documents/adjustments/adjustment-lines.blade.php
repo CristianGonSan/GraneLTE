@@ -10,7 +10,7 @@
                     <tr>
                         <th style="min-width: 200px">Materia prima</th>
                         <th style="min-width: 220px">Origen</th>
-                        <th style="min-width: 200px; width: 200px;">Conteo</th>
+                        <th style="min-width: 200px; width: 200px;">Conteo *</th>
                         <th style="min-width: 140px">Teórico</th>
                         <th style="min-width: 140px">Diferencia</th>
                         <th style="width: 160px">Impacto MXN</th>
