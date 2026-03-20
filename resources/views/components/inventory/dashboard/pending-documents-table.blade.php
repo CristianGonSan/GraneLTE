@@ -23,9 +23,13 @@
                         @forelse ($documents as $document)
                             <tr>
                                 <td>
-                                    <a href="{{ $document->getRoute('show') }}" target="_blank">
+                                    @can('raw-material-documents.view')
+                                        <a href="{{ $document->getRoute('show') }}" target="_blank">
+                                            {{ $document->reference_number ?? $document->id }}
+                                        </a>
+                                    @else
                                         {{ $document->reference_number ?? $document->id }}
-                                    </a>
+                                    @endcan
                                 </td>
                                 <td>
                                     {{ $document->type->label() }}
@@ -48,9 +52,13 @@
     </div>
     @if ($documents->isNotEmpty())
         <div class="card-footer text-right">
-            <a href="{{ route('raw-material-documents.index', ['status' => 'pending']) }}" target="_blank">
-                Ver todos<i class="fas fa-arrow-circle-right ml-1"></i>
-            </a>
+            @can('raw-material-documents.view')
+                <a href="{{ route('raw-material-documents.index', ['status' => 'pending']) }}" target="_blank">
+                    Ver todos<i class="fas fa-fw fa-arrow-up-right-from-square ml-1"></i>
+                </a>
+            @else
+                <span class="text-muted">Ver todos<i class="fas fa-fw fa-lock ml-1"></i></span>
+            @endcan
         </div>
     @endif
 </div>

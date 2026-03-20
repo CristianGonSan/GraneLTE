@@ -10,7 +10,7 @@
                 <i class="fas fa-dollar-sign"></i>
             </div>
             <a href="#cost-by-material" class="small-box-footer">
-                Ver más<i class="fas fa-arrow-circle-right ml-1"></i>
+                Ver más<i class="fas fa-fw fa-link ml-1"></i>
             </a>
         </div>
     </div>
@@ -25,9 +25,15 @@
             <div class="icon">
                 <i class="fas fa-boxes"></i>
             </div>
-            <a href="{{ route('raw-materials.index') }}" target="_blank" class="small-box-footer">
-                Ver más<i class="fas fa-arrow-circle-right ml-1"></i>
-            </a>
+            @can('raw-materials.view')
+                <a href="{{ route('raw-materials.index') }}" target="_blank" class="small-box-footer">
+                    Ver más<i class="fas fa-fw fa-arrow-up-right-from-square ml-1"></i>
+                </a>
+            @else
+                <div class="small-box-footer">
+                    Ver más<i class="fas fa-fw fa-lock ml-1"></i>
+                </div>
+            @endcan
         </div>
     </div>
 
@@ -42,7 +48,7 @@
                 <i class="fas fa-file-alt"></i>
             </div>
             <a href="#pending-documents" class="small-box-footer">
-                Ver más<i class="fas fa-arrow-circle-right ml-1"></i>
+                Ver más<i class="fas fa-link fa-fw ml-1"></i>
             </a>
         </div>
     </div>
@@ -58,7 +64,7 @@
                 <i class="fas fa-exclamation-triangle"></i>
             </div>
             <a href="#critical-alerts" class="small-box-footer">
-                Ver más<i class="fas fa-arrow-circle-right ml-1"></i>
+                Ver más<i class="fas fa-fw fa-link ml-1"></i>
             </a>
         </div>
     </div>

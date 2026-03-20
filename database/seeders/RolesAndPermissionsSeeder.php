@@ -74,6 +74,7 @@ final class RolesAndPermissionsSeeder extends Seeder
             'raw-material-movements.view',
             'raw-material-stocks.view',
 
+            'dashboard.view',
             'reports.export',
         ];
 

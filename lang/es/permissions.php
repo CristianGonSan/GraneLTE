@@ -62,5 +62,6 @@ return [
     'raw-material-movements.view'   => 'Ver movimientos de materia prima',
     'raw-material-stocks.view'      => 'Ver existencias de materia prima',
 
+    'dashboard.view' => 'Ver Dashboard',
     'reports.export' => 'Exportar',
 ];

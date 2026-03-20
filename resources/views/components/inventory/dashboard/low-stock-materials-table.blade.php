@@ -59,9 +59,13 @@
     </div>
     @if ($materials->isNotEmpty())
         <div class="card-footer text-right">
-            <a href="{{ route('raw-materials.index', ['low-stock-filter' => 'low_stock']) }}" target="_blank">
-                Ver todos<i class="fas fa-arrow-circle-right ml-1"></i>
-            </a>
+            @can('raw-materials.view')
+                <a href="{{ route('raw-materials.index', ['low-stock-filter' => 'low_stock']) }}" target="_blank">
+                    Ver todos<i class="fas fa-fw fa-arrow-up-right-from-square ml-1"></i>
+                </a>
+            @else
+                <span class="text-muted">Ver todos<i class="fas fa-fw fa-lock ml-1"></i></span>
+            @endcan
         </div>
     @endif
 </div>
