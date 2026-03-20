@@ -39,6 +39,7 @@ trait FlashToast
             'position' => 'top-end',
             'timer' => 4000,
             'showConfirmButton' => false,
+            'timerProgressBar' => true,
             'customClass' => [
                 'popup' => 'custom-toast-position'
             ]
