@@ -23,7 +23,7 @@ class CategoriesTable extends Component
     public int $page = 1;
 
     #[Session]
-    public string $sortColumn = 'id';
+    public string $sortColumn = 'name';
 
     #[Session]
     public string $sortDirection = 'desc';

@@ -15,7 +15,7 @@
 3. Refactorizar el selector de stock, mejorar la visualización de los items y filtros. +
 
 4. Definir permisos e implementar los middlewares. +-
-   - Permiso a media no funciona
+   - Permiso a media no funciona +
    - Adaptar las tablas de relaciones -
 
 5. Detalles menores; agregar los titulos a las paginas y corregir nomenclatura. +
