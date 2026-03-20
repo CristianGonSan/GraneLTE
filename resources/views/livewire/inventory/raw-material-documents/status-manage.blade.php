@@ -72,6 +72,9 @@
 
         @endswitch
 
+        <x-livewire.loading-button label="Generar Excel" icon="file-excel" theme="outline-success" class="mr-1"
+            wire:click='export' />
+
         <a href="{{ route('raw-material-documents.index') }}" class="btn btn-outline-secondary mr-1">
             <i class="fas fa-fw fa-chevron-left mr-1"></i> Volver
         </a>

@@ -47,7 +47,7 @@ class ExportInventoryReport extends Component
                     : now(),
                 expiringDays: $this->expiringDays,
             ),
-            'reporte-inventario-' . now()->format('Y-m-d') . '.xlsx'
+            'reporte-inventario_' . now()->format('Y-m-d') . '.xlsx'
         );
     }
 }

@@ -3,12 +3,15 @@
 namespace App\Livewire\Inventory\RawMaterialDocuments;
 
 use App\Enums\Inventory\RawMaterialDocument\RawMaterialDocumentStatus;
+use App\Exports\Excel\Inventory\RawMaterialDocument\RawMaterialDocumentExport;
 use App\Models\Inventory\RawMaterialDocument;
 use App\Traits\SweetAlert2\FlashToast;
 use App\Traits\SweetAlert2\Livewire\Toast;
 use DomainException;
 use Illuminate\View\View;
 use Livewire\Component;
+use Maatwebsite\Excel\Facades\Excel;
+use Symfony\Component\HttpFoundation\BinaryFileResponse;
 use Throwable;
 
 class ChangeDocumentStatus extends Component
@@ -72,6 +75,14 @@ class ChangeDocumentStatus extends Component
         $document->hardDelete();
         $this->flashToastSuccess('Documento eliminado');
         redirect()->route('raw-material-documents.index');
+    }
+
+    public function export(): BinaryFileResponse
+    {
+        return Excel::download(
+            new RawMaterialDocumentExport($this->documentId),
+            "documento_#{$this->documentId}" . '_' . now()->format('Y-m-d') . '.xlsx'
+        );
     }
 
     private ?RawMaterialDocument $document = null;
