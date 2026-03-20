@@ -44,13 +44,17 @@
                     <div class="text-muted" style="font-size: .8rem">{{ $attachment->human_readable_size }}</div>
                 </div>
                 <div class="ml-3 text-nowrap">
-                    <a href="{{ route('media.show', $attachment->id) }}" target="_blank"
-                        class="btn btn-outline-secondary btn-sm">
-                        <i class="fas fa-fw fa-arrow-up-right-from-square"></i>
-                    </a>
-                    <a href="{{ route('media.download', $attachment->id) }}" class="btn btn-outline-secondary btn-sm">
-                        <i class="fas fa-fw fa-download"></i>
-                    </a>
+                    @can('media.view')
+                        <a href="{{ route('media.show', $attachment->id) }}" target="_blank"
+                            class="btn btn-outline-secondary btn-sm">
+                            <i class="fas fa-fw fa-arrow-up-right-from-square"></i>
+                        </a>
+                        <a href="{{ route('media.download', $attachment->id) }}" class="btn btn-outline-secondary btn-sm">
+                            <i class="fas fa-fw fa-download"></i>
+                        </a>
+                    @else
+                        <i class="fas fa-fw fa-lock text-muted"></i>
+                    @endcan
                 </div>
             </div>
         @endif
