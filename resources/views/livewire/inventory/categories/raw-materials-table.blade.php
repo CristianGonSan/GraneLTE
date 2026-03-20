@@ -28,6 +28,9 @@
     {{ $this->thead() }}
 
     <tbody>
+        @php
+            $canView = can('raw-materials.view');
+        @endphp
         @forelse ($materials as $material)
             <tr wire:key="raw-material-{{ $material->id }}">
                 <td>{{ $material->shortText('name') }}</td>
@@ -38,10 +41,14 @@
                 </td>
                 <td class="text-center"><i class="{{ $material->getActiveIconClass() }}"></i></td>
                 <td class="text-center">
-                    <a href="{{ route('raw-materials.show', $material->id) }}" class="d-block text-reset"
-                        target="_blank">
-                        <i class="fas fa-fw fa-arrow-up-right-from-square"></i>
-                    </a>
+                    @if ($canView)
+                        <a href="{{ route('raw-materials.show', $material->id) }}" class="d-block text-reset"
+                            target="_blank">
+                            <i class="fas fa-fw fa-arrow-up-right-from-square"></i>
+                        </a>
+                    @else
+                        <i class="fas fa-fw fa-lock text-muted"></i>
+                    @endif
                 </td>
             </tr>
         @empty

@@ -17,10 +17,14 @@
                 <hr>
                 <div>
                     {{ $status->label() }} por
-                    <a href="{{ route('admin.users.edit', $val->id) }}" target="_blank">
+                    @can('users.view')
+                        <a href="{{ route('admin.users.show', $val->id) }}" target="_blank">
+                            {{ $val->name }}
+                        </a>
+                    @else
                         {{ $val->name }}
-                    </a> el
-                    {{ $document->validated_at->format('d/m/Y - h:i a') }}
+                    @endcan
+                    el {{ $document->validated_at->format('d/m/Y - h:i a') }}
                 </div>
             @endif
         </div>

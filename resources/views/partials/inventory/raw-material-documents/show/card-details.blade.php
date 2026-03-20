@@ -59,10 +59,14 @@
 
         <div>
             Creado por
-            <a href="{{ route('admin.users.show', $document->creator->id) }}" target="_blank">
+            @can('users.view')
+                <a href="{{ route('admin.users.show', $document->created_by) }}" target="_blank">
+                    {{ $document->creator->name }}
+                </a>
+            @else
                 {{ $document->creator->name }}
-            </a> el
-            {{ $document->created_at->format('d/m/Y - h:i a') }}
+            @endcan
+            el {{ $document->created_at->format('d/m/Y - h:i a') }}
         </div>
     </div>
 </div>

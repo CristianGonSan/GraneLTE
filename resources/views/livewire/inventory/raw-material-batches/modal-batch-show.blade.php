@@ -52,9 +52,11 @@
 
                                 <h2 class="h5">
                                     Lote
-                                    <a href="{{ route('raw-material-batches.show', $batch->id) }}" target="_blank">
-                                        <i class="fas fa-fw fa-arrow-up-right-from-square"></i>
-                                    </a>
+                                    @can('raw-material-batches.view')
+                                        <a href="{{ route('raw-material-batches.show', $batch->id) }}" target="_blank">
+                                            <i class="fas fa-fw fa-arrow-up-right-from-square"></i>
+                                        </a>
+                                    @endcan
                                 </h2>
 
                                 <div class="card mb-3">
@@ -96,9 +98,11 @@
 
                                 <h2 class="h5">
                                     Material
-                                    <a href="{{ route('raw-materials.show', $material->id) }}" target="_blank">
-                                        <i class="fas fa-fw fa-arrow-up-right-from-square"></i>
-                                    </a>
+                                    @can('raw-materials.view')
+                                        <a href="{{ route('raw-materials.show', $material->id) }}" target="_blank">
+                                            <i class="fas fa-fw fa-arrow-up-right-from-square"></i>
+                                        </a>
+                                    @endcan
                                 </h2>
 
                                 <div class="card mb-3">
@@ -122,9 +126,11 @@
 
                                 <h2 class="h5">
                                     Proveedor
-                                    <a href="{{ route('suppliers.edit', $supplier->id) }}" target="_blank">
-                                        <i class="fas fa-fw fa-arrow-up-right-from-square"></i>
-                                    </a>
+                                    @can('suppliers.view')
+                                        <a href="{{ route('suppliers.show', $supplier->id) }}" target="_blank">
+                                            <i class="fas fa-fw fa-arrow-up-right-from-square"></i>
+                                        </a>
+                                    @endcan
                                 </h2>
 
                                 <div class="card mb-0">

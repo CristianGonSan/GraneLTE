@@ -29,6 +29,8 @@ class ModalStockShow extends Component
     #[On('showStock')]
     public function openModal(?int $id): void
     {
+        abort_if(cannot('raw-material-stocks.view'), 403);
+
         $this->stockId      = $id;
         $this->showModal    = true;
     }

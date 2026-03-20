@@ -27,6 +27,9 @@
     {{ $this->thead() }}
 
     <tbody>
+        @php
+            $canView = can('raw-material-movements.view');
+        @endphp
         @forelse ($movements as $movement)
             <tr wire:key="raw-material-movement-{{ $movement->id }}">
                 <td class="text-center">{{ number_format($movement->id) }}</td>
@@ -35,10 +38,16 @@
                 <td>{{ $movement->warehouse->shortText('name') }}</td>
                 <td>{{ number_format($movement->quantity, 3) }} {{ $unitSymbol }}</td>
                 <td>{{ $movement->effective_at->format('d/m/Y - h:i a') }}</td>
-                <td class="text-center cursor-pointer"
-                    wire:click="$dispatch('showMovement', { id: {{ $movement->id }} })">
-                    <i class="fas fa-fw fa-expand"></i>
-                </td>
+                @if ($canView)
+                    <td class="text-center cursor-pointer"
+                        wire:click="$dispatch('showMovement', { id: {{ $movement->id }} })">
+                        <i class="fas fa-fw fa-expand"></i>
+                    </td>
+                @else
+                    <td class="text-center">
+                        <i class="fas fa-fw fa-lock text-muted"></i>
+                    </td>
+                @endif
             </tr>
         @empty
             <tr>

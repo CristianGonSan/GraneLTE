@@ -21,6 +21,9 @@
     {{ $this->thead() }}
 
     <tbody>
+        @php
+            $canView = can('raw-material-stocks.view');
+        @endphp
         @forelse ($stocks as $stock)
             @php
                 $material = $stock->batch->material;
@@ -29,9 +32,16 @@
                 <td>{{ $material->shortText('name') }}</td>
                 <td>{{ $stock->warehouse->shortText('name') }}</td>
                 <td>{{ number_format($stock->current_quantity, 3) }} {{ $material->unit->symbol }}</td>
-                <td class="text-center cursor-pointer" wire:click="$dispatch('showStock', { id: {{ $stock->id }} })">
-                    <i class="fas fa-fw fa-expand"></i>
-                </td>
+                @if ($canView)
+                    <td class="text-center cursor-pointer"
+                        wire:click="$dispatch('showStock', { id: {{ $stock->id }} })">
+                        <i class="fas fa-fw fa-expand"></i>
+                    </td>
+                @else
+                    <td class="text-center">
+                        <i class="fas fa-fw fa-lock text-muted"></i>
+                    </td>
+                @endif
             </tr>
         @empty
             <tr>

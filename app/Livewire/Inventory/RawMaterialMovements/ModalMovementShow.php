@@ -27,6 +27,8 @@ class ModalMovementShow extends Component
     #[On('showMovement')]
     public function openModal(?int $id): void
     {
+        abort_if(cannot('raw-material-movements.view'), 403);
+
         $this->movementId  = $id;
         $this->showModal   = true;
     }

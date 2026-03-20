@@ -41,6 +41,9 @@
     {{ $this->thead() }}
 
     <tbody>
+        @php
+            $canView = can('raw-material-stocks.view');
+        @endphp
         @forelse ($stocks as $stock)
             <tr wire:key="raw-material-stock-{{ $stock->id }}">
                 <td>{{ $stock->batch->code }}</td>
@@ -49,9 +52,16 @@
                 <td @if ($stock->batch->isExpired()) class="text-danger" title="Ha caducado" @endif>
                     {{ $stock->batch->expiration_date?->format('d/m/Y') ?? '--/--/----' }}
                 </td>
-                <td class="text-center cursor-pointer" wire:click="$dispatch('showStock', { id: {{ $stock->id }} })">
-                    <i class="fas fa-fw fa-expand"></i>
-                </td>
+                @if ($canView)
+                    <td class="text-center cursor-pointer"
+                        wire:click="$dispatch('showStock', { id: {{ $stock->id }} })">
+                        <i class="fas fa-fw fa-expand"></i>
+                    </td>
+                @else
+                    <td class="text-center">
+                        <i class="fas fa-fw fa-lock text-muted"></i>
+                    </td>
+                @endif
             </tr>
         @empty
             <tr>

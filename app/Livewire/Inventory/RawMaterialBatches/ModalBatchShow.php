@@ -28,6 +28,8 @@ class ModalBatchShow extends Component
     #[On('showBatch')]
     public function openModal(?int $id): void
     {
+        abort_if(cannot('raw-material-batches.view'), 403);
+
         $this->batchId      = $id;
         $this->showModal    = true;
     }

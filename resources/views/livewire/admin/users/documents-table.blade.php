@@ -21,8 +21,11 @@
     {{ $this->thead() }}
 
     <tbody>
+        @php
+            $canView = can('raw-material-documents.view');
+        @endphp
         @forelse ($documents as $document)
-<tr wire:key="raw-material-document-{{ $document->id }}">
+            <tr wire:key="raw-material-document-{{ $document->id }}">
                 <td class="text-center">{{ number_format($document->id) }}</td>
                 <td>{{ $document->shortText('reference_number') }}</td>
                 <td>{{ $document->type->label() }}</td>
@@ -32,17 +35,21 @@
                 <td>{{ $document->effective_at->format('d/m/Y') }}</td>
                 <td>{{ $document->created_at->format('d/m/Y') }}</td>
                 <td class="text-center">
-                    <a href="{{ $document->getRoute('show') }}" class="d-block text-reset" target="_blank">
-                        <i class="fas fa-fw fa-arrow-up-right-from-square"></i>
-                    </a>
+                    @if ($canView)
+                        <a href="{{ $document->getRoute('show') }}" class="d-block text-reset" target="_blank">
+                            <i class="fas fa-fw fa-arrow-up-right-from-square"></i>
+                        </a>
+                    @else
+                        <i class="fas fa-fw fa-lock text-muted"></i>
+                    @endif
                 </td>
             </tr>
-    @empty
+        @empty
             <tr>
                 <td colspan="9" class="text-center text-muted">
                     No se encontraron resultados.
                 </td>
             </tr>
-@endforelse
+        @endforelse
     </tbody>
 </x-card-table>

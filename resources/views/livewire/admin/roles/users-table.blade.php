@@ -6,6 +6,9 @@
     {{ $this->thead() }}
 
     <tbody>
+        @php
+            $canView = can('users.view');
+        @endphp
         @forelse($users as $user)
             <tr wire:key="user-{{ $user->id }}">
                 <td>{{ $user->name }}</td>
@@ -14,9 +17,13 @@
                     <i class="{{ $user->getActiveIconClass() }}"></i>
                 </td>
                 <td class="text-center">
-                    <a href="{{ route('admin.users.show', $user->id) }}" class="d-block text-reset" target="_blank">
-                        <i class="fas fa-fw fa-arrow-up-right-from-square"></i>
-                    </a>
+                    @if ($canView)
+                        <a href="{{ route('admin.users.show', $user->id) }}" class="d-block text-reset" target="_blank">
+                            <i class="fas fa-fw fa-arrow-up-right-from-square"></i>
+                        </a>
+                    @else
+                        <i class="fas fa-fw fa-lock text-muted"></i>
+                    @endif
                 </td>
             </tr>
         @empty
