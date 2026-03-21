@@ -2,10 +2,6 @@
 
 @section('title_prefix', 'Acerca del sistema |')
 
-@section('content_header')
-    <h1 class="m-0">Acerca del sistema</h1>
-@stop
-
 @section('css')
     <style>
         section {
@@ -15,20 +11,15 @@
         .sticky-top {
             top: 57px;
         }
-
-        .link-subtle {
-            color: inherit;
-            text-decoration: underline;
-            text-decoration-color: rgba(0, 0, 0, 0.25);
-            text-underline-offset: 2px;
-        }
-
-        .link-subtle:hover {
-            color: inherit;
-            text-decoration-color: rgba(0, 0, 0, 0.6);
-        }
     </style>
 @endsection
+
+@section('content_header')
+    <div class="d-flex align-items-center justify-content-between">
+        <h1 class="m-0">Acerca del sistema</h1>
+        <small class="text-muted">v{{ config('app.version') }}</small>
+    </div>
+@stop
 
 @section('content')
     <div class="row">
@@ -330,8 +321,8 @@
                             <td>Modales de confirmación y alertas</td>
                         </tr>
                         <tr>
-                            <td><a href="https://www.mysql.com" target="_blank" rel="noopener"
-                                    class="link-subtle">MySQL</a></td>
+                            <td><a href="https://mariadb.com" target="_blank" rel="noopener"
+                                    class="link-subtle">MariaDB</a></td>
                             <td>8.x</td>
                             <td>Base de datos relacional</td>
                         </tr>
@@ -360,11 +351,7 @@
                         </a>
                     </li>
                 </ul>
-                <p class="text-muted small mb-0">
-                    GraneLTE es un sistema interno de uso exclusivo. © {{ date('Y') }}
-                </p>
             </section>
-
         </div>
 
         {{-- Índice lateral --}}
@@ -385,6 +372,12 @@
         </div>
     </div>
 @endsection
+
+@section('footer')
+    <div class="text-center">
+        <strong>GraneLTE</strong> &copy; {{ date('Y') }} &mdash; Sistema interno de uso exclusivo.
+    </div>
+@stop
 
 @section('js')
     <script>
