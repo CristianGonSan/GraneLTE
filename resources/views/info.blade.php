@@ -137,7 +137,9 @@
                     libremente. Al enviarse pasa a <strong>Pendiente</strong>, donde queda bloqueado para
                     edición. El revisor puede <strong>Aceptarlo</strong>, lo que genera los movimientos
                     correspondientes e impacta existencias y lotes, o <strong>Rechazarlo</strong>, en cuyo
-                    caso el documento queda cerrado sin ningún efecto sobre el inventario.
+                    caso el documento queda cerrado sin ningún efecto sobre el inventario. Un documento aceptado puede
+                    marcarse como <strong>Cancelado</strong> para excluirlo de las métricas; esto no revertirá los
+                    movimientos, por lo que deberá realizarse manualmente mediante un documento de ajuste.
                 </p>
 
                 <h6 class="font-weight-bold mt-3 text-muted">Tipos de documento</h6>
@@ -174,7 +176,7 @@
                 </p>
                 <div class="bg-light border rounded p-3 mb-3">
                     <div class="form-group mb-2">
-                        <label class="mb-1">Materia prima <span class="text-muted font-weight-bold">*</span></label>
+                        <label class="mb-1">Materia prima *</label>
                         <input type="text" class="form-control form-control-sm" placeholder="Seleccionar…" disabled>
                     </div>
                     <div class="form-group mb-0">
@@ -191,7 +193,7 @@
                 </p>
                 <div class="bg-light border rounded p-3 mb-3">
                     <div class="form-group mb-0">
-                        <label class="mb-1">Cantidad <span class="text-muted font-weight-bold">*</span></label>
+                        <label class="mb-1">Cantidad *</label>
                         <input type="text" class="form-control form-control-sm is-invalid" value="abc" disabled>
                         <div class="invalid-feedback d-block">El campo debe ser un número mayor a cero.</div>
                     </div>
@@ -235,6 +237,9 @@
                     rol del usuario. Acceder directamente a una ruta sin permiso redirige a una pantalla
                     de acceso denegado (403). Los permisos siguen el patrón <code>recurso.acción</code>,
                     por ejemplo: <code>raw-materials.view</code>, <code>raw-material-documents.edit</code>.
+                    Los enlaces que aparezcan con el ícono <i class="fas fa-fw fa-lock text-muted"></i>
+                    y en tono gris indican que el usuario no cuenta con los permisos necesarios para
+                    acceder a esa sección.
                 </p>
             </section>
 
@@ -341,13 +346,13 @@
                 </p>
                 <ul class="list-unstyled mb-3">
                     <li class="mb-1">
-                        <i class="fas fa-envelope fa-fw mr-2 text-muted"></i>
+                        <i class="fas fa-fw fa-envelope fa-fw mr-1 text-muted"></i>
                         <a href="mailto:cristiangonsan18@gmail.com">cristiangonsan18@gmail.com</a>
                     </li>
                     <li>
-                        <i class="fab fa-github fa-fw mr-2 text-muted"></i>
+                        <i class="fab fa-fw fa-github fa-fw mr-1 text-muted"></i>
                         <a href="https://github.com/CristianGonSan/GraneLTE" target="_blank" rel="noopener noreferrer">
-                            https://github.com/CristianGonSan/GraneLTE
+                            CristianGonSan/GraneLTE
                         </a>
                     </li>
                 </ul>
