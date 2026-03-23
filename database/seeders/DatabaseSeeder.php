@@ -22,10 +22,10 @@ class DatabaseSeeder extends Seeder
             //AdminSeeder::class,
             UnitSeeder::class,
             CategorySeeder::class,
-            //SupplierSeeder::class,
-            //WarehouseSeeder::class,
-            //ResponsibleSeeder::class,
-            //RawMaterialSeeder::class,
+            SupplierSeeder::class,
+            WarehouseSeeder::class,
+            ResponsibleSeeder::class,
+            RawMaterialSeeder::class,
             RolesAndPermissionsSeeder::class
         ]);
     }
