@@ -87,7 +87,7 @@ final class RolesAndPermissionsSeeder extends Seeder
 
         $user = User::firstOrCreate(
             ['email' => 'admin@gmail.com'],
-            ['name' => 'Admin', 'password' => bcrypt('123456788')]
+            ['name' => 'Admin', 'password' => bcrypt('admin')]
         );
 
         $user->assignRole($role);

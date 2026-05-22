@@ -8,13 +8,13 @@ use Hash;
 
 class AdminSeeder extends Seeder
 {
-    public function run() {
-
+    public function run()
+    {
         User::updateOrCreate(
             ['email' => 'admin@gmail.com'],
             [
                 'name' => 'admin',
-                'password' => Hash::make('123456788'),
+                'password' => bcrypt('admin'),
             ]
         );
     }
