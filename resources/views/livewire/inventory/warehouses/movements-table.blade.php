@@ -43,7 +43,7 @@
                 <td>{{ $movement->effective_at->format('d/m/Y - h:i a') }}</td>
                 @if ($canView)
                     <td class="text-center cursor-pointer"
-                        wire:click="$dispatch('showMovement', { id: {{ $movement->id }} })">
+                        wire:click="$dispatch('openComponentRawMaterialMovementShow', { movementId: {{ $movement->id }} })">
                         <i class="fas fa-fw fa-expand"></i>
                     </td>
                 @else

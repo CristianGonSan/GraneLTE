@@ -60,7 +60,7 @@
                 </td>
                 @if ($canView)
                     <td class="text-center cursor-pointer"
-                        wire:click="$dispatch('showBatch', { id: {{ $batch->id }} })">
+                        wire:click="$dispatch('openComponentRawMaterialBatchShow', { batchId: {{ $batch->id }} })">
                         <i class="fas fa-fw fa-expand"></i>
                     </td>
                 @else

@@ -2,19 +2,14 @@
 
 namespace App\Livewire\Inventory\RawMaterialStocks;
 
-use App\Models\Inventory\RawMaterialBatch;
-use App\Models\Inventory\RawMaterialMovement;
 use App\Models\Inventory\RawMaterialStock;
 use Illuminate\Contracts\View\View;
-use Illuminate\Database\Eloquent\Builder;
 use Livewire\Attributes\On;
 use Livewire\Component;
 
 class ModalStockShow extends Component
 {
-    public bool $showModal = false;
     public ?int $stockId = null;
-
 
     public function render(): View
     {
@@ -26,28 +21,30 @@ class ModalStockShow extends Component
         );
     }
 
-    #[On('showStock')]
-    public function openModal(?int $id): void
+    #[On('openComponentRawMaterialStockShow')]
+    public function openModal(int $stockId): void
     {
         abort_if(cannot('raw-material-stocks.view'), 403);
 
-        $this->stockId      = $id;
-        $this->showModal    = true;
+        $this->stockId = $stockId;
+        $this->dispatch('showModalRawMaterialStockShow');
     }
 
+    #[On('closeComponentRawMaterialStockShow')]
     public function closeModal(): void
     {
-        $this->stockId      = null;
-        $this->showModal    = false;
+        $this->stockId = null;
+        $this->dispatch('hideModalRawMaterialStockShow');
     }
 
     private ?RawMaterialStock $stock = null;
 
-    private function stock(): RawMaterialStock|null
+    private function stock(): ?RawMaterialStock
     {
         if ($this->stockId === null) {
             return null;
         }
+
         return $this->stock ??= RawMaterialStock::findOrFail($this->stockId);
     }
 }

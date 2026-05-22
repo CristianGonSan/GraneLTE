@@ -40,7 +40,7 @@
                 <td>{{ number_format($movement->quantity, 3) }} {{ $material->unit->symbol }}</td>
                 <td>{{ $movement->effective_at->format('d/m/Y - h:i a') }}</td>
                 <td class="text-center cursor-pointer"
-                    wire:click="$dispatch('showMovement', { id: {{ $movement->id }} })">
+                    wire:click="$dispatch('openComponentRawMaterialMovementShow', { movementId: {{ $movement->id }} })">
                     <i class="fas fa-fw fa-expand"></i>
                 </td>
             </tr>

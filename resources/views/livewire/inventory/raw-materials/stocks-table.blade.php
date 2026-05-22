@@ -54,7 +54,7 @@
                 </td>
                 @if ($canView)
                     <td class="text-center cursor-pointer"
-                        wire:click="$dispatch('showStock', { id: {{ $stock->id }} })">
+                        wire:click="$dispatch('openComponentRawMaterialStockShow', { stockId: {{ $stock->id }} })">
                         <i class="fas fa-fw fa-expand"></i>
                     </td>
                 @else

@@ -54,7 +54,7 @@
                 <td @if ($batch->isExpired()) class="text-danger" title="Ha caducado" @endif>
                     {{ $batch->expiration_date?->format('d/m/Y') ?? '--/--/----' }}
                 </td>
-                <td class="text-center cursor-pointer" wire:click="$dispatch('showStock', { id: {{ $stock->id }} })">
+                <td class="text-center cursor-pointer" wire:click="$dispatch('openComponentRawMaterialStockShow', { stockId: {{ $stock->id }} })">
                     <i class="fas fa-fw fa-expand"></i>
                 </td>
             </tr>
