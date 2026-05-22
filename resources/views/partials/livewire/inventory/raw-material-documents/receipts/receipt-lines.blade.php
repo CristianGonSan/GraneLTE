@@ -1,11 +1,11 @@
 <div class="card">
     <div class="card-header">
         <div class="form-row align-items-end">
-            <x-form.select-wire-ignore fgroup-class="col-md-4 mb-0" label-class="text-muted mb-0"
-                name="rawMaterialId" label="Materia prima *" wire:loading.attr="readonly" wire:target="save,addLine" />
+            <x-form.select-wire-ignore fgroup-class="col-md-4 mb-0" label-class="text-muted mb-0" name="rawMaterialId"
+                label="Materia prima *" wire:loading.attr="readonly" wire:target="save,addLine" />
 
-            <x-form.select-wire-ignore fgroup-class="col-md-4 mb-0" label-class="text-muted mb-0"
-                name="warehouseId" label="Almacén *" wire:loading.attr="readonly" wire:target="save,addLine" />
+            <x-form.select-wire-ignore fgroup-class="col-md-4 mb-0" label-class="text-muted mb-0" name="warehouseId"
+                label="Almacén *" wire:loading.attr="readonly" wire:target="save,addLine" />
 
             <div class="col-md-4">
                 <x-livewire.loading-button label="Agregar lote" icon="plus" wire:click="addLine"
@@ -47,7 +47,7 @@
                             </td>
                             <td class="align-middle p-2">
                                 <x-adminlte-input type="number" name="lines.{{ $index }}.received_quantity"
-                                    placeholder="0" step="0.001" min="0.001"
+                                    placeholder="0" step="0.001" min="0.001" max="999999999.999"
                                     wire:model.live.debounce.500ms="lines.{{ $index }}.received_quantity"
                                     igroup-size="sm" fgroup-class="mb-0" required>
                                     <x-slot name="appendSlot">

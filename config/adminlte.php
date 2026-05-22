@@ -529,7 +529,7 @@ return [
                 ],
                 [
                     'type' => 'js',
-                    'asset' => false,
+                    'asset' => true,
                     'location' => '/js/sweetalert2/livewire-integration.js',
                 ],
                 [
