@@ -5,7 +5,7 @@
                 <div class="form-group mb-0">
                     <label class="text-muted mb-0">Stock de origen</label>
                     <x-livewire.loading-button label="Seleccionar existencias" icon="magnifying-glass"
-                        wire:click="$dispatch('openStockSelector')" wire:target="setLine" class="btn-block" />
+                        wire:click="$dispatch('openComponentRawMaterialStockSelector')" wire:target="setLine" class="btn-block" />
                 </div>
             </div>
 

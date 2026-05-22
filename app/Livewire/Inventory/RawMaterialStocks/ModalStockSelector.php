@@ -18,8 +18,6 @@ class ModalStockSelector extends Component
     #[Locked]
     public bool $closeAfterSelected;
 
-    public bool $showModal = false;
-
     public string $searchTerm = '';
 
     public array $filters = [
@@ -44,15 +42,25 @@ class ModalStockSelector extends Component
         ]);
     }
 
-    #[On('openStockSelector')]
+    #[On('openComponentRawMaterialStockSelector')]
     public function openModal(): void
     {
-        $this->showModal = true;
+        $this->dispatch('showModalRawMaterialStockSelector');
     }
 
+    #[On('closeComponentRawMaterialStockSelector')]
     public function closeModal(): void
     {
-        $this->showModal = false;
+        $this->dispatch('hideModalRawMaterialStockSelector');
+    }
+
+    public function selectStock(int $stockId): void
+    {
+        $this->dispatch('selectedStock', id: $stockId);
+
+        if ($this->closeAfterSelected) {
+            $this->closeModal();
+        }
     }
 
     public function search(): void
@@ -73,7 +81,7 @@ class ModalStockSelector extends Component
         }
 
         if ($key === 'expirationDays') {
-            $this->filters['expirationDays'] = max(1, (int) $this->filters['expirationDays']);
+            $this->filters['expirationDays'] = \max(1, (int) $this->filters['expirationDays']);
         }
 
         $this->resetPage();
@@ -92,7 +100,6 @@ class ModalStockSelector extends Component
                 'warehouse',
             ]);
 
-        // Filtros de cantidad (ahora tienen sentido directo)
         if ($this->filters['quantityMin'] !== null) {
             $query->where('stocks.current_quantity', '>=', $this->filters['quantityMin']);
         }
@@ -101,7 +108,6 @@ class ModalStockSelector extends Component
             $query->where('stocks.current_quantity', '<=', $this->filters['quantityMax']);
         }
 
-        // Filtros de expiración (siguen dependiendo del batch)
         match ($this->filters['expirationFilter']) {
             'not_expired' => $query->where(
                 fn(Builder $q) => $q
@@ -122,7 +128,6 @@ class ModalStockSelector extends Component
             default => null,
         };
 
-        // Búsqueda
         if ($term = $this->searchTerm) {
             $query->where(function (Builder $q) use ($term) {
                 $q->where('materials.name', 'like', "%{$term}%")
@@ -132,7 +137,6 @@ class ModalStockSelector extends Component
             });
         }
 
-        // Ordenamiento
         switch ($this->filters['order']) {
             case 'fifo':
                 $query->orderBy('batches.created_at', 'asc');

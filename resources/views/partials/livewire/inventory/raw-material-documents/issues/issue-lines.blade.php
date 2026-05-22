@@ -1,7 +1,7 @@
 <div class="card">
     <div class="card-header">
         <x-livewire.loading-button label="Seleccionar existencias" icon="magnifying-glass"
-            wire:click="$dispatch('openStockSelector')" wire:target="addLine" />
+            wire:click="$dispatch('openComponentRawMaterialStockSelector')" wire:target="addLine" />
     </div>
     <div class="card-body p-0">
         <div class="table-responsive">
