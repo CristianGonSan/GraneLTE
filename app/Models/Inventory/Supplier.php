@@ -59,7 +59,7 @@ class Supplier extends Model
     ];
 
     protected $casts = [
-        'is_active' => 'bool',
+        'is_active' => 'boolean',
     ];
 
     public function isInUse(): bool
