@@ -30,8 +30,8 @@
                 </div>
 
                 <div class="col-12">
-                    <x-checkbox name="createAnother" label="Guardar y crear otra"
-                        title="Permite ingresar otra categoria tras guardar" wire:model='createAnother' />
+                    <x-checkbox name="createAnother" label="Guardar y crear otro"
+                        title="Permite ingresar otro usuario tras guardar" wire:model='createAnother' />
                 </div>
             </div>
         </div>
